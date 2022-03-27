@@ -1,38 +1,38 @@
-import fetch from 'isomorphic-unfetch';
-
-// const dev = process.env.NODE_ENV !== 'production';
-
-export function request(url, options) {
+export const request = (url, options) => {
   return fetch(url, options).then(checkStatus).then(parseJSON);
-}
+};
 
-export function post(url, options = {}, data = {}) {
-  options.body = objectToFormData(data);
-  if (!options.method) options.method = 'post';
+export const post = (url, options = {}, data = {}) => {
+  options.headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  options.body = JSON.stringify(data);
+  if (!options.method) options.method = 'POST';
   return request(url, options);
-}
+};
 
-export function put(url, options = {}, data = {}) {
-  options.body = objectToFormData(data);
+export const put = (url, options = {}, data = {}) => {
+  options.headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  options.body = JSON.stringify(data);
   if (!options.method) options.method = 'put';
   return request(url, options);
-}
+};
 
-function parseJSON(response) {
-  return response.json();
-}
+const parseJSON = async response => await response.json();
 
-function checkStatus(response) {
-  if ((response.status >= 200 && response.status < 300) || (response.status >= 400 && response.status < 500)) {
-    return response;
-  }
+const checkStatus = response => {
+  if ((response.status >= 200 && response.status < 300) || (response.status >= 400 && response.status < 500)) return response;
 
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
-}
+};
 
-export function objectToFormData(obj, form, namespace) {
+export const objectToFormData = (obj, form, namespace) => {
   let fd = form || new FormData();
   let formKey;
   for (var property in obj) {
@@ -54,4 +54,4 @@ export function objectToFormData(obj, form, namespace) {
   }
 
   return fd;
-}
+};

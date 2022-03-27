@@ -28,8 +28,10 @@
       padding: 4px;
       border-radius: 14px;
       min-width: 150px;
+      cursor: pointer;
 
       &.on {
+        color: #fff;
         background-image: linear-gradient(to right, #ff2653, #ff881b);
       }
     }

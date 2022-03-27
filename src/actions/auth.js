@@ -1,3 +1,5 @@
+import { LOGIN, REGISTER } from 'constants/auth';
+
 function login(payload) {
   return {
     type: LOGIN,
