@@ -1,0 +1,45 @@
+body {
+  // width , height
+  .wf-100 {
+    width: 100vw;
+  }
+  .hf-100 {
+    height: 100vh;
+  }
+  .w-100 {
+    width: 100%;
+  }
+  .h-100 {
+    height: 100%;
+  }
+
+  //   flex-box
+  .d-flex {
+    display: flex;
+
+    &.justify-content-center {
+      justify-content: center;
+    }
+    &.align-items-center {
+      align-items: center;
+    }
+  }
+
+  //  margin
+  .m-auto {
+    margin: auto !important;
+  }
+  //   ----top
+  .mt-8 {
+    margin-top: 8px !important;
+  }
+  // ----left
+  .ml-16 {
+    margin-left: 16px !important;
+  }
+
+  //   text
+  .text-white {
+    color: white;
+  }
+}

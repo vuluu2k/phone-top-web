@@ -1,0 +1,37 @@
+.auth {
+  &.container {
+    position: relative;
+    background: url('https://res.cloudinary.com/vuluu/image/upload/v1648358674/PhoneTop/login_wzuboa.jpg') no-repeat center center/cover;
+    height: 100vh;
+
+    .dark-overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 100%;
+    }
+
+    .auth-inner {
+      height: 100%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .text {
+      color: #fff;
+    }
+
+    .btn-switch {
+      font-weight: 500;
+      padding: 4px;
+      border-radius: 14px;
+      min-width: 150px;
+
+      &.on {
+        background-image: linear-gradient(to right, #ff2653, #ff881b);
+      }
+    }
+  }
+}
