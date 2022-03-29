@@ -6,6 +6,7 @@ import Login from './Login';
 import Register from './Register';
 
 import authActions from 'actions/auth';
+import { selectAuth } from 'selectors';
 
 function AuthLayout(props) {
   const [status, setStatus] = useState(true);
@@ -39,4 +40,4 @@ function AuthLayout(props) {
 
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(authActions, dispatch) });
 
-export default connect(null, mapDispatchToProps)(AuthLayout);
+export default connect(selectAuth, mapDispatchToProps)(AuthLayout);

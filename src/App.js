@@ -5,6 +5,9 @@ import store from './store';
 import { Landing } from 'components/layouts';
 import { Home } from 'pages';
 import { Auth } from 'components/auth';
+import { Dashboard, ProductManager } from 'pages/admin';
+import { UserRouting } from 'components/user';
+import { PrivateRoute } from 'components/routing';
 
 import 'css/common.scss';
 import 'css/layout.scss';
@@ -14,13 +17,20 @@ import 'css/auth.scss';
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/account" element={<Auth />} />
-        </Routes>
-      </BrowserRouter>
+      <UserRouting>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Auth />} />
+
+            <Route exact path="/" element={<PrivateRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/product-manager" element={<ProductManager />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </UserRouting>
     </Provider>
   );
 }

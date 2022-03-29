@@ -14,8 +14,6 @@ export default function Register(props) {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  console.log(password, password_repeat);
-
   const onSubmit = () => {
     if (password_repeat !== password) {
       return message.error('Mật khẩu nhập lại không chính xác', 1);
@@ -25,7 +23,7 @@ export default function Register(props) {
 
   return (
     <div>
-      <Form name="basic" autoComplete="off">
+      <Form name="basic">
         <Form.Item name="username" rules={[{ required: true, message: 'Vui lòng nhập tên tài khoản!' }]}>
           <Input placeholder="Tài khoản" name="username" value={username} onChange={onChange} />
         </Form.Item>
