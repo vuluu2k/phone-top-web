@@ -1,5 +1,5 @@
 export function moneyMask(amount) {
-  if (amount == undefined || amount == null) {
+  if (amount === undefined || amount === null) {
     return '0 ₫';
   } else {
     return formatText(amount, ' ₫');
