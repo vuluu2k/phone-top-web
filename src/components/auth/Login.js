@@ -29,8 +29,8 @@ export default function Login(props) {
   };
 
   const onSubmit = () => {
-    if (!username || !password) {
-      message.error('Tài khoản, mật khẩu chưa được nhập');
+    if (!username || !password || username === '' || password === '') {
+      messageAntd.error('Bạn chưa nhập tài khoản mật khẩu');
     }
     login({ username, password });
   };
