@@ -1,0 +1,21 @@
+body {
+  .product-item {
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+    &:hover {
+      animation-name: animZoom;
+      animation-duration: 0.5s;
+    }
+  }
+
+  @keyframes animZoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.02);
+    }
+  }
+}

@@ -45,4 +45,14 @@ body {
   .text-white {
     color: white;
   }
+
+  .pos-relative {
+    position: relative;
+  }
+  .slider-custom {
+    padding: 16px 16px 0 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+    background-image: linear-gradient(to right, #ff2653, #ff881b);
+  }
 }

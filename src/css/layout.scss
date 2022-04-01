@@ -1,6 +1,18 @@
 @import '~antd/dist/antd.css';
 
-.layout-customer {
+.layout {
+  .ant-layout-header {
+    padding: 0 200px;
+    line-height: 20px;
+    background-image: linear-gradient(to right, #ff2653, #ff881b);
+
+    &.header {
+      a {
+        color: #fff !important;
+      }
+    }
+  }
+
   #components-layout-demo-top-side .logo {
     float: left;
     width: 120px;
@@ -16,5 +28,16 @@
 
   .site-layout-background {
     background: #fff;
+  }
+
+  .back-top {
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    border-radius: 16px;
+    background-color: #1088e9;
+    color: #fff;
+    text-align: center;
+    font-size: 14;
   }
 }

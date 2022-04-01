@@ -1,29 +1,28 @@
 import React from 'react';
-import { Layout, Menu, Carousel, Image, Row, Col } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { Layout, Menu, Carousel, Image, Row, Col, BackTop, Input } from 'antd';
+import { UserOutlined, LaptopOutlined, NotificationOutlined, VerticalAlignTopOutlined, PhoneOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
-
-const contentStyle = {
-  height: '160px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
-};
+const { Search } = Input;
 
 export default function Client({ children }) {
+  const onSearch = value => console.log(value);
   return (
-    <Layout>
+    <Layout className="layout">
       <Header className="header">
-        <div style={{ padding: '0 200px' }}>
-          <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
+        <div className="d-flex align-items-center" style={{ height: 64 }}>
+          <Image src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} />
+          <Search placeholder="Nhập sẳn phẩm bạn muốn tìm kiếm" allowClear onSearch={() => onSearch()} style={{ width: 400, marginLeft: 16 }} />
+
+          <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>
+            <PhoneOutlined style={{ fontSize: 28, color: 'white', marginRight: 8 }} />
+            <a href="tel:0898709170">
+              <div style={{ fontWeight: 500 }}>Gọi mua hàng</div>
+              <div style={{ fontWeight: 700 }}>0898709170</div>
+            </a>
+          </div>
         </div>
       </Header>
       <Content style={{ padding: '0 200px' }}>
@@ -73,8 +72,13 @@ export default function Client({ children }) {
           </Sider>
         </Layout>
         <Layout>{children}</Layout>
+        <BackTop>
+          <div className="back-top">
+            <VerticalAlignTopOutlined />
+          </div>
+        </BackTop>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer style={{ textAlign: 'center', borderTop: '1px solid #003c75' }}>
         <Row>
           <Col span={6}>
             <h4>Tìm cửa hàng</h4>

@@ -13,6 +13,7 @@ import 'css/common.scss';
 import 'css/layout.scss';
 import 'css/home.scss';
 import 'css/auth.scss';
+import 'css/product.scss';
 
 function App() {
   return (
