@@ -8,7 +8,9 @@ import {
   LOAD_USER,
   LOAD_USER_SUCCESS,
   LOAD_USER_ERROR,
+  LOGOUT,
 } from 'constants/auth';
+import { update } from 'lodash';
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
 
 const initialState = {
@@ -45,6 +47,15 @@ const authReducer = (state = initialState, payload) => {
       return handleSuccess(state, 'statusLogin', payload);
     case LOGIN_ERROR:
       return handleError(state, 'statusLogin', payload.message);
+
+    case LOGOUT:
+      return update(state, {
+        auth: {
+          requesting: { $set: true },
+          isAuthenticated: { $set: false },
+          user: { $set: null },
+        },
+      });
 
     case LOAD_USER:
       return handleRequest(state, 'auth', payload);

@@ -1,4 +1,5 @@
 export const LOGIN = 'app/LOGIN';
+export const LOGOUT = 'app/LOGOUT';
 export const LOGIN_SUCCESS = 'app/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'app/LOGIN_ERROR';
 

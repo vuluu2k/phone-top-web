@@ -10,7 +10,7 @@ const offset = 6;
 let start = 0;
 let end = size;
 
-export default function Slider(props) {
+export default function SliderCustom(props) {
   const [item, setItem] = useState(props.item.slice(start, end));
 
   const onNext = () => {

@@ -11,6 +11,7 @@ import {
   LOAD_USER,
   LOAD_USER_SUCCESS,
   LOAD_USER_ERROR,
+  LOGOUT,
 } from 'constants/auth';
 import { setToken } from 'utils/token';
 import { LOCAL_STORAGE_TOKEN_NAME, USER } from 'constants';
@@ -29,6 +30,9 @@ function* startRequest(payload) {
       break;
     case LOAD_USER:
       yield call(loadUser, payload);
+      break;
+    case LOGOUT:
+      yield call(logout);
       break;
     default:
       break;
@@ -81,6 +85,11 @@ function* login({ payload }) {
   }
 }
 
+function* logout({ payload }) {
+  localStorage.removeItem(USER);
+  localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+}
+
 function* loadUser() {
   if (localStorage[LOCAL_STORAGE_TOKEN_NAME]) {
     setToken(localStorage[LOCAL_STORAGE_TOKEN_NAME]);
@@ -105,5 +114,5 @@ function* loadUser() {
 }
 
 export function* authSagas() {
-  yield takeLatest([REGISTER, LOGIN, LOAD_USER], startRequest);
+  yield takeLatest([REGISTER, LOGIN, LOAD_USER, LOGOUT], startRequest);
 }

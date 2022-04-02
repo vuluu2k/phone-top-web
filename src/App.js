@@ -5,7 +5,7 @@ import store from './store';
 import { Landing } from 'components/layouts';
 import { Home } from 'pages';
 import { Auth } from 'components/auth';
-import { Dashboard, ProductManager } from 'pages/admin';
+import { Dashboard, ProductManager, CategoryManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
 import { PrivateRoute } from 'components/routing';
 
@@ -28,6 +28,7 @@ function App() {
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/product-manager" element={<ProductManager />} />
+              <Route path="/category-manager" element={<CategoryManager />} />
             </Route>
           </Routes>
         </BrowserRouter>
