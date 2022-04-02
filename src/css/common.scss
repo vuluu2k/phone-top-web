@@ -13,12 +13,25 @@ body {
     height: 100%;
   }
 
+  // font
+
+  .fw-500 {
+    font-weight: 500;
+  }
+
+  .fw-700 {
+    font-weight: 700;
+  }
+
   //   flex-box
   .d-flex {
     display: flex;
 
     &.justify-content-center {
       justify-content: center;
+    }
+    &.justify-content-between {
+      justify-content: space-between;
     }
     &.align-items-center {
       align-items: center;

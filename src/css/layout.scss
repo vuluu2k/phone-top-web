@@ -7,6 +7,9 @@
     background-image: linear-gradient(to right, #ff2653, #ff881b);
 
     &.header {
+      position: fixed;
+      z-index: 1;
+      width: 100%;
       a {
         color: #fff !important;
       }
