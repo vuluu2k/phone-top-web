@@ -28,7 +28,7 @@ function loadUser(payload) {
   };
 }
 
-const authActions = { login, register, loadUser };
+const authActions = { login, register, loadUser, logout };
 
 export { loadUser };
 

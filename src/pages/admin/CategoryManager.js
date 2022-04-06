@@ -10,9 +10,9 @@ import { categoryActions } from 'actions';
 import { selectCategory } from 'selectors';
 
 function CategoryManager(props) {
-  const [state, setState] = useState({ visibleCreate: false, name: '', sub_name: '', sub_name_array: [] });
+  const [state, setState] = useState({ visibleCreate: false, name: '', sub_name: '', sub_name_array: [], visibleEdit: false, id: undefined });
 
-  const { visibleCreate, name, sub_name, sub_name_array } = state;
+  const { visibleCreate, name, sub_name, sub_name_array, visibleEdit, id } = state;
   const { selectCategoryInformation, actions } = props;
   const { categorys } = selectCategoryInformation;
 
@@ -27,14 +27,29 @@ function CategoryManager(props) {
   };
 
   const onShowCreate = () => setState({ ...state, visibleCreate: true });
-  const onHideCreate = () => setState({ ...state, visibleCreate: false });
+  const onHideCreate = () => {
+    setState({ ...state, visibleCreate: false });
+    onClear();
+  };
+
+  const onShowEdit = item => setState({ ...state, visibleEdit: true, name: item.name_vi, sub_name_array: item.sub_name, id: item._id });
+  const onHideEdit = () => {
+    setState({ ...state, visibleEdit: false });
+    onClear();
+  };
+
   const onClear = () => {
-    setState({ visibleCreate: false, name: '', sub_name: '', sub_name_array: [] });
+    setState({ name: '', sub_name: '', sub_name_array: [], id: undefined });
   };
 
   const onSubmitCreate = () => {
     actions.createCategory({ name: name, name_vi: name, sub_name: sub_name_array });
-    onClear();
+    onHideCreate();
+  };
+
+  const onSubmitEdit = () => {
+    actions.editCategory({ id: id, name: name, name_vi: name, sub_name: sub_name_array });
+    onHideEdit();
   };
 
   const onSubmitDelete = id => {
@@ -66,8 +81,8 @@ function CategoryManager(props) {
       dataIndex: 'actions',
       render: (_, item) => (
         <div>
-          <Button className="btn-green" icon={<EditOutlined />} />
-          <Button className="btn-red" icon={<DeleteOutlined />} onClick={() => onSubmitDelete(item._id)} />
+          <Button className="btn-green" icon={<EditOutlined />} onClick={() => onShowEdit(item)} />
+          <Button className="btn-red" icon={<DeleteOutlined />} onClick={() => onSubmitDelete(item.id)} />
         </div>
       ),
     },
@@ -79,7 +94,7 @@ function CategoryManager(props) {
         <Button icon={<PlusOutlined />} className="mb-8 btn-blue" onClick={() => onShowCreate()}>
           Thêm danh mục
         </Button>
-        <Table className="data-custom" columns={columns} dataSource={categorys} onChange={onChange} rowKey="_id" />
+        <Table className="data-custom" columns={columns} dataSource={categorys} onChange={onChange} rowKey="id" />
       </TableCustom>
       <Modal
         wrapClassName="modal-add-category"
@@ -93,6 +108,42 @@ function CategoryManager(props) {
             </Button>
             <Button className="btn-blue" onClick={() => onSubmitCreate()}>
               Thêm danh mục
+            </Button>
+          </>
+        }>
+        <Input placeholder="Nhập tên danh mục" name="name" value={name} onChange={onChange} />
+        <div className="d-flex mt-8 mb-8">
+          <Input placeholder="Thêm tên danh mục con" name="sub_name" value={sub_name} onChange={onChange} />
+          <Button className="btn-blue ml-8" icon={<PlusOutlined />} onClick={handleAddSubName} />
+        </div>
+        <Row gutter={8}>
+          {sub_name_array.map((item, index) => (
+            <Col span={8} key={index}>
+              <div
+                className="d-flex justify-content-between"
+                style={{ padding: '4px 8px', backgroundColor: '#d6e4ff', marginBottom: 8, borderRadius: 8 }}>
+                <div>{item}</div>
+                <div>
+                  <CloseCircleOutlined onClick={() => handleCloseSubName(item)} />
+                </div>
+              </div>
+            </Col>
+          ))}
+        </Row>
+      </Modal>
+
+      <Modal
+        wrapClassName="modal-add-category"
+        title={`Sửa danh mục ${name}`}
+        visible={visibleEdit}
+        onCancel={() => onHideEdit()}
+        footer={
+          <>
+            <Button className="btn-orange" onClick={() => onHideEdit()}>
+              Quay lại
+            </Button>
+            <Button className="btn-blue" onClick={() => onSubmitEdit()}>
+              Lưu danh mục
             </Button>
           </>
         }>

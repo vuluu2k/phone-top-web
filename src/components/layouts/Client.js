@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Menu, Row, Col, BackTop, Input } from 'antd';
 import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { ImTruck } from 'react-icons/im';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import { authActions } from 'actions';
 
 const { Header, Content, Footer } = Layout;
 
@@ -10,6 +14,12 @@ function Client({ children, ...props }) {
   const handleClick = e => {
     console.log('click', e);
   };
+
+  // useEffect(() => {
+  //   props.actions.loadUser();
+  // }, []);
+
+  // console.log(props);
 
   return (
     <Layout className="layout">
@@ -76,4 +86,6 @@ function Client({ children, ...props }) {
   );
 }
 
-export default Client;
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions }, dispatch) });
+
+export default connect(null, mapDispatchToProps)(Client);

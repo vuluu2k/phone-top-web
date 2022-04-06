@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons';
+import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, VideoCameraOutlined, UploadOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { authActions } from 'actions';
+import { useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
 let keyMenu = 'dashboard';
 
-export default function Admin({ children, ...props }) {
+function Admin({ children, ...props }) {
+  const navigate = useNavigate();
   const [state, setState] = useState({ collapsed: false });
   const { collapsed } = state;
 
   const toggle = () => setState({ collapsed: !collapsed });
 
   const handleChangeMenu = key => (keyMenu = key);
+
+  const handleLogOut = () => {
+    props.actions.logout();
+  };
 
   return (
     <Layout className="layout-admin">
@@ -33,6 +42,16 @@ export default function Admin({ children, ...props }) {
             <Link to="/category-manager">Danh mục</Link>
           </Menu.Item>
         </Menu>
+
+        <div
+          className="text-white fw-500 d-flex align-items-center"
+          style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }}
+          onClick={() => handleLogOut()}>
+          <div>
+            <LogoutOutlined />
+          </div>
+          <div style={{ marginLeft: 8 }}>Đăng xuất</div>
+        </div>
       </Sider>
       <Layout className="site-layout hf-100" style={collapsed ? { marginLeft: 80 } : { marginLeft: 200 }}>
         <Header className="site-layout-background w-100" style={{ position: 'fixed' }}>
@@ -54,3 +73,7 @@ export default function Admin({ children, ...props }) {
     </Layout>
   );
 }
+
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions }, dispatch) });
+
+export default connect(null, mapDispatchToProps)(Admin);

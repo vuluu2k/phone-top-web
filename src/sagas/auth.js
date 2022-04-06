@@ -85,7 +85,7 @@ function* login({ payload }) {
   }
 }
 
-function* logout({ payload }) {
+function* logout() {
   localStorage.removeItem(USER);
   localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
 }
