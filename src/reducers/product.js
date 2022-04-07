@@ -1,37 +1,37 @@
 import {
-  LOAD_LIST_CATEGORY,
-  LOAD_LIST_CATEGORY_SUCCESS,
-  LOAD_LIST_CATEGORY_ERROR,
-  CREATE_CATEGORY,
-  CREATE_CATEGORY_SUCCESS,
-  CREATE_CATEGORY_ERROR,
-  EDIT_CATEGORY,
-  EDIT_CATEGORY_SUCCESS,
-  EDIT_CATEGORY_ERROR,
-  DELETE_CATEGORY,
-  DELETE_CATEGORY_SUCCESS,
-  DELETE_CATEGORY_ERROR,
-} from 'constants/category';
+  LOAD_LIST_PRODUCT,
+  LOAD_LIST_PRODUCT_SUCCESS,
+  LOAD_LIST_PRODUCT_ERROR,
+  CREATE_PRODUCT,
+  CREATE_PRODUCT_SUCCESS,
+  CREATE_PRODUCT_ERROR,
+  EDIT_PRODUCT,
+  EDIT_PRODUCT_SUCCESS,
+  EDIT_PRODUCT_ERROR,
+  DELETE_PRODUCT,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_ERROR,
+} from 'constants/product';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
 import update from 'immutability-helper';
 import { converObjToCamelKeys } from 'utils';
 
 const initialState = {
-  categoryInfomation: {
+  productInfomation: {
     success: false,
     message: '',
-    categorys: [],
+    products: [],
   },
-  categoryStatusDel: {
-    success: false,
-    message: '',
-  },
-  categoryStatusCreate: {
+  productStatusDel: {
     success: false,
     message: '',
   },
-  categoryStatusEdit: {
+  productStatusCreate: {
+    success: false,
+    message: '',
+  },
+  productStatusEdit: {
     success: false,
     message: '',
   },
@@ -64,7 +64,6 @@ const handleEdit = (state, payload) => {
     return item;
   });
 
-  console.log(listAfterEdit, id);
   return update(state, {
     categoryStatusDel: {
       requesting: { $set: false },
@@ -92,39 +91,39 @@ const handleCreate = (state, payload) => {
   });
 };
 
-const categoryReducer = (state = initialState, payload) => {
+const productReducer = (state = initialState, payload) => {
   switch (payload.type) {
-    case LOAD_LIST_CATEGORY:
+    case LOAD_LIST_PRODUCT:
       return handleRequest(state, 'categoryInfomation', payload);
-    case LOAD_LIST_CATEGORY_SUCCESS:
+    case LOAD_LIST_PRODUCT_SUCCESS:
       return handleSuccess(state, 'categoryInfomation', payload);
-    case LOAD_LIST_CATEGORY_ERROR:
+    case LOAD_LIST_PRODUCT_ERROR:
       return handleError(state, 'categoryInfomation', payload.message);
 
-    case CREATE_CATEGORY:
-      return handleRequest(state, 'categoryStatusCreate', payload);
-    case CREATE_CATEGORY_SUCCESS:
-      return handleCreate(state, payload);
-    case CREATE_CATEGORY_ERROR:
-      return handleError(state, 'categoryStatusCreate', payload.message);
+    // case CREATE_CATEGORY:
+    //   return handleRequest(state, 'categoryStatusCreate', payload);
+    // case CREATE_CATEGORY_SUCCESS:
+    //   return handleCreate(state, payload);
+    // case CREATE_CATEGORY_ERROR:
+    //   return handleError(state, 'categoryStatusCreate', payload.message);
 
-    case EDIT_CATEGORY:
-      return handleRequest(state, 'categoryStatusEdit');
-    case EDIT_CATEGORY_SUCCESS:
-      return handleEdit(state, payload);
-    case EDIT_CATEGORY_ERROR:
-      return handleError(state, 'categoryStatusEdit', payload.message);
+    // case EDIT_CATEGORY:
+    //   return handleRequest(state, 'categoryStatusEdit');
+    // case EDIT_CATEGORY_SUCCESS:
+    //   return handleEdit(state, payload);
+    // case EDIT_CATEGORY_ERROR:
+    //   return handleError(state, 'categoryStatusEdit', payload.message);
 
-    case DELETE_CATEGORY:
-      return handleRequest(state, 'categoryStatusDel');
-    case DELETE_CATEGORY_SUCCESS:
-      return handleDelete(state, payload);
-    case DELETE_CATEGORY_ERROR:
-      return handleError(state, 'categoryStatusDel', payload.message);
+    // case DELETE_CATEGORY:
+    //   return handleRequest(state, 'categoryStatusDel');
+    // case DELETE_CATEGORY_SUCCESS:
+    //   return handleDelete(state, payload);
+    // case DELETE_CATEGORY_ERROR:
+    //   return handleError(state, 'categoryStatusDel', payload.message);
 
     default:
       return state;
   }
 };
 
-export default categoryReducer;
+export default productReducer;

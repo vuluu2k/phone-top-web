@@ -132,24 +132,24 @@ body {
 
   .ant-btn {
     &.btn-blue {
-      border-radius: 8px;
+      border-radius: 4px;
       border-color: $daybreak-blue-8;
       color: $daybreak-blue-8;
     }
     &.btn-green {
-      border-radius: 8px;
+      border-radius: 4px;
       border-color: $polar-green-4;
       color: $polar-green-7;
     }
 
     &.btn-red {
-      border-radius: 8px;
+      border-radius: 4px;
       border-color: $dust-red-6;
       color: $dust-red-6;
     }
 
     &.btn-orange {
-      border-radius: 8px;
+      border-radius: 4px;
       border-color: $calendula-gold-7;
       color: $calendula-gold-7;
     }
@@ -165,11 +165,11 @@ body {
 
     .data-table-title {
       border-bottom: 1px solid $neutral-6;
-      padding: 16px;
+      padding: 8px 16px;
 
       .title {
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: 700;
       }
     }
 

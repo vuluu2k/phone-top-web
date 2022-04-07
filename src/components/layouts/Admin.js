@@ -1,27 +1,37 @@
 import React, { useState } from 'react';
-import { Layout, Menu } from 'antd';
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, VideoCameraOutlined, UploadOutlined, LogoutOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Layout, Menu, Avatar, Divider } from 'antd';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+  LogoutOutlined,
+  OrderedListOutlined,
+  MobileOutlined,
+} from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { authActions } from 'actions';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { selectAuth } from 'selectors';
 
 const { Header, Sider, Content } = Layout;
 
-let keyMenu = 'dashboard';
-
 function Admin({ children, ...props }) {
-  const navigate = useNavigate();
-  const [state, setState] = useState({ collapsed: false });
-  const { collapsed } = state;
+  const [state, setState] = useState({ collapsed: false, keyMenu: window.location.pathname || '/dashboard' });
+  const { collapsed, keyMenu } = state;
+  const {
+    selectAuthStatus: { user },
+  } = props;
 
-  const toggle = () => setState({ collapsed: !collapsed });
+  const toggle = () => setState({ ...state, collapsed: !collapsed });
 
-  const handleChangeMenu = key => (keyMenu = key);
+  const handleChangeMenu = key => setState({ ...state, keyMenu: key });
 
   const handleLogOut = () => {
     props.actions.logout();
+    window.location.reload(false);
   };
 
   return (
@@ -31,26 +41,34 @@ function Admin({ children, ...props }) {
           <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" alt="logo" width={150} />
         </div>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['dashboard']} selectedKeys={[keyMenu]} onClick={e => handleChangeMenu(e.key)}>
-          <Menu.Item key="dashboard" icon={<UserOutlined />}>
+        <Divider style={{ backgroundColor: 'white', height: 1, margin: 4 }} />
+        <div className="d-flex align-items-center w-100 mt-8 mb-8" style={{ marginLeft: !collapsed ? 16 : 24 }}>
+          <Avatar size={30} icon={<UserOutlined />} />
+          {!collapsed && (
+            <div className="text-white fw-500 ml-8" style={{ textTransform: 'capitalize' }}>
+              {user?.name}
+            </div>
+          )}
+        </div>
+        <Menu theme="dark" mode="inline" selectedKeys={[keyMenu]} onClick={e => handleChangeMenu(e.key)}>
+          <Menu.Item key="/dashboard" icon={<VideoCameraOutlined />}>
             <Link to="/dashboard">Báo cáo - live</Link>
           </Menu.Item>
-          <Menu.Item key="product-manager" icon={<VideoCameraOutlined />}>
+          <Menu.Item key="/product-manager" icon={<MobileOutlined />}>
             <Link to="/product-manager">Sản phẩm</Link>
           </Menu.Item>
-          <Menu.Item key="category-manager" icon={<UploadOutlined />}>
+          <Menu.Item key="/category-manager" icon={<OrderedListOutlined />}>
             <Link to="/category-manager">Danh mục</Link>
           </Menu.Item>
         </Menu>
-
         <div
           className="text-white fw-500 d-flex align-items-center"
           style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }}
           onClick={() => handleLogOut()}>
-          <div>
+          <div style={{ marginLeft: !collapsed ? 4 : 10 }}>
             <LogoutOutlined />
           </div>
-          <div style={{ marginLeft: 8 }}>Đăng xuất</div>
+          {!collapsed && <div style={{ marginLeft: 8 }}>Đăng xuất</div>}
         </div>
       </Sider>
       <Layout className="site-layout hf-100" style={collapsed ? { marginLeft: 80 } : { marginLeft: 200 }}>
@@ -75,5 +93,6 @@ function Admin({ children, ...props }) {
 }
 
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions }, dispatch) });
+const mapStateToProps = state => ({ ...selectAuth(state) });
 
-export default connect(null, mapDispatchToProps)(Admin);
+export default connect(mapStateToProps, mapDispatchToProps)(Admin);

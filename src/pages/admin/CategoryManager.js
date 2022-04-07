@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
-import { Table, Button, Modal, Input, Row, Col } from 'antd';
+import { Table, Button, Modal, Input, Row, Col, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { Admin } from 'components/layouts';
-import { TableCustom } from 'components/Common';
+import { TableCustom, ComfirmModal } from 'components/Common';
 import { categoryActions } from 'actions';
 import { selectCategory } from 'selectors';
 
 function CategoryManager(props) {
-  const [state, setState] = useState({ visibleCreate: false, name: '', sub_name: '', sub_name_array: [], visibleEdit: false, id: undefined });
+  const [state, setState] = useState({
+    visibleCreate: false,
+    visibleEdit: false,
+    visibleDelete: false,
+    name: '',
+    sub_name: '',
+    sub_name_array: [],
+    id: undefined,
+  });
 
-  const { visibleCreate, name, sub_name, sub_name_array, visibleEdit, id } = state;
+  const { visibleCreate, visibleEdit, visibleDelete, name, sub_name, sub_name_array, id } = state;
   const { selectCategoryInformation, actions } = props;
   const { categorys } = selectCategoryInformation;
 
@@ -20,7 +28,13 @@ function CategoryManager(props) {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
-  const handleAddSubName = () => setState({ ...state, sub_name_array: sub_name_array.concat([sub_name]), sub_name: '' });
+  const handleAddSubName = () => {
+    if (sub_name === '') {
+      message.error('Thêm danh mục chưa được nhập gì cả nhé v:');
+      return;
+    }
+    setState({ ...state, sub_name_array: sub_name_array.concat([sub_name]), sub_name: '' });
+  };
   const handleCloseSubName = item => {
     const filter = sub_name_array.filter(a => a !== item);
     setState({ ...state, sub_name_array: filter });
@@ -31,6 +45,9 @@ function CategoryManager(props) {
     setState({ ...state, visibleCreate: false });
     onClear();
   };
+
+  const onShowDelete = () => setState({ ...state, visibleDelete: true });
+  const onHideDelete = () => setState({ ...state, visibleDelete: false });
 
   const onShowEdit = item => setState({ ...state, visibleEdit: true, name: item.name_vi, sub_name_array: item.sub_name, id: item._id });
   const onHideEdit = () => {
@@ -54,6 +71,7 @@ function CategoryManager(props) {
 
   const onSubmitDelete = id => {
     actions.deleteCategory({ id });
+    onHideDelete();
   };
 
   const columns = [
@@ -72,6 +90,7 @@ function CategoryManager(props) {
     {
       title: 'Số lượng danh mục con',
       key: 'length',
+      align: 'center',
       dataIndex: 'length',
       render: (_, item) => <div>{item.sub_name.length}</div>,
     },
@@ -81,8 +100,9 @@ function CategoryManager(props) {
       dataIndex: 'actions',
       render: (_, item) => (
         <div>
-          <Button className="btn-green" icon={<EditOutlined />} onClick={() => onShowEdit(item)} />
-          <Button className="btn-red" icon={<DeleteOutlined />} onClick={() => onSubmitDelete(item.id)} />
+          <Button className="btn-green" size="small" icon={<EditOutlined />} onClick={() => onShowEdit(item)} />
+          <Button className="btn-red ml-8" size="small" icon={<DeleteOutlined />} onClick={() => onShowDelete()} />
+          <ComfirmModal visible={visibleDelete} onClose={() => onHideDelete()} onSubmit={() => onSubmitDelete(item._id)} />
         </div>
       ),
     },
@@ -94,7 +114,7 @@ function CategoryManager(props) {
         <Button icon={<PlusOutlined />} className="mb-8 btn-blue" onClick={() => onShowCreate()}>
           Thêm danh mục
         </Button>
-        <Table className="data-custom" columns={columns} dataSource={categorys} onChange={onChange} rowKey="id" />
+        <Table className="data-custom" columns={columns} dataSource={categorys} rowKey={record => record._id} />
       </TableCustom>
       <Modal
         wrapClassName="modal-add-category"
@@ -113,7 +133,7 @@ function CategoryManager(props) {
         }>
         <Input placeholder="Nhập tên danh mục" name="name" value={name} onChange={onChange} />
         <div className="d-flex mt-8 mb-8">
-          <Input placeholder="Thêm tên danh mục con" name="sub_name" value={sub_name} onChange={onChange} />
+          <Input placeholder="Thêm tên danh mục con" name="sub_name" value={sub_name} onChange={onChange} onPressEnter={handleAddSubName} />
           <Button className="btn-blue ml-8" icon={<PlusOutlined />} onClick={handleAddSubName} />
         </div>
         <Row gutter={8}>
@@ -149,7 +169,7 @@ function CategoryManager(props) {
         }>
         <Input placeholder="Nhập tên danh mục" name="name" value={name} onChange={onChange} />
         <div className="d-flex mt-8 mb-8">
-          <Input placeholder="Thêm tên danh mục con" name="sub_name" value={sub_name} onChange={onChange} />
+          <Input placeholder="Thêm tên danh mục con" name="sub_name" value={sub_name} onChange={onChange} onPressEnter={handleAddSubName} />
           <Button className="btn-blue ml-8" icon={<PlusOutlined />} onClick={handleAddSubName} />
         </div>
         <Row gutter={8}>

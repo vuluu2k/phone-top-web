@@ -91,4 +91,15 @@
   .site-layout .site-layout-background {
     background: #fff;
   }
+
+  .min-height-100vh {
+    min-height: 100vh;
+  }
+  .nav-link {
+    color: #fff;
+  }
+  .nav-link.activated {
+    color: #fff;
+    background-color: #0d6efd;
+  }
 }
