@@ -36,7 +36,7 @@ function Admin({ children, ...props }) {
 
   return (
     <Layout className="layout-admin">
-      <Sider trigger={null} collapsible collapsed={collapsed} className="hf-100" style={{ position: 'fixed' }} width={200}>
+      <Sider trigger={null} theme="light" collapsible collapsed={collapsed} className="hf-100" style={{ position: 'fixed' }} width={200}>
         <div className="d-flex justify-content-center p-8">
           <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" alt="logo" width={150} />
         </div>
@@ -45,24 +45,33 @@ function Admin({ children, ...props }) {
         <div className="d-flex align-items-center w-100 mt-8 mb-8" style={{ marginLeft: !collapsed ? 16 : 24 }}>
           <Avatar size={30} icon={<UserOutlined />} />
           {!collapsed && (
-            <div className="text-white fw-500 ml-8" style={{ textTransform: 'capitalize' }}>
+            <div className="fw-500 ml-8" style={{ textTransform: 'capitalize' }}>
               {user?.name}
             </div>
           )}
         </div>
-        <Menu theme="dark" mode="inline" selectedKeys={[keyMenu]} onClick={e => handleChangeMenu(e.key)}>
+        <Menu theme="light" mode="inline" selectedKeys={[keyMenu]} onClick={e => handleChangeMenu(e.key)}>
           <Menu.Item key="/dashboard" icon={<VideoCameraOutlined />}>
             <Link to="/dashboard">Báo cáo - live</Link>
           </Menu.Item>
           <Menu.Item key="/product-manager" icon={<MobileOutlined />}>
             <Link to="/product-manager">Sản phẩm</Link>
           </Menu.Item>
+          <Menu.Item key="/package-manager" icon={<OrderedListOutlined />}>
+            <Link to="/package-manager">Đơn hàng</Link>
+          </Menu.Item>
           <Menu.Item key="/category-manager" icon={<OrderedListOutlined />}>
             <Link to="/category-manager">Danh mục</Link>
           </Menu.Item>
+          <Menu.Item key="/blog-manager" icon={<OrderedListOutlined />}>
+            <Link to="/blog-manager">Tin tức</Link>
+          </Menu.Item>
+          <Menu.Item key="/account-manager" icon={<OrderedListOutlined />}>
+            <Link to="/account-manager">Tài khoản</Link>
+          </Menu.Item>
         </Menu>
         <div
-          className="text-white fw-500 d-flex align-items-center"
+          className="fw-500 d-flex align-items-center"
           style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }}
           onClick={() => handleLogOut()}>
           <div style={{ marginLeft: !collapsed ? 4 : 10 }}>
@@ -72,7 +81,7 @@ function Admin({ children, ...props }) {
         </div>
       </Sider>
       <Layout className="site-layout hf-100" style={collapsed ? { marginLeft: 80 } : { marginLeft: 200 }}>
-        <Header className="site-layout-background w-100" style={{ position: 'fixed' }}>
+        <Header className="site-layout-background w-100" style={{ position: 'fixed', zIndex: 1 }}>
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
             className: 'trigger',
             onClick: () => toggle(),
@@ -82,7 +91,6 @@ function Admin({ children, ...props }) {
           style={{
             margin: '64px 16px',
             padding: '12px 0',
-            minHeight: 280,
           }}>
           <h1>{props.title}</h1>
           {children}

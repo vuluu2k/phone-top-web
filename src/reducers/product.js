@@ -94,11 +94,11 @@ const handleCreate = (state, payload) => {
 const productReducer = (state = initialState, payload) => {
   switch (payload.type) {
     case LOAD_LIST_PRODUCT:
-      return handleRequest(state, 'categoryInfomation', payload);
+      return handleRequest(state, 'productInfomation', payload);
     case LOAD_LIST_PRODUCT_SUCCESS:
-      return handleSuccess(state, 'categoryInfomation', payload);
+      return handleSuccess(state, 'productInfomation', payload);
     case LOAD_LIST_PRODUCT_ERROR:
-      return handleError(state, 'categoryInfomation', payload.message);
+      return handleError(state, 'productInfomation', payload.message);
 
     // case CREATE_CATEGORY:
     //   return handleRequest(state, 'categoryStatusCreate', payload);

@@ -114,7 +114,7 @@ function CategoryManager(props) {
         <Button icon={<PlusOutlined />} className="mb-8 btn-blue" onClick={() => onShowCreate()}>
           Thêm danh mục
         </Button>
-        <Table className="data-custom" columns={columns} dataSource={categorys} rowKey={record => record._id} />
+        <Table className="data-custom" columns={columns} dataSource={categorys} rowKey={record => record._id} size="small" />
       </TableCustom>
       <Modal
         wrapClassName="modal-add-category"
