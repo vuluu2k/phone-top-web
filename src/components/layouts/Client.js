@@ -17,13 +17,10 @@ function Client({ children, ...props }) {
   } = props;
   const user = localStorage.getItem(USER);
   const userParse = JSON.parse(user);
-  console.log(userParse);
 
   useEffect(() => {
     initCart({ user_id: userParse?.user?._id });
   }, [userParse]);
-
-  // console.log(props);
 
   return (
     <Layout className="layout">
@@ -51,7 +48,7 @@ function Client({ children, ...props }) {
             <ShoppingCartOutlined className="icon-header" />
             <div className="fw-500 text-white">Giỏ hàng</div>
           </div>
-          <Link to={(user && '/accout') || '/login'}>
+          <Link to={(user && '/account') || '/login'}>
             <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
               <UserOutlined className="icon-header" />
               <div className="fw-500 text-white">{userParse.user.name || 'Tài khoản'}</div>

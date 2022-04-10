@@ -13,10 +13,14 @@ let end = size;
 export default function SliderCustom(props) {
   const [item, setItem] = useState(props.item.slice(start, end));
 
+  console.log(props.item.length);
+
   const onNext = () => {
-    start += offset;
-    end += offset;
-    setItem(props.item.slice(start, end));
+    if (props.item.length > end) {
+      start += offset;
+      end += offset;
+      setItem(props.item.slice(start, end));
+    }
   };
 
   const onPre = () => {

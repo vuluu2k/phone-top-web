@@ -40,13 +40,15 @@ function* startRequest(payload) {
 }
 
 function* register({ payload }) {
-  const { username, email, password } = payload;
+  const { username, email, password, phone_number, full_name } = payload;
 
   const url = `${API_URL}/auth/register`;
   const body = {
     name: username,
     email: email,
     password: password,
+    phone_number: phone_number,
+    full_name: full_name,
   };
 
   try {
