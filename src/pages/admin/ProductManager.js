@@ -11,24 +11,24 @@ import { productActions } from 'actions';
 import { selectProduct, selectCategory } from 'selectors';
 
 function ProductManager(props) {
-  const [state, setState] = useState({ visibleAdd: false });
+  const [state, setState] = useState({ visibleAdd: false, visibleProduct: false, productItem: {} });
 
   const {
-    actions: { loadListProduct },
+    actions: { loadListProduct, createProduct, editProduct, deleteProduct },
     selectProductInformation: { products },
     selectCategoryInformation: { categorys },
   } = props;
 
-  const { visibleAdd } = state;
+  const { visibleAdd, visibleProduct, productItem } = state;
 
   const onShowAdd = () => setState({ ...state, visibleAdd: true });
-  const onHidenAdd = () => setState({ ...state, visibleAdd: false });
+  const onHidenAdd = () => setState({ ...state, visibleAdd: false, visibleProduct: false });
 
   useEffect(() => {
     loadListProduct();
   }, []);
 
-  console.log(props);
+  console.log(productItem);
 
   const columns = [
     {
@@ -51,7 +51,6 @@ function ProductManager(props) {
       title: 'Tên sản phẩm',
       key: 'name',
       dataIndex: 'name',
-      // render: (_, item) => <div>{item.name_vi}</div>,
     },
     {
       title: 'Danh mục',
@@ -77,12 +76,6 @@ function ProductManager(props) {
       key: 'quantity',
       align: 'center',
       dataIndex: 'quantity',
-      // render: (_, item) => <div>{item.sub_name.length}</div>,
-    },
-    {
-      title: 'Cấu hình',
-      key: 'option',
-      dataIndex: 'option',
     },
   ];
   return (
@@ -96,14 +89,30 @@ function ProductManager(props) {
         <Table
           className="data-custom"
           columns={columns}
-          scroll={{ y: 'calc(100vh - 320px)' }}
+          scroll={{ y: 'calc(100vh - 350px)' }}
           dataSource={products}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: () => {
+                setState({ ...state, productItem: record, visibleProduct: true });
+              },
+            };
+          }}
           rowKey={record => record._id}
           size="small"
           pagination={{ position: ['bottomLeft'] }}
         />
       </TableCustom>
-      <ProductAddModal visible={visibleAdd} onClose={onHidenAdd} categorys={categorys} />
+      <ProductAddModal visible={visibleAdd} onClose={onHidenAdd} categorys={categorys} createProduct={createProduct} />
+      <ProductAddModal
+        visible={visibleProduct}
+        onClose={onHidenAdd}
+        categorys={categorys}
+        productItem={productItem}
+        editProduct={editProduct}
+        deleteProduct={deleteProduct}
+        modalName="detail"
+      />
     </Admin>
   );
 }

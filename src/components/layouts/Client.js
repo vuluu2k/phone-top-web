@@ -6,18 +6,22 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { authActions } from 'actions';
+import { authActions, cartActions } from 'actions';
+import { USER } from 'constants';
 
 const { Header, Content, Footer } = Layout;
 
 function Client({ children, ...props }) {
-  const handleClick = e => {
-    console.log('click', e);
-  };
+  const {
+    actions: { initCart },
+  } = props;
+  const user = localStorage.getItem(USER);
+  const userParse = JSON.parse(user);
+  console.log(userParse);
 
-  // useEffect(() => {
-  //   props.actions.loadUser();
-  // }, []);
+  useEffect(() => {
+    initCart({ user_id: userParse?.user?._id });
+  }, [userParse]);
 
   // console.log(props);
 
@@ -47,10 +51,10 @@ function Client({ children, ...props }) {
             <ShoppingCartOutlined className="icon-header" />
             <div className="fw-500 text-white">Giỏ hàng</div>
           </div>
-          <Link to="/login">
+          <Link to={(user && '/accout') || '/login'}>
             <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
               <UserOutlined className="icon-header" />
-              <div className="fw-500 text-white">Tài khoản</div>
+              <div className="fw-500 text-white">{userParse.user.name || 'Tài khoản'}</div>
             </div>
           </Link>
         </div>
@@ -86,6 +90,6 @@ function Client({ children, ...props }) {
   );
 }
 
-const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions }, dispatch) });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions, ...cartActions }, dispatch) });
 
 export default connect(null, mapDispatchToProps)(Client);

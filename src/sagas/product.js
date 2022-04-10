@@ -25,15 +25,15 @@ function* startRequest(payload) {
     case LOAD_LIST_PRODUCT:
       yield call(loadList);
       break;
-    // case CREATE_PRODUCT:
-    //   yield call(createCategory, payload);
-    //   break;
-    // case EDIT_PRODUCT:
-    //   yield call(editCategory, payload);
-    //   break;
-    // case DELETE_PRODUCT:
-    //   yield call(deleteCategory, payload);
-    //   break;
+    case CREATE_PRODUCT:
+      yield call(createProduct, payload);
+      break;
+    case EDIT_PRODUCT:
+      yield call(editProduct, payload);
+      break;
+    case DELETE_PRODUCT:
+      yield call(deleteProduct, payload);
+      break;
     default:
       break;
   }
@@ -57,70 +57,83 @@ function* loadList() {
   }
 }
 
-// function* createCategory({ payload }) {
-//   const { name, name_vi, sub_name } = payload;
-//   const url = `${API_URL}/category/create`;
-//   const body = {
-//     name: name,
-//     name_vi: name_vi || name,
-//     sub_name: sub_name,
-//   };
-//   try {
-//     const response = yield call(axios.post, url, body);
-//     if (!response.data.success) {
-//       yield put({ typ: CREATE_CATEGORY_ERROR, ...response.data });
-//     } else {
-//       yield put({ type: CREATE_CATEGORY_SUCCESS, ...response.data });
-//     }
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//     yield put({ type: CREATE_CATEGORY_ERROR, error: error });
-//     return error;
-//   }
-// }
+function* createProduct({ payload }) {
+  const { name, value, image, status, quantity, category, sub_category, options, profile } = payload;
+  console.log(payload);
+  const url = `${API_URL}/product/create`;
+  const body = {
+    name,
+    value,
+    image,
+    status,
+    quantity,
+    category,
+    sub_category,
+    options,
+    profile,
+  };
+  try {
+    const response = yield call(axios.post, url, body);
+    if (!response.data.success) {
+      yield put({ typ: CREATE_PRODUCT_ERROR, ...response.data });
+    } else {
+      yield put({ type: CREATE_PRODUCT_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CREATE_PRODUCT_ERROR, error: error });
+    return error;
+  }
+}
 
-// function* editCategory({ payload }) {
-//   const { id, name, name_vi, sub_name } = payload;
-//   const url = `${API_URL}/category/edit/${id}`;
-//   const body = {
-//     name: name,
-//     name_vi: name_vi || name,
-//     sub_name: sub_name,
-//   };
-//   try {
-//     const response = yield call(axios.patch, url, body);
-//     if (!response.data.success) {
-//       yield put({ type: EDIT_CATEGORY_ERROR, ...response.data });
-//     } else {
-//       yield put({ type: EDIT_CATEGORY_SUCCESS, ...response.data });
-//     }
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//     yield put({ type: EDIT_CATEGORY_ERROR, error: error });
-//     return error;
-//   }
-// }
+function* editProduct({ payload }) {
+  const { id, name, value, image, status, quantity, category, sub_category, options, profile } = payload;
+  const url = `${API_URL}/product/edit`;
+  const body = {
+    product_id: id,
+    name,
+    value,
+    image,
+    status,
+    quantity,
+    category,
+    sub_category,
+    options,
+    profile,
+  };
+  try {
+    const response = yield call(axios.patch, url, body);
+    if (!response.data.success) {
+      yield put({ type: EDIT_PRODUCT_ERROR, ...response.data });
+    } else {
+      yield put({ type: EDIT_PRODUCT_SUCCESS, ...response.data, id });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: EDIT_PRODUCT_ERROR, error: error });
+    return error;
+  }
+}
 
-// function* deleteCategory({ payload }) {
-//   const { id } = payload;
-//   console.log(id);
-//   const url = `${API_URL}/category/delete/${id}`;
-//   try {
-//     const response = yield call(axios.delete, url);
-//     if (!response.data.success) {
-//       yield put({ type: DELETE_CATEGORY_ERROR, ...response.data });
-//     } else {
-//       yield put({ type: DELETE_CATEGORY_SUCCESS, ...response.data });
-//     }
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//     yield put({ type: DELETE_CATEGORY_ERROR, error: error });
-//     return error;
-//   }
-// }
+function* deleteProduct({ payload }) {
+  const { id } = payload;
+  const url = `${API_URL}/product/delete/${id}`;
+  try {
+    const response = yield call(axios.delete, url);
+    if (!response.data.success) {
+      yield put({ type: DELETE_PRODUCT_ERROR, ...response.data });
+    } else {
+      yield put({ type: DELETE_PRODUCT_SUCCESS, ...response.data, id });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: DELETE_PRODUCT_ERROR, error: error });
+    return error;
+  }
+}
 
 export function* productSagas() {
   yield takeLatest([LOAD_LIST_PRODUCT, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT], startRequest);

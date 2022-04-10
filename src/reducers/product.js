@@ -39,54 +39,54 @@ const initialState = {
 
 const handleDelete = (state, payload) => {
   const { id } = payload;
-  const listCurrent = state.categoryInfomation.categorys;
+  const listCurrent = state.productInfomation.products;
   const listFilter = listCurrent.filter(item => item._id !== id);
   return update(state, {
-    categoryStatusDel: {
+    productStatusDel: {
       requesting: { $set: false },
       success: { $set: true },
       $merge: converObjToCamelKeys(payload),
     },
-    categoryInfomation: {
-      categorys: { $set: listFilter },
+    productInfomation: {
+      products: { $set: listFilter },
     },
   });
 };
 
 const handleEdit = (state, payload) => {
-  const { id, category } = payload;
-  console.log(id, category);
-  const listCurrent = state.categoryInfomation.categorys;
+  const { id, product } = payload;
+  console.log('test', id, product);
+  const listCurrent = state.productInfomation.products;
   const listAfterEdit = listCurrent.map(item => {
     if (item._id === id) {
-      return category;
+      return product;
     }
     return item;
   });
 
   return update(state, {
-    categoryStatusDel: {
+    productStatusEdit: {
       requesting: { $set: false },
       success: { $set: true },
       $merge: converObjToCamelKeys(payload),
     },
-    categoryInfomation: {
-      categorys: { $set: listAfterEdit },
+    productInfomation: {
+      products: { $set: listAfterEdit },
     },
   });
 };
 
 const handleCreate = (state, payload) => {
-  const { category } = payload;
-  const listCurrent = state.categoryInfomation.categorys;
+  const { product } = payload;
+  const listCurrent = state.productInfomation.products;
   return update(state, {
-    categoryStatusDel: {
+    productStatusCreate: {
       requesting: { $set: false },
       success: { $set: true },
       $merge: converObjToCamelKeys(payload),
     },
-    categoryInfomation: {
-      categorys: { $set: listCurrent.concat(category) },
+    productInfomation: {
+      products: { $set: listCurrent.concat(product) },
     },
   });
 };
@@ -100,27 +100,27 @@ const productReducer = (state = initialState, payload) => {
     case LOAD_LIST_PRODUCT_ERROR:
       return handleError(state, 'productInfomation', payload.message);
 
-    // case CREATE_CATEGORY:
-    //   return handleRequest(state, 'categoryStatusCreate', payload);
-    // case CREATE_CATEGORY_SUCCESS:
-    //   return handleCreate(state, payload);
-    // case CREATE_CATEGORY_ERROR:
-    //   return handleError(state, 'categoryStatusCreate', payload.message);
+    case CREATE_PRODUCT:
+      return handleRequest(state, 'productInfomation', payload);
+    case CREATE_PRODUCT_SUCCESS:
+      return handleCreate(state, payload);
+    case CREATE_PRODUCT_ERROR:
+      return handleError(state, 'productInfomation', payload.message);
 
-    // case EDIT_CATEGORY:
-    //   return handleRequest(state, 'categoryStatusEdit');
-    // case EDIT_CATEGORY_SUCCESS:
-    //   return handleEdit(state, payload);
-    // case EDIT_CATEGORY_ERROR:
-    //   return handleError(state, 'categoryStatusEdit', payload.message);
+    case EDIT_PRODUCT:
+      return handleRequest(state, 'productInfomation');
+    case EDIT_PRODUCT_SUCCESS:
+      console.log(payload);
+      return handleEdit(state, payload);
+    case EDIT_PRODUCT_ERROR:
+      return handleError(state, 'productInfomation', payload.message);
 
-    // case DELETE_CATEGORY:
-    //   return handleRequest(state, 'categoryStatusDel');
-    // case DELETE_CATEGORY_SUCCESS:
-    //   return handleDelete(state, payload);
-    // case DELETE_CATEGORY_ERROR:
-    //   return handleError(state, 'categoryStatusDel', payload.message);
-
+    case DELETE_PRODUCT:
+      return handleRequest(state, 'productInfomation');
+    case DELETE_PRODUCT_SUCCESS:
+      return handleDelete(state, payload);
+    case DELETE_PRODUCT_ERROR:
+      return handleError(state, 'productInfomation', payload.message);
     default:
       return state;
   }

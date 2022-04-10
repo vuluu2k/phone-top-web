@@ -9,6 +9,10 @@ import {
   OrderedListOutlined,
   MobileOutlined,
 } from '@ant-design/icons';
+import { FiPackage } from 'react-icons/fi';
+import { GrBlog } from 'react-icons/gr';
+import { BiCategory } from 'react-icons/bi';
+import { MdSupervisorAccount } from 'react-icons/md';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { authActions } from 'actions';
@@ -36,12 +40,19 @@ function Admin({ children, ...props }) {
 
   return (
     <Layout className="layout-admin">
-      <Sider trigger={null} theme="light" collapsible collapsed={collapsed} className="hf-100" style={{ position: 'fixed' }} width={200}>
-        <div className="d-flex justify-content-center p-8">
-          <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" alt="logo" width={150} />
+      <Sider
+        trigger={null}
+        theme="light"
+        collapsible
+        collapsed={collapsed}
+        className="hf-100"
+        style={{ position: 'fixed', filter: 'drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.15))', zIndex: 2 }}
+        width={200}>
+        <div className="d-flex justify-content-center align-items-center p-8">
+          <div style={{ fontSize: 18, fontWeight: 'bold', padding: '3px 0' }}>{collapsed ? 'P' : 'PhoneTop'}</div>
         </div>
         <div className="logo" />
-        <Divider style={{ backgroundColor: 'white', height: 1, margin: 4 }} />
+        <Divider style={{ backgroundColor: '#f0f0f0', height: 1, margin: 0 }} />
         <div className="d-flex align-items-center w-100 mt-8 mb-8" style={{ marginLeft: !collapsed ? 16 : 24 }}>
           <Avatar size={30} icon={<UserOutlined />} />
           {!collapsed && (
@@ -57,31 +68,32 @@ function Admin({ children, ...props }) {
           <Menu.Item key="/product-manager" icon={<MobileOutlined />}>
             <Link to="/product-manager">Sản phẩm</Link>
           </Menu.Item>
-          <Menu.Item key="/package-manager" icon={<OrderedListOutlined />}>
+          <Menu.Item key="/package-manager" icon={<FiPackage />}>
             <Link to="/package-manager">Đơn hàng</Link>
           </Menu.Item>
-          <Menu.Item key="/category-manager" icon={<OrderedListOutlined />}>
+          <Menu.Item key="/category-manager" icon={<BiCategory />}>
             <Link to="/category-manager">Danh mục</Link>
           </Menu.Item>
-          <Menu.Item key="/blog-manager" icon={<OrderedListOutlined />}>
+          <Menu.Item key="/blog-manager" icon={<GrBlog />}>
             <Link to="/blog-manager">Tin tức</Link>
           </Menu.Item>
-          <Menu.Item key="/account-manager" icon={<OrderedListOutlined />}>
+          <Menu.Item key="/account-manager" icon={<MdSupervisorAccount />}>
             <Link to="/account-manager">Tài khoản</Link>
           </Menu.Item>
         </Menu>
-        <div
-          className="fw-500 d-flex align-items-center"
-          style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }}
-          onClick={() => handleLogOut()}>
-          <div style={{ marginLeft: !collapsed ? 4 : 10 }}>
-            <LogoutOutlined />
+        <div className="w-100" style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }} onClick={() => handleLogOut()}>
+          <div className="fw-500 d-flex align-items-center">
+            <div style={{ marginLeft: !collapsed ? 4 : 10 }}>
+              <LogoutOutlined />
+            </div>
+            {!collapsed && <div style={{ marginLeft: 8 }}>Đăng xuất</div>}
           </div>
-          {!collapsed && <div style={{ marginLeft: 8 }}>Đăng xuất</div>}
         </div>
       </Sider>
       <Layout className="site-layout hf-100" style={collapsed ? { marginLeft: 80 } : { marginLeft: 200 }}>
-        <Header className="site-layout-background w-100" style={{ position: 'fixed', zIndex: 1 }}>
+        <Header
+          className="site-layout-background w-100 d-flex align-items-center"
+          style={{ position: 'fixed', zIndex: 1, filter: 'drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.15))' }}>
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
             className: 'trigger',
             onClick: () => toggle(),
@@ -89,7 +101,7 @@ function Admin({ children, ...props }) {
         </Header>
         <Content
           style={{
-            margin: '64px 16px',
+            margin: '50px 16px',
             padding: '12px 0',
           }}>
           <h1>{props.title}</h1>
