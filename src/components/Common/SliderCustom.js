@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { useSpring, animated } from 'react-spring';
@@ -12,8 +12,9 @@ let end = size;
 
 export default function SliderCustom(props) {
   const [item, setItem] = useState(props.item.slice(start, end));
-
-  console.log(props.item.length);
+  useEffect(() => {
+    setItem(props.item.slice(start, end));
+  }, [props.item]);
 
   const onNext = () => {
     if (props.item.length > end) {
@@ -42,11 +43,12 @@ export default function SliderCustom(props) {
 
   return (
     <div className="slider-custom pos-relative">
+      <h1 className="text-white text-upper">{props.title}</h1>
       <animated.div style={anim}>
         <Row gutter={15}>
           {item.map((a, index) => (
             <Col key={index} span={4}>
-              <ProductItem name={a.name} value={a.value} />
+              <ProductItem name={a.name} value={a.value} imageLink={a.image_link} />
             </Col>
           ))}
         </Row>

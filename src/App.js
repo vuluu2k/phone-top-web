@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import { Landing } from 'components/layouts';
-import { Home, Account } from 'pages';
+import { Home, Account, ProductDetail } from 'pages';
 import { Auth } from 'components/auth';
 import { Dashboard, ProductManager, CategoryManager, PackageManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
@@ -24,6 +24,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/home" element={<Home />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/product-detail/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Auth />} />
 
             <Route exact path="/" element={<PrivateRoute />}>

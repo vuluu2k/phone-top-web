@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { authActions, cartActions } from 'actions';
+import { selectAuth } from 'selectors';
 import { USER } from 'constants';
 
 const { Header, Content, Footer } = Layout;
@@ -14,13 +15,14 @@ const { Header, Content, Footer } = Layout;
 function Client({ children, ...props }) {
   const {
     actions: { initCart },
+    selectAuthStatus,
   } = props;
-  const user = localStorage.getItem(USER);
-  const userParse = JSON.parse(user);
 
   useEffect(() => {
-    initCart({ user_id: userParse?.user?._id });
-  }, [userParse]);
+    initCart({ user_id: selectAuthStatus?.user?._id });
+  }, [selectAuthStatus]);
+
+  console.log(props);
 
   return (
     <Layout className="layout">
@@ -48,10 +50,10 @@ function Client({ children, ...props }) {
             <ShoppingCartOutlined className="icon-header" />
             <div className="fw-500 text-white">Giỏ hàng</div>
           </div>
-          <Link to={(user && '/account') || '/login'}>
+          <Link to={(selectAuthStatus?.user?.name && '/account') || '/login'}>
             <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
               <UserOutlined className="icon-header" />
-              <div className="fw-500 text-white">{userParse.user.name || 'Tài khoản'}</div>
+              <div className="fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
             </div>
           </Link>
         </div>
@@ -64,19 +66,51 @@ function Client({ children, ...props }) {
           </div>
         </BackTop>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer style={{ color: 'white', padding: '16px 200px' }}>
         <Row>
           <Col span={6}>
-            <h4>Tìm cửa hàng</h4>
+            <div>Tìm cửa hàng</div>
+            <div>Tìm cửa hàng gần nhất</div>
+            <div>Mua hàng từ xa</div>
           </Col>
           <Col span={6}>
-            <h4>Tìm cửa hàng</h4>
+            <div>
+              Gọi mua hàng:
+              <strong>
+                <a href="tel:18002097">1800.2097</a>
+              </strong>
+              (8h00 - 22h00)
+            </div>
+            <div>
+              Gọi khiếu nại:
+              <strong>
+                <a href="tel:18002063">1800.2063</a>
+              </strong>
+              (8h00 - 22h00)
+            </div>
+            <div>
+              Gọi bảo hành
+              <strong>
+                <a href="tel:18002064">1800.2064</a>
+              </strong>
+              (8h00 - 22h00)
+            </div>
           </Col>
           <Col span={6}>
-            <h4>Tìm cửa hàng</h4>
+            <div>Mua hàng và thanh toán Online</div>
+            <div>Mua hàng trả góp Online</div>
+            <div>Tra thông tin đơn hàng</div>
+            <div>Trung tâm bảo hành chính hãng</div>
+            <div>Quy định về việc sao lưu dữ liệu</div>
+            <div>Dịch vụ bảo hành điện thoại</div>
           </Col>
           <Col span={6}>
-            <h4>Tìm cửa hàng</h4>
+            <div>Quy chế hoạt động</div>
+            <div>Chính sách Bảo hành</div>
+            <div>Liên hệ hợp tác kinh doanh</div>
+            <div>Đơn Doanh nghiệp</div>
+            <div>Ưu đãi từ đối tác</div>
+            <div>Tuyển dụng</div>
           </Col>
         </Row>
       </Footer>
@@ -88,5 +122,6 @@ function Client({ children, ...props }) {
 }
 
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions, ...cartActions }, dispatch) });
+const mapStateToProps = state => ({ ...selectAuth(state) });
 
-export default connect(null, mapDispatchToProps)(Client);
+export default connect(mapStateToProps, mapDispatchToProps)(Client);

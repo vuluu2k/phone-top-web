@@ -5,6 +5,9 @@ import {
   LOAD_LIST_PRODUCT,
   LOAD_LIST_PRODUCT_SUCCESS,
   LOAD_LIST_PRODUCT_ERROR,
+  LOAD_LIST_PRODUCT_HOME,
+  LOAD_LIST_PRODUCT_HOME_SUCCESS,
+  LOAD_LIST_PRODUCT_HOME_ERROR,
   CREATE_PRODUCT,
   CREATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_ERROR,
@@ -24,6 +27,9 @@ function* startRequest(payload) {
   switch (payload.type) {
     case LOAD_LIST_PRODUCT:
       yield call(loadList);
+      break;
+    case LOAD_LIST_PRODUCT_HOME:
+      yield call(loadListHome);
       break;
     case CREATE_PRODUCT:
       yield call(createProduct, payload);
@@ -53,6 +59,24 @@ function* loadList() {
   } catch (error) {
     console.log(error);
     yield put({ type: LOAD_LIST_PRODUCT_ERROR, error: error });
+    return error;
+  }
+}
+
+function* loadListHome() {
+  const url = `${API_URL}/product/view_home`;
+
+  try {
+    const response = yield call(axios.get, url);
+    if (!response.data.success) {
+      yield put({ typ: LOAD_LIST_PRODUCT_HOME_ERROR, ...response.data });
+    } else {
+      yield put({ type: LOAD_LIST_PRODUCT_HOME_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: LOAD_LIST_PRODUCT_HOME_ERROR, error: error });
     return error;
   }
 }
@@ -136,5 +160,5 @@ function* deleteProduct({ payload }) {
 }
 
 export function* productSagas() {
-  yield takeLatest([LOAD_LIST_PRODUCT, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT], startRequest);
+  yield takeLatest([LOAD_LIST_PRODUCT, LOAD_LIST_PRODUCT_HOME, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT], startRequest);
 }

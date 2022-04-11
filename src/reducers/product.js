@@ -11,6 +11,9 @@ import {
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_ERROR,
+  LOAD_LIST_PRODUCT_HOME,
+  LOAD_LIST_PRODUCT_HOME_SUCCESS,
+  LOAD_LIST_PRODUCT_HOME_ERROR,
 } from 'constants/product';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -22,6 +25,16 @@ const initialState = {
     success: false,
     message: '',
     products: [],
+  },
+  productInfomationHome: {
+    success: false,
+    message: '',
+    hot: [],
+    mobile: [],
+    laptop: [],
+    watch: [],
+    tablet: [],
+    accessory: [],
   },
   productStatusDel: {
     success: false,
@@ -99,6 +112,13 @@ const productReducer = (state = initialState, payload) => {
       return handleSuccess(state, 'productInfomation', payload);
     case LOAD_LIST_PRODUCT_ERROR:
       return handleError(state, 'productInfomation', payload.message);
+
+    case LOAD_LIST_PRODUCT_HOME:
+      return handleRequest(state, 'productInfomationHome', payload);
+    case LOAD_LIST_PRODUCT_HOME_SUCCESS:
+      return handleSuccess(state, 'productInfomationHome', payload);
+    case LOAD_LIST_PRODUCT_HOME_ERROR:
+      return handleError(state, 'productInfomationHome', payload.message);
 
     case CREATE_PRODUCT:
       return handleRequest(state, 'productInfomation', payload);

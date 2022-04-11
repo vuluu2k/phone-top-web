@@ -1,8 +1,15 @@
-import { LOAD_LIST_PRODUCT, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT } from 'constants/product';
+import { LOAD_LIST_PRODUCT, LOAD_LIST_PRODUCT_HOME, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT } from 'constants/product';
 
 function loadListProduct(payload) {
   return {
     type: LOAD_LIST_PRODUCT,
+    payload,
+  };
+}
+
+function loadListProductHome(payload) {
+  return {
+    type: LOAD_LIST_PRODUCT_HOME,
     payload,
   };
 }
@@ -28,6 +35,6 @@ function deleteProduct(payload) {
   };
 }
 
-const productActions = { loadListProduct, createProduct, editProduct, deleteProduct };
+const productActions = { loadListProduct, createProduct, editProduct, deleteProduct, loadListProductHome };
 
 export default productActions;

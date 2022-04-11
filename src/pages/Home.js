@@ -1,33 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Menu, Carousel, Image, Row, Col } from 'antd';
-import Icon, { MobileOutlined, LaptopOutlined, TabletOutlined } from '@ant-design/icons';
+import Icon, { MobileOutlined, LaptopOutlined, TabletOutlined, HomeOutlined } from '@ant-design/icons';
+import { IoWatchOutline } from 'react-icons/io5';
+import { CgUsb } from 'react-icons/cg';
 import { FaHeadphonesAlt } from 'react-icons/fa';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
 
-import { selectCategory } from 'selectors';
+import { selectCategory, selectProduct } from 'selectors';
+import { productActions } from 'actions';
 import { Client } from 'components/layouts';
 import { ProductItem } from 'components/product';
 import { SilderCustom } from 'components/Common';
 const { SubMenu } = Menu;
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 
-const item = [
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-  { name: 'iPhone SE 2022 | Chính hãng VN/A', value: 100000 },
-];
+function renderProductArray(product, title) {
+  return (
+    <>
+      <h1 style={{ marginBottom: 16 }} className="text-upper">
+        {title}
+      </h1>
+      <Row gutter={15}>
+        {product.map((a, index) => (
+          <Col key={index} span={4}>
+            <ProductItem name={a.name} value={a.value} imageLink={a.image_link} id={a._id} />
+          </Col>
+        ))}
+      </Row>
+    </>
+  );
+}
+
 function Home(props) {
   const {
     selectCategory: {
       selectCategoryInformation: { categorys },
     },
+    actions: { loadListProductHome },
+    selectProductInformationHome: { hot, mobile, laptop, watch, tablet, accessory },
   } = props;
+
+  useEffect(() => {
+    loadListProductHome();
+  }, []);
 
   return (
     <Client>
@@ -36,14 +52,17 @@ function Home(props) {
           <Menu mode="vertical">
             {categorys?.map(category => {
               const icon =
-                (category.name === 'mobile' && MobileOutlined) ||
-                (category.name === 'Laptop, PC' && LaptopOutlined) ||
-                (category.name === 'Tablet' && TabletOutlined) ||
-                (category.name === 'Music' && FaHeadphonesAlt);
+                (category.name_vi === 'Điện thoại' && MobileOutlined) ||
+                (category.name_vi === 'Laptop, PC, Màn hình' && LaptopOutlined) ||
+                (category.name_vi === 'Máy tỉnh bảng' && TabletOutlined) ||
+                (category.name_vi === 'Âm thanh' && FaHeadphonesAlt) ||
+                (category.name_vi === 'Nhà thông minh' && HomeOutlined) ||
+                (category.name_vi === 'Đồng hồ' && IoWatchOutline) ||
+                (category.name_vi === 'Phụ kiện' && CgUsb);
               return (
                 <SubMenu key={category._id} icon={<Icon component={icon} />} title={category.name_vi}>
-                  {category.sub_name.map(item => (
-                    <SubMenu key={item} title={item}></SubMenu>
+                  {category.sub_name.map((item, idx) => (
+                    <SubMenu key={item + category._id} title={item}></SubMenu>
                   ))}
                 </SubMenu>
               );
@@ -73,22 +92,23 @@ function Home(props) {
         </Sider>
       </Layout>
       <Layout>
-        <SilderCustom item={item} />
+        <SilderCustom item={hot} title="Sản phẩm bán chạy nhất" />
 
-        <Row gutter={15}>
-          {item.map((a, index) => (
-            <Col key={index} span={4}>
-              <ProductItem name={a.name} value={a.value} />
-            </Col>
-          ))}
-        </Row>
+        {renderProductArray(mobile, 'Điện thoại')}
+        {renderProductArray(laptop, 'Laptop, PC, Màn hình')}
+        {renderProductArray(watch, 'Đồng hồ')}
+        {renderProductArray(tablet, 'Máy tính bảng')}
+        {renderProductArray(accessory, 'Phụ kiện')}
       </Layout>
     </Client>
   );
 }
 
-const mapDispatchToProps = state => ({
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...productActions }, dispatch) });
+
+const mapStateToProps = state => ({
   selectCategory: selectCategory(state),
+  ...selectProduct(state),
 });
 
-export default connect(mapDispatchToProps, null)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
