@@ -22,8 +22,6 @@ function Client({ children, ...props }) {
     initCart({ user_id: selectAuthStatus?.user?._id });
   }, [selectAuthStatus]);
 
-  console.log(props);
-
   return (
     <Layout className="layout">
       <Header className="header">

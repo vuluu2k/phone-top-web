@@ -94,11 +94,11 @@ function Home(props) {
       <Layout>
         <SilderCustom item={hot} title="Sản phẩm bán chạy nhất" />
 
-        {renderProductArray(mobile, 'Điện thoại')}
-        {renderProductArray(laptop, 'Laptop, PC, Màn hình')}
-        {renderProductArray(watch, 'Đồng hồ')}
-        {renderProductArray(tablet, 'Máy tính bảng')}
-        {renderProductArray(accessory, 'Phụ kiện')}
+        {mobile.length > 0 && renderProductArray(mobile, 'Điện thoại')}
+        {laptop.length > 0 && renderProductArray(laptop, 'Laptop, PC, Màn hình')}
+        {watch.length > 0 && renderProductArray(watch, 'Đồng hồ')}
+        {tablet.length > 0 && renderProductArray(tablet, 'Máy tính bảng')}
+        {accessory.length > 0 && renderProductArray(accessory, 'Phụ kiện')}
       </Layout>
     </Client>
   );

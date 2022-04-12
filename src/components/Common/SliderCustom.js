@@ -48,7 +48,7 @@ export default function SliderCustom(props) {
         <Row gutter={15}>
           {item.map((a, index) => (
             <Col key={index} span={4}>
-              <ProductItem name={a.name} value={a.value} imageLink={a.image_link} />
+              <ProductItem name={a.name} value={a.value} imageLink={a.image_link} id={a._id} />
             </Col>
           ))}
         </Row>

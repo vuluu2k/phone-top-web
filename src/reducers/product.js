@@ -68,7 +68,6 @@ const handleDelete = (state, payload) => {
 
 const handleEdit = (state, payload) => {
   const { id, product } = payload;
-  console.log('test', id, product);
   const listCurrent = state.productInfomation.products;
   const listAfterEdit = listCurrent.map(item => {
     if (item._id === id) {

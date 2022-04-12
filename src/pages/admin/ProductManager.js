@@ -28,8 +28,6 @@ function ProductManager(props) {
     loadListProduct();
   }, []);
 
-  console.log(productItem);
-
   const columns = [
     {
       title: 'Mã',

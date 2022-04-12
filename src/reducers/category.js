@@ -55,7 +55,6 @@ const handleDelete = (state, payload) => {
 
 const handleEdit = (state, payload) => {
   const { id, category } = payload;
-  console.log(id, category);
   const listCurrent = state.categoryInfomation.categorys;
   const listAfterEdit = listCurrent.map(item => {
     if (item._id === id) {
@@ -64,7 +63,6 @@ const handleEdit = (state, payload) => {
     return item;
   });
 
-  console.log(listAfterEdit, id);
   return update(state, {
     categoryStatusDel: {
       requesting: { $set: false },

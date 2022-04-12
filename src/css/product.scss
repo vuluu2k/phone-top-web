@@ -18,4 +18,31 @@ body {
       transform: scale(1.02);
     }
   }
+
+  .product-item-detail{
+    background-image: linear-gradient(to right, #ff2653, #ff881b);
+    padding:16px;
+    border-radius: 8px;
+    min-height:400px;
+  }
+
+  .product-item-money {
+    display: inline-block;
+    margin-bottom: 10px!important;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #D70018;
+  }
+
+  .option-item{
+    border:1px solid #ff881b;
+    padding:8px 20px;
+    border-radius:8px;
+  }
+
+  .option-item-activated{
+    border:1px solid blue;
+    padding:8px 20px;
+    border-radius:8px;
+  }
 }
