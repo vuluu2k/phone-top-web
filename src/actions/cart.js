@@ -42,7 +42,7 @@ function deleteCart(payload) {
   };
 }
 
-function ShowCart(payload) {
+function showCart(payload) {
   return {
     type: SHOW_CART,
     payload,
@@ -56,6 +56,6 @@ function hiddenCart(payload) {
   };
 }
 
-const cartActions = { initCart, changeCart, getCart, addCart, editCart, deleteCart, ShowCart, hiddenCart };
+const cartActions = { initCart, changeCart, getCart, addCart, editCart, deleteCart, showCart, hiddenCart };
 
 export default cartActions;

@@ -15,7 +15,7 @@ function ProductManager(props) {
 
   const {
     actions: { loadListProduct, createProduct, editProduct, deleteProduct },
-    selectProductInformation: { products },
+    selectProductInformation: { products, success },
     selectCategoryInformation: { categorys },
   } = props;
 
@@ -102,15 +102,17 @@ function ProductManager(props) {
         />
       </TableCustom>
       <ProductAddModal visible={visibleAdd} onClose={onHidenAdd} categorys={categorys} createProduct={createProduct} />
-      <ProductAddModal
-        visible={visibleProduct}
-        onClose={onHidenAdd}
-        categorys={categorys}
-        productItem={productItem}
-        editProduct={editProduct}
-        deleteProduct={deleteProduct}
-        modalName="detail"
-      />
+      {visibleProduct && (
+        <ProductAddModal
+          visible={visibleProduct}
+          onClose={onHidenAdd}
+          categorys={categorys}
+          productItem={productItem}
+          editProduct={editProduct}
+          deleteProduct={deleteProduct}
+          modalName="detail"
+        />
+      )}
     </Admin>
   );
 }

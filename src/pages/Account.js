@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Avatar, Button, Input } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SaveOutlined } from '@ant-design/icons';
 
 import { Client } from 'components/layouts';
-import { USER } from 'constants';
 import { selectAuth } from 'selectors';
 import { authActions } from 'actions';
 
 function Account(props) {
-  const userLocal = localStorage.getItem(USER);
-  const userParse = JSON.parse(userLocal);
   const {
-    user: { name, full_name, email, phone_number },
-  } = userParse;
+    selectAuthStatus: { user },
+  } = props;
   const [state, setState] = useState({
     statusChange: 'information',
-    fullName: full_name,
-    Email: email,
-    phoneNumber: phone_number,
+    fullName: user?.full_name,
+    Email: user?.email,
+    phoneNumber: user?.phone_number,
     password: '',
     newPassword: '',
     newPasswordRepeat: '',
@@ -29,13 +26,25 @@ function Account(props) {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    setState({
+      statusChange: 'information',
+      fullName: user?.full_name,
+      Email: user?.email,
+      phoneNumber: user?.phone_number,
+      password: '',
+      newPassword: '',
+      newPasswordRepeat: '',
+    });
+  }, [user]);
+
   return (
     <Client>
       <Row style={{ margin: '16px 0' }}>
         <Col span={6} style={{ padding: 16 }}>
           <div className="d-flex align-items-center justify-content-center">
             <Avatar size={60} />
-            <div className="ml-8 fw-500">{name}</div>
+            <div className="ml-8 fw-500">{user?.name}</div>
           </div>
           <div className="mt-16">
             <Button type="text" block onClick={() => setState({ ...state, statusChange: 'information' })}>
@@ -48,7 +57,7 @@ function Account(props) {
             </Button>
           </div>
         </Col>
-        <Col span={18} style={{ backgroundColor: 'white', padding: 16 }}>
+        <Col span={18} style={{ backgroundColor: 'white', padding: 16, minHeight: 'calc(100vh - 298px)' }}>
           {(statusChange === 'information' && (
             <>
               <div>
@@ -57,7 +66,7 @@ function Account(props) {
               </div>
 
               <div className="text">
-                Tên đăng nhập: <span className="fw-500">{name}</span>
+                Tên đăng nhập: <span className="fw-500">{user?.name}</span>
               </div>
               <Row>
                 <div className="text">Họ và Tên</div>

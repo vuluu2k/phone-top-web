@@ -82,7 +82,7 @@ function* loadListHome() {
 }
 
 function* createProduct({ payload }) {
-  const { name, value, image, status, quantity, category, sub_category, options, profile } = payload;
+  const { name, value, image, status, quantity, category, sub_category, options, profile, description } = payload;
   console.log(payload);
   const url = `${API_URL}/product/create`;
   const body = {
@@ -95,6 +95,7 @@ function* createProduct({ payload }) {
     sub_category,
     options,
     profile,
+    description,
   };
   try {
     const response = yield call(axios.post, url, body);
@@ -112,7 +113,7 @@ function* createProduct({ payload }) {
 }
 
 function* editProduct({ payload }) {
-  const { id, name, value, image, status, quantity, category, sub_category, options, profile } = payload;
+  const { id, name, value, image, status, quantity, category, sub_category, options, profile, description } = payload;
   const url = `${API_URL}/product/edit`;
   const body = {
     product_id: id,
@@ -125,6 +126,7 @@ function* editProduct({ payload }) {
     sub_category,
     options,
     profile,
+    description,
   };
   try {
     const response = yield call(axios.patch, url, body);

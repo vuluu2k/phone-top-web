@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Layout, Row, Col, BackTop, Input } from 'antd';
-import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined, Drawer } from '@ant-design/icons';
+import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu } from 'antd';
+import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import { ImTruck } from 'react-icons/im';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -8,14 +8,17 @@ import { bindActionCreators } from 'redux';
 
 import { authActions, cartActions } from 'actions';
 import { selectAuth, selectCart } from 'selectors';
+import { CartDetail } from 'components/cart';
+import { sumMoney } from 'utils/number';
 
 const { Header, Content, Footer } = Layout;
 
 function Client({ children, ...props }) {
   const {
-    actions: { initCart, logout },
+    actions: { initCart, logout, hiddenCart, showCart },
     selectVisibleCart,
     selectAuthStatus,
+    selectCartInformation: { products },
   } = props;
 
   useEffect(() => {
@@ -46,16 +49,35 @@ function Client({ children, ...props }) {
                 <div className="fw-500">Tra Cứu đơn hàng</div>
               </div>
             </Link>
-            <div className="text-center">
+            <div className="text-center cursor-pointer" onClick={() => showCart()}>
               <ShoppingCartOutlined className="icon-header" />
               <div className="fw-500 text-white">Giỏ hàng</div>
             </div>
-            <Link to={(selectAuthStatus?.user?.name && '/account') || '/login'}>
-              <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
-                <UserOutlined className="icon-header" />
-                <div className="fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
-              </div>
-            </Link>
+            {(selectAuthStatus?.user?.name && (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
+                      Đăng xuất
+                    </Menu.Item>
+                    <Menu.Item key="my-information" icon={<LogoutOutlined />}>
+                      <Link to="/user">Thông tin cá nhân</Link>
+                    </Menu.Item>
+                  </Menu>
+                }>
+                <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
+                  <UserOutlined className="icon-header" />
+                  <div className="fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
+                </div>
+              </Dropdown>
+            )) || (
+              <Link to="/login">
+                <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
+                  <UserOutlined className="icon-header" />
+                  <div className="fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
+                </div>
+              </Link>
+            )}
           </div>
         </Header>
         <Content style={{ padding: '0 200px', marginTop: 64 }}>
@@ -114,10 +136,34 @@ function Client({ children, ...props }) {
             </Col>
           </Row>
         </Footer>
-        <div className="w-100 d-flex justify-content-center " style={{ backgroundColor: 'red', color: 'white', padding: '8px 0', fontWeight: 500 }}>
+        <div
+          className="w-100 d-flex justify-content-center "
+          style={{ backgroundColor: 'rgba(255, 0, 0,0.8)', color: 'white', padding: '8px 0', fontWeight: 500 }}>
           ©Copyright Created by Lưu Công Quang Vũ
         </div>
       </Layout>
+      <Drawer
+        title="Giỏ hàng của bạn"
+        placement="right"
+        onClose={() => hiddenCart()}
+        visible={selectVisibleCart}
+        footer={
+          <>
+            <div className="text-upper fw-500 mb-8 text-center">
+              Tổng tiền: <span style={{ color: 'rgb(215, 0, 24)' }}>{sumMoney(products?.map(item => item.quantity * item.value_option))}</span>
+            </div>
+            <div className="d-flex">
+              <Button className="btn-red" block>
+                Xem chi tiết giỏ hàng
+              </Button>
+              <Button className="btn-blue ml-4" block>
+                Thanh toán
+              </Button>
+            </div>
+          </>
+        }>
+        <CartDetail user_id={selectAuthStatus?.user?._id} />
+      </Drawer>
     </>
   );
 }

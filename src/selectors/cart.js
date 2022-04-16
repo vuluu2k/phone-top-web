@@ -9,7 +9,7 @@ const selectCart = createSelector(
   selectCartInformation,
   selectVisibleCart,
 
-  selectCartInformation => ({
+  (selectCartInformation, selectVisibleCart) => ({
     selectCartInformation,
     selectVisibleCart,
   })

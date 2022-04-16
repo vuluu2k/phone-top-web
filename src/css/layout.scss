@@ -4,7 +4,7 @@
   .ant-layout-header {
     padding: 0 200px;
     line-height: 20px;
-    background-image: linear-gradient(to right, #ff2653, #ff881b);
+    background: #d70018;
 
     &.header {
       position: fixed;
@@ -22,11 +22,12 @@
   }
 
   .ant-layout-footer {
-    background-image: linear-gradient(to left, #ff2653, #ff881b);
+    background: #d70018;
     color: white;
   }
 
   .layout-carousel {
+    box-shadow: rgb(60 64 67 / 0.1) 0px 1px 2px 0px, rgb(60 64 67 / 0.15) 0px 2px 6px 2px;
     border: 1px solid #f0f0f0;
     margin-top: 16px;
     padding: 8px;
@@ -69,7 +70,7 @@
 .layout-admin {
   .ant-layout-header {
     padding: 0 16px;
-    height: 50px ;
+    height: 50px;
   }
   #components-layout-demo-custom-trigger .trigger {
     padding: 0 24px;

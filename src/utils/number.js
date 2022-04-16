@@ -19,3 +19,11 @@ export function formatText(amount, suffix) {
   }
   return amount + suffix;
 }
+
+export function sumMoney(arrayNumber) {
+  let sum = 0;
+  arrayNumber?.map(item => {
+    sum += item;
+  });
+  return moneyMask(sum);
+}

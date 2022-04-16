@@ -34,6 +34,11 @@ body {
   $calendula-gold-7: #d48806;
   $calendula-gold-4: #ffd666;
   $sunset-orange-1: #fff7e6;
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
   // width , height
   .wf-100 {
     width: 100vw;
@@ -42,13 +47,16 @@ body {
     height: 100vh;
   }
   .w-100 {
-    width: 100%;
+    width: 100% !important;
   }
   .h-100 {
-    height: 100%;
+    height: 100% !important;
   }
 
   // font
+  .fz-16 {
+    font-size: 16px !important;
+  }
 
   .fw-500 {
     font-weight: 500;
@@ -64,7 +72,7 @@ body {
     text-align: center;
   }
 
-  .text-upper{
+  .text-upper {
     text-transform: uppercase;
   }
 
@@ -92,6 +100,10 @@ body {
     padding: 8px !important;
   }
 
+  .p-16 {
+    padding: 16px !important;
+  }
+
   //  margin
   .m-auto {
     margin: auto !important;
@@ -109,6 +121,11 @@ body {
     margin-bottom: 8px !important;
   }
   // ----left
+
+  .ml-4 {
+    margin-left: 4px !important;
+  }
+
   .ml-8 {
     margin-left: 8px !important;
   }
@@ -120,10 +137,14 @@ body {
   //   text
 
   .text {
-    font-size:14px;
+    font-size: 14px;
     margin-top: 8px;
-    margin-bottom:4px;
+    margin-bottom: 4px;
     font-weight: 450;
+  }
+
+  .text-red {
+    color: #d70018;
   }
 
   .text-white {
@@ -135,9 +156,19 @@ body {
   }
   .slider-custom {
     padding: 16px 16px 0 16px;
-    border-radius: 8px;
-    margin: 16px 0;
-    background-image: linear-gradient(to right, #ff2653, #ff881b);
+    border-radius: 10px;
+    margin: 8px 0 16px;
+    background: linear-gradient(to bottom, #2d0798, #c114e0);
+  }
+
+  //
+
+  .bg-description {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.91) 50%, #fff 55%);
+  }
+
+  .box-shadow {
+    box-shadow: rgb(60 64 67 / 0.1) 0px 1px 2px 0px, rgb(60 64 67 / 0.15) 0px 2px 6px 2px;
   }
 
   // btn
@@ -145,25 +176,36 @@ body {
   .ant-btn {
     &.btn-blue {
       border-radius: 4px;
+      font-weight: 500;
       border-color: $daybreak-blue-8;
       color: $daybreak-blue-8;
     }
     &.btn-green {
       border-radius: 4px;
+      font-weight: 500;
       border-color: $polar-green-4;
       color: $polar-green-7;
     }
 
     &.btn-red {
       border-radius: 4px;
+      font-weight: 500;
       border-color: $dust-red-6;
       color: $dust-red-6;
     }
 
     &.btn-orange {
       border-radius: 4px;
+      font-weight: 500;
       border-color: $calendula-gold-7;
       color: $calendula-gold-7;
+    }
+
+    &.btn-buy {
+      color: white;
+      border-radius: 8px;
+      height: 60px;
+      background-color: $dust-red-6;
     }
   }
 

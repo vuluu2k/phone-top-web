@@ -47,7 +47,7 @@ function Home(props) {
 
   return (
     <Client>
-      <Layout className="layout-carousel site-layout-background">
+      <Layout className="layout-carousel site-layout-background" style={{ marginBottom: 16 }}>
         <Sider className="site-layout-background">
           <Menu mode="vertical">
             {categorys?.map(category => {

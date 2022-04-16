@@ -14,7 +14,7 @@ import {
   LOGOUT,
 } from 'constants/auth';
 import { setToken } from 'utils/token';
-import { LOCAL_STORAGE_TOKEN_NAME, USER } from 'constants';
+import { LOCAL_STORAGE_TOKEN_NAME, USER, LOCAL_CART } from 'constants';
 import { API_URL } from 'env_config';
 
 export default [authSagas];
@@ -88,6 +88,7 @@ function* login({ payload }) {
 }
 
 function* logout() {
+  localStorage.removeItem(LOCAL_CART);
   localStorage.removeItem(USER);
   localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
   window.location.reload(false);

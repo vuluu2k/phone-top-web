@@ -14,6 +14,7 @@ import 'css/layout.scss';
 import 'css/home.scss';
 import 'css/auth.scss';
 import 'css/product.scss';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/user" element={<Account />} />
             <Route path="/product-detail/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Auth />} />
 

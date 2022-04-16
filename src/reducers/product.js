@@ -129,7 +129,6 @@ const productReducer = (state = initialState, payload) => {
     case EDIT_PRODUCT:
       return handleRequest(state, 'productInfomation');
     case EDIT_PRODUCT_SUCCESS:
-      console.log(payload);
       return handleEdit(state, payload);
     case EDIT_PRODUCT_ERROR:
       return handleError(state, 'productInfomation', payload.message);

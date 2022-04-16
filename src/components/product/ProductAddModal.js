@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col, Input, Select, Upload } from 'antd';
 import { CloseCircleOutlined, RollbackOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 
 import { TableCustom } from 'components/Common';
 import { getBase64 } from 'utils/file';
@@ -11,6 +15,12 @@ const { Option } = Select;
 
 export default function ProductAddModal(props) {
   const { visible, onClose, categorys, createProduct, editProduct, productItem, deleteProduct, modalName } = props;
+  const [stateDescription, setStateDescription] = useState({
+    description:
+      (productItem?.description &&
+        EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(productItem.description).contentBlocks))) ||
+      EditorState.createEmpty(),
+  });
 
   const [state, setState] = useState({
     name: productItem?.name || '',
@@ -48,48 +58,53 @@ export default function ProductAddModal(props) {
     ],
     sub_categorys: [],
     visibleDel: false,
+    description: '',
   });
 
-  useEffect(
-    () =>
-      setState({
-        name: productItem?.name || '',
-        category: productItem?.category || '',
-        sub_category: productItem?.sub_category || '',
-        status: productItem?.status || 'Mới',
-        value: productItem?.value || 0,
-        quantity: productItem?.quantity || 0,
-        options: productItem?.options || [],
-        name_option: '',
-        value_option: '',
-        profile: productItem?.profile || {
-          screen_size: '',
-          screen_technology: '',
-          camera_font: '',
-          camera_back: '',
-          chipset: '',
-          ram_capacity: 0,
-          rom_capacity: 0,
-          baterry: 0,
-          sim_card: '',
-          os: '',
-          screen_pixel: '',
-          weight: 0,
-          bluetooth: '',
-          scan_frequency: '',
+  useEffect(() => {
+    if (productItem) {
+      setStateDescription({
+        desciption: EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(productItem.description).contentBlocks)),
+      });
+      console.log(productItem.description);
+    }
+    setState({
+      name: productItem?.name || '',
+      category: productItem?.category || '',
+      sub_category: productItem?.sub_category || '',
+      status: productItem?.status || 'Mới',
+      value: productItem?.value || 0,
+      quantity: productItem?.quantity || 0,
+      options: productItem?.options || [],
+      name_option: '',
+      value_option: '',
+      profile: productItem?.profile || {
+        screen_size: '',
+        screen_technology: '',
+        camera_font: '',
+        camera_back: '',
+        chipset: '',
+        ram_capacity: 0,
+        rom_capacity: 0,
+        baterry: 0,
+        sim_card: '',
+        os: '',
+        screen_pixel: '',
+        weight: 0,
+        bluetooth: '',
+        scan_frequency: '',
+      },
+      fileList: [
+        {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: productItem?.image_link || 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
         },
-        fileList: [
-          {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: productItem?.image_link || 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-          },
-        ],
-        sub_categorys: [],
-      }),
-    [productItem]
-  );
+      ],
+      sub_categorys: [],
+    });
+  }, [productItem]);
 
   const {
     name,
@@ -123,12 +138,24 @@ export default function ProductAddModal(props) {
     visibleDel,
   } = state;
 
+  const { description } = stateDescription;
+
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
   const onChangeObj = e => {
     setState({ ...state, profile: { ...profile, [e.target.name]: e.target.value } });
+  };
+
+  const onEditorStateChange = description => {
+    setStateDescription({
+      description,
+    });
+    setState({
+      ...state,
+      description: draftToHtml(convertToRaw(description.getCurrentContent())),
+    });
   };
 
   const onAddOption = () => {
@@ -174,6 +201,7 @@ export default function ProductAddModal(props) {
       sub_category,
       options,
       profile,
+      description: state.description,
     });
     onClose();
     onClear();
@@ -191,6 +219,7 @@ export default function ProductAddModal(props) {
       sub_category,
       options,
       profile,
+      description: state.description,
     });
     onClose();
     onClear();
@@ -206,7 +235,7 @@ export default function ProductAddModal(props) {
     onClear();
   };
 
-  const onClear = () =>
+  const onClear = () => {
     setState({
       name: '',
       category: '',
@@ -242,8 +271,12 @@ export default function ProductAddModal(props) {
         },
       ],
       sub_categorys: [],
+      description: '',
     });
-
+    setStateDescription({
+      description: Editor.createEmpty(),
+    });
+  };
   const styleTable = { padding: '4px 16px' };
 
   return (
@@ -306,6 +339,7 @@ export default function ProductAddModal(props) {
                   </Select>
                 </TableCustom>
               </div>
+
               <div style={{ marginBottom: 16 }}>
                 <TableCustom title="Danh mục" style={styleTable}>
                   <div className="text" style={{ marginTop: 0 }}>
@@ -398,6 +432,20 @@ export default function ProductAddModal(props) {
                   />
                 </TableCustom>
               </div>
+            </Col>
+            <Col span={24} style={{ marginTop: 16 }}>
+              <TableCustom title="Mô tả sản phẩm" style={styleTable}>
+                <div style={{ marginBottom: 16 }}>
+                  <Editor
+                    editorState={description}
+                    wrapperClassName="wrapper-class"
+                    editorClassName="editor-class"
+                    toolbarClassName="toolbar-class"
+                    onEditorStateChange={onEditorStateChange}
+                    editorStyle={{ height: '300px', border: '1px solid #CED4DA', borderRadius: '0.2em' }}
+                  />
+                </div>
+              </TableCustom>
             </Col>
           </Row>
         </div>
