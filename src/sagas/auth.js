@@ -90,6 +90,7 @@ function* login({ payload }) {
 function* logout() {
   localStorage.removeItem(USER);
   localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+  window.location.reload(false);
 }
 
 function* loadUser() {

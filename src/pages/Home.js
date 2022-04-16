@@ -85,11 +85,6 @@ function Home(props) {
             </div>
           </Carousel>
         </Content>
-        <Sider theme="light" className="d-flex flex-column justify-content-between" style={{ height: '100%' }}>
-          <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_ultra_Right.png" />
-          <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_ultra_Right.png" />
-          <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_ultra_Right.png" />
-        </Sider>
       </Layout>
       <Layout>
         <SilderCustom item={hot} title="Sản phẩm bán chạy nhất" />

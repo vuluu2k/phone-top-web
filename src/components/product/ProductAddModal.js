@@ -244,8 +244,6 @@ export default function ProductAddModal(props) {
       sub_categorys: [],
     });
 
-  console.log('modal', visibleDel);
-
   const styleTable = { padding: '4px 16px' };
 
   return (

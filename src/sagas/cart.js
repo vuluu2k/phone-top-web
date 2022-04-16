@@ -9,50 +9,45 @@ import {
   CHANGE_CART_SUCCESS,
   CHANGE_CART_ERROR,
   GET_CART,
-  GET_CART_SUCCESS,
-  GET_CART_ERROR,
+  // GET_CART_SUCCESS,
+  // GET_CART_ERROR,
+  ADD_ITEM_CART,
+  // ADD_ITEM_CART_SUCCESS,
+  // ADD_ITEM_CART_ERROR,
+  EDIT_ITEM_CART,
+  DELETE_ITEM_CART,
 } from 'constants/cart';
 
+import { LOCAL_CART } from 'constants';
+
 import { API_URL } from 'env_config';
+
+let cart = [];
+let quantity = 1;
 
 export default [cartSagas];
 
 function* startRequest(payload) {
   switch (payload.type) {
-    // case LOAD_LIST_CATEGORY:
-    //   yield call(loadList);
-    //   break;
     case INIT_CART:
       yield call(initCart, payload);
       break;
-    // case EDIT_CATEGORY:
-    //   yield call(editCategory, payload);
-    //   break;
-    // case DELETE_CATEGORY:
-    //   yield call(deleteCategory, payload);
-    //   break;
+    case CHANGE_CART:
+      yield call(changeCart, payload);
+      break;
+    case ADD_ITEM_CART:
+      yield call(addCart, payload);
+      break;
+    case EDIT_ITEM_CART:
+      yield call(editCart, payload);
+      break;
+    case DELETE_ITEM_CART:
+      yield call(deleteCart, payload);
+      break;
     default:
       break;
   }
 }
-
-// function* loadList() {
-//   const url = `${API_URL}/category/view`;
-
-//   try {
-//     const response = yield call(axios.get, url);
-//     if (!response.data.success) {
-//       yield put({ typ: LOAD_LIST_CATEGORY_ERROR, ...response.data });
-//     } else {
-//       yield put({ type: LOAD_LIST_CATEGORY_SUCCESS, ...response.data });
-//     }
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//     yield put({ type: LOAD_LIST_CATEGORY_ERROR, error: error });
-//     return error;
-//   }
-// }
 
 function* initCart({ payload }) {
   const { user_id } = payload;
@@ -75,29 +70,72 @@ function* initCart({ payload }) {
   }
 }
 
-// function* editCategory({ payload }) {
-//   const { id, name, name_vi, sub_name } = payload;
-//   const url = `${API_URL}/category/edit/${id}`;
-//   const body = {
-//     name: name,
-//     name_vi: name_vi || name,
-//     sub_name: sub_name,
-//   };
-//   try {
-//     const response = yield call(axios.patch, url, body);
-//     if (!response.data.success) {
-//       yield put({ type: EDIT_CATEGORY_ERROR, ...response.data });
-//     } else {
-//       yield put({ type: EDIT_CATEGORY_SUCCESS, ...response.data });
-//     }
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//     yield put({ type: EDIT_CATEGORY_ERROR, error: error });
-//     return error;
-//   }
-// }
+function* changeCart({ payload }) {
+  const { user_id, products } = payload;
+  const url = `${API_URL}/cart/change`;
+  const body = {
+    user_id: user_id,
+    products: products,
+  };
+  try {
+    const response = yield call(axios.patch, url, body);
+    if (!response.data.success) {
+      yield put({ type: CHANGE_CART_ERROR, ...response.data });
+    } else {
+      yield put({ type: CHANGE_CART_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CHANGE_CART_ERROR, error: error });
+    return error;
+  }
+}
+
+function* addCart({ payload }) {
+  const { product_id, name_option, value_option } = payload;
+
+  let storage = localStorage.getItem(LOCAL_CART);
+  if (storage) {
+    cart = JSON.parse(storage);
+  }
+  let item = cart.find(c => c.product_id === product_id && c.name_option === name_option);
+  if (item) {
+    item.quantity += 1;
+  } else {
+    cart.push({ product_id, name_option, value_option, quantity });
+  }
+  localStorage.setItem(LOCAL_CART, JSON.stringify(cart));
+}
+
+function* editCart({ payload }) {
+  const { product_id, name_option, quantity } = payload;
+
+  let storage = localStorage.getItem(LOCAL_CART);
+  if (storage) {
+    cart = JSON.parse(storage);
+  }
+  let item = cart.find(c => c.product_id === product_id && c.name_option === name_option);
+  if (item) {
+    item.quantity = quantity;
+  }
+  localStorage.setItem(LOCAL_CART, JSON.stringify(cart));
+}
+
+function* deleteCart({ payload }) {
+  const { product_id, name_option } = payload;
+  let storage = localStorage.getItem(LOCAL_CART);
+  if (storage) {
+    cart = JSON.parse(storage);
+  }
+  let delCart = cart.filter(c => c.product_id !== product_id && c.name_option !== name_option);
+  if (delCart !== cart) {
+    localStorage.setItem(LOCAL_CART, JSON.stringify(delCart));
+  } else if (delCart.length < 0) {
+    localStorage.removeItem(LOCAL_CART);
+  }
+}
 
 export function* cartSagas() {
-  yield takeLatest([GET_CART, INIT_CART, CHANGE_CART], startRequest);
+  yield takeLatest([GET_CART, INIT_CART, CHANGE_CART, ADD_ITEM_CART, EDIT_ITEM_CART, DELETE_ITEM_CART], startRequest);
 }

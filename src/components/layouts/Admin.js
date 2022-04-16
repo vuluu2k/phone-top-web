@@ -35,7 +35,6 @@ function Admin({ children, ...props }) {
 
   const handleLogOut = () => {
     props.actions.logout();
-    window.location.reload(false);
   };
 
   return (
