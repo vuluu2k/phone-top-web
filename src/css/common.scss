@@ -39,6 +39,12 @@ body {
     cursor: pointer;
   }
 
+  // boder
+
+  .border-radius-16 {
+    border-radius: 16px !important;
+  }
+
   // width , height
   .wf-100 {
     width: 100vw;
@@ -56,6 +62,10 @@ body {
   // font
   .fz-16 {
     font-size: 16px !important;
+  }
+
+  .fz-18 {
+    font-size: 18px !important;
   }
 
   .fw-500 {
@@ -119,6 +129,10 @@ body {
 
   .mb-8 {
     margin-bottom: 8px !important;
+  }
+
+  .mb-16 {
+    margin-bottom: 16px !important;
   }
   // ----left
 
@@ -203,6 +217,7 @@ body {
 
     &.btn-buy {
       color: white;
+      border-color: $dust-red-6;
       border-radius: 8px;
       height: 60px;
       background-color: $dust-red-6;
