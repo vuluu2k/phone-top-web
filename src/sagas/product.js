@@ -17,6 +17,9 @@ import {
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_ERROR,
+  GET_ITEM_PRODUCT,
+  GET_ITEM_PRODUCT_SUCCESS,
+  GET_ITEM_PRODUCT_ERROR,
 } from 'constants/product';
 
 import { API_URL } from 'env_config';
@@ -39,6 +42,9 @@ function* startRequest(payload) {
       break;
     case DELETE_PRODUCT:
       yield call(deleteProduct, payload);
+      break;
+    case GET_ITEM_PRODUCT:
+      yield call(getItem, payload);
       break;
     default:
       break;
@@ -161,6 +167,25 @@ function* deleteProduct({ payload }) {
   }
 }
 
+function* getItem({ payload }) {
+  const { product_id } = payload;
+  const url = `${API_URL}/product/view?product_id=${product_id}`;
+
+  try {
+    const response = yield call(axios.get, url);
+    if (!response.data.success) {
+      yield put({ typ: GET_ITEM_PRODUCT_ERROR, ...response.data });
+    } else {
+      yield put({ type: GET_ITEM_PRODUCT_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: GET_ITEM_PRODUCT_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* productSagas() {
-  yield takeLatest([LOAD_LIST_PRODUCT, LOAD_LIST_PRODUCT_HOME, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT], startRequest);
+  yield takeLatest([LOAD_LIST_PRODUCT, LOAD_LIST_PRODUCT_HOME, CREATE_PRODUCT, EDIT_PRODUCT, DELETE_PRODUCT, GET_ITEM_PRODUCT], startRequest);
 }

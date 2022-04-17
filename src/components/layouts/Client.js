@@ -60,7 +60,7 @@ function Client({ children, ...props }) {
                     <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
                       Đăng xuất
                     </Menu.Item>
-                    <Menu.Item key="my-information" icon={<LogoutOutlined />}>
+                    <Menu.Item key="my-information" icon={<UserOutlined />}>
                       <Link to="/user">Thông tin cá nhân</Link>
                     </Menu.Item>
                   </Menu>
@@ -153,11 +153,11 @@ function Client({ children, ...props }) {
               Tổng tiền: <span style={{ color: 'rgb(215, 0, 24)' }}>{sumMoney(products?.map(item => item.quantity * item.value_option))}</span>
             </div>
             <div className="d-flex">
-              <Button className="btn-red" block>
-                Xem chi tiết giỏ hàng
+              <Button className="btn-red" block onClick={() => hiddenCart()}>
+                <Link to="/cart">Xem chi tiết giỏ hàng</Link>
               </Button>
-              <Button className="btn-blue ml-4" block>
-                Thanh toán
+              <Button className="btn-blue ml-4" block onClick={() => hiddenCart()}>
+                <Link to="/pay">Thanh toán</Link>
               </Button>
             </div>
           </>

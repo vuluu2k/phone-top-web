@@ -15,7 +15,7 @@ function ProductManager(props) {
 
   const {
     actions: { loadListProduct, createProduct, editProduct, deleteProduct },
-    selectProductInformation: { products, success },
+    selectProductInformation: { products },
     selectCategoryInformation: { categorys },
   } = props;
 
@@ -101,7 +101,8 @@ function ProductManager(props) {
           pagination={{ position: ['bottomLeft'] }}
         />
       </TableCustom>
-      <ProductAddModal visible={visibleAdd} onClose={onHidenAdd} categorys={categorys} createProduct={createProduct} />
+      {visibleAdd && <ProductAddModal visible={visibleAdd} onClose={onHidenAdd} categorys={categorys} createProduct={createProduct} />}
+
       {visibleProduct && (
         <ProductAddModal
           visible={visibleProduct}

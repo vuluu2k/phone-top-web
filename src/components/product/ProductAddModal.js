@@ -5,21 +5,23 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { TableCustom } from 'components/Common';
 import { getBase64 } from 'utils/file';
 import { moneyMask } from 'utils/number';
 import { ComfirmModal } from 'components/Common';
+import { selectProduct } from 'selectors';
 
 const { Option } = Select;
 
-export default function ProductAddModal(props) {
+function ProductAddModal(props) {
   const { visible, onClose, categorys, createProduct, editProduct, productItem, deleteProduct, modalName } = props;
   const [stateDescription, setStateDescription] = useState({
-    description:
-      (productItem?.description &&
-        EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(productItem.description).contentBlocks))) ||
-      EditorState.createEmpty(),
+    description: productItem?.description
+      ? EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(productItem?.description).contentBlocks))
+      : EditorState.createEmpty(),
   });
 
   const [state, setState] = useState({
@@ -62,12 +64,6 @@ export default function ProductAddModal(props) {
   });
 
   useEffect(() => {
-    if (productItem) {
-      setStateDescription({
-        desciption: EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(productItem.description).contentBlocks)),
-      });
-      console.log(productItem.description);
-    }
     setState({
       name: productItem?.name || '',
       category: productItem?.category || '',
@@ -454,3 +450,7 @@ export default function ProductAddModal(props) {
     </>
   );
 }
+
+const mapStateToProps = state => ({ ...selectProduct(state) });
+
+export default connect(mapStateToProps, null)(ProductAddModal);

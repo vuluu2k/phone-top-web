@@ -14,6 +14,9 @@ import {
   LOAD_LIST_PRODUCT_HOME,
   LOAD_LIST_PRODUCT_HOME_SUCCESS,
   LOAD_LIST_PRODUCT_HOME_ERROR,
+  GET_ITEM_PRODUCT,
+  GET_ITEM_PRODUCT_SUCCESS,
+  GET_ITEM_PRODUCT_ERROR,
 } from 'constants/product';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -45,6 +48,12 @@ const initialState = {
     message: '',
   },
   productStatusEdit: {
+    success: false,
+    message: '',
+  },
+
+  productItem: {
+    item: undefined,
     success: false,
     message: '',
   },
@@ -139,6 +148,21 @@ const productReducer = (state = initialState, payload) => {
       return handleDelete(state, payload);
     case DELETE_PRODUCT_ERROR:
       return handleError(state, 'productInfomation', payload.message);
+
+    case GET_ITEM_PRODUCT:
+      return handleRequest(state, 'productItem');
+    case GET_ITEM_PRODUCT_SUCCESS:
+      return update(state, {
+        productItem: {
+          requesting: { $set: false },
+          success: { $set: true },
+          message: { $set: 'Lấy sản phẩm thành công' },
+          item: { $set: payload.products[0] },
+        },
+      });
+    case GET_ITEM_PRODUCT_ERROR:
+      return handleError(state, 'productItem', payload.message);
+
     default:
       return state;
   }

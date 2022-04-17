@@ -10,7 +10,8 @@ import { selectAuth } from 'selectors';
 
 function AuthLayout(props) {
   const [status, setStatus] = useState(true);
-  const onChangeStatus = () => setStatus(!status);
+  const onButtonLogin = () => setStatus(true);
+  const onButtonRegister = () => setStatus(false);
 
   return (
     <div className="auth container">
@@ -20,16 +21,16 @@ function AuthLayout(props) {
             <h3>Chào mừng bạn tới cửa hàng của chúng tôi</h3>
             <div className="d-flex justify-content-center mt-16">
               <div className="d-flex" style={{ borderRadius: 14, boxShadow: '0 0 4px 1px #ff7e21' }}>
-                <div className={(status && 'btn-switch on') || 'btn-switch'} onClick={onChangeStatus}>
+                <div className={(status && 'btn-switch on') || 'btn-switch'} onClick={() => onButtonLogin()}>
                   Đăng nhập
                 </div>
-                <div className={(!status && 'btn-switch on') || 'btn-switch'} onClick={onChangeStatus}>
+                <div className={(!status && 'btn-switch on') || 'btn-switch'} onClick={() => onButtonRegister()}>
                   Đăng ký
                 </div>
               </div>
             </div>
             <div className="mt-16" style={{ width: 400 }}>
-              {(status && <Login {...props} />) || <Register {...props} />}
+              {(status && <Login {...props} />) || <Register {...props} onButtonLogin={() => onButtonLogin()} />}
             </div>
           </div>
         </div>

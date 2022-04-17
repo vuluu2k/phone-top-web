@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Input, Form, message } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Input, Form, message as messageAntd } from 'antd';
+import validator from 'validator';
 
 export default function Register(props) {
   const [state, setState] = useState({ username: '', email: '', password: '', phone_number: '', full_name: '' });
@@ -8,15 +9,48 @@ export default function Register(props) {
 
   const {
     actions: { register },
+    selectRegisterStatus: { message, success, requesting },
+    selectRegisterStatus,
+    onButtonLogin,
   } = props;
 
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
+  useEffect(() => {
+    notification();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectRegisterStatus]);
+
+  const notification = () => {
+    if (success) {
+      messageAntd.success(message);
+      // onButtonLogin();
+    } else if (message !== '' && !requesting && !success) {
+      messageAntd.error(message || '');
+    }
+  };
+
   const onSubmit = () => {
     if (password_repeat !== password) {
-      return message.error('Mật khẩu nhập lại không chính xác', 1);
+      return messageAntd.error('Mật khẩu nhập lại không chính xác', 1);
+    }
+    if (
+      validator.isEmpty(username) ||
+      validator.isEmpty(full_name) ||
+      validator.isEmpty(email) ||
+      validator.isEmpty(phone_number) ||
+      validator.isEmpty(password) ||
+      validator.isEmpty(password_repeat)
+    ) {
+      return messageAntd.error('Bạn chưa nhập đủ trường dữ liệu');
+    }
+    if (!validator.isEmail(String(email))) {
+      return messageAntd.error('Kiểu email không chính xác ', 1);
+    }
+    if (!validator.isLength(String(password), { min: 8 })) {
+      return messageAntd.error('Mật khẩu tối thiểu là 8 kí tự ', 1);
     }
     register({ username, email, password, phone_number, full_name });
   };
