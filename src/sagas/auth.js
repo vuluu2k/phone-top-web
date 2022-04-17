@@ -11,9 +11,10 @@ import {
   LOAD_USER,
   LOAD_USER_SUCCESS,
   LOAD_USER_ERROR,
+  LOGOUT,
 } from 'constants/auth';
 import { setToken } from 'utils/token';
-import { LOCAL_STORAGE_TOKEN_NAME, USER } from 'constants';
+import { LOCAL_STORAGE_TOKEN_NAME, USER, LOCAL_CART } from 'constants';
 import { API_URL } from 'env_config';
 
 export default [authSagas];
@@ -30,19 +31,24 @@ function* startRequest(payload) {
     case LOAD_USER:
       yield call(loadUser, payload);
       break;
+    case LOGOUT:
+      yield call(logout);
+      break;
     default:
       break;
   }
 }
 
 function* register({ payload }) {
-  const { username, email, password } = payload;
+  const { username, email, password, phone_number, full_name } = payload;
 
   const url = `${API_URL}/auth/register`;
   const body = {
     name: username,
     email: email,
     password: password,
+    phone_number: phone_number,
+    full_name: full_name,
   };
 
   try {
@@ -81,6 +87,13 @@ function* login({ payload }) {
   }
 }
 
+function* logout() {
+  localStorage.removeItem(LOCAL_CART);
+  localStorage.removeItem(USER);
+  localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+  window.location.reload(false);
+}
+
 function* loadUser() {
   if (localStorage[LOCAL_STORAGE_TOKEN_NAME]) {
     setToken(localStorage[LOCAL_STORAGE_TOKEN_NAME]);
@@ -105,5 +118,5 @@ function* loadUser() {
 }
 
 export function* authSagas() {
-  yield takeLatest([REGISTER, LOGIN, LOAD_USER], startRequest);
+  yield takeLatest([REGISTER, LOGIN, LOAD_USER, LOGOUT], startRequest);
 }

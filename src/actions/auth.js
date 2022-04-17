@@ -1,8 +1,15 @@
-import { LOGIN, REGISTER, LOAD_USER } from 'constants/auth';
+import { LOGIN, LOGOUT, REGISTER, LOAD_USER } from 'constants/auth';
 
 function login(payload) {
   return {
     type: LOGIN,
+    payload,
+  };
+}
+
+function logout(payload) {
+  return {
+    type: LOGOUT,
     payload,
   };
 }
@@ -21,7 +28,7 @@ function loadUser(payload) {
   };
 }
 
-const authActions = { login, register, loadUser };
+const authActions = { login, register, loadUser, logout };
 
 export { loadUser };
 

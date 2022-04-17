@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import { Landing } from 'components/layouts';
-import { Home } from 'pages';
+import { Home, Account, ProductDetail, Cart } from 'pages';
 import { Auth } from 'components/auth';
-import { Dashboard, ProductManager } from 'pages/admin';
+import { Dashboard, ProductManager, CategoryManager, PackageManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
 import { PrivateRoute } from 'components/routing';
 
@@ -13,6 +13,8 @@ import 'css/common.scss';
 import 'css/layout.scss';
 import 'css/home.scss';
 import 'css/auth.scss';
+import 'css/product.scss';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function App() {
   return (
@@ -22,12 +24,20 @@ function App() {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/user" element={<Account />} />
+            <Route path="/product-detail/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Auth />} />
+            <Route path="/cart" element={<Cart />} />
 
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/product-manager" element={<ProductManager />} />
+              <Route path="/category-manager" element={<CategoryManager />} />
+              <Route path="/package-manager" element={<PackageManager />} />
+              <Route path="/blog-manager" element={<CategoryManager />} />
+              <Route path="/account-manager" element={<CategoryManager />} />
             </Route>
+            <Route path="/*" element={<div>Địa chỉ trang không tồn tại trên trang web</div>} />
           </Routes>
         </BrowserRouter>
       </UserRouting>
