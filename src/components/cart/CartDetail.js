@@ -53,7 +53,7 @@ function CartDetail(props) {
 
   return (
     <>
-      {(products.length > 0 &&
+      {(products?.length > 0 &&
         products.map((item, idx) => (
           <div key={idx} style={{ marginBottom: 8, backgroundColor: '#f0f0f0', padding: 4 }}>
             <div className="d-flex w-100">
