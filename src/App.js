@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import { Landing } from 'components/layouts';
-import { Home, Account, ProductDetail, Cart } from 'pages';
+import { Home, Account, ProductDetail, Cart, Pay } from 'pages';
 import { Auth } from 'components/auth';
 import { Dashboard, ProductManager, CategoryManager, PackageManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
@@ -14,6 +14,7 @@ import 'css/layout.scss';
 import 'css/home.scss';
 import 'css/auth.scss';
 import 'css/product.scss';
+import 'css/cart.scss';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
             <Route path="/product-detail/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Auth />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/pay" element={<Pay />} />
 
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
