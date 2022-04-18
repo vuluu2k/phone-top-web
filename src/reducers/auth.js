@@ -26,7 +26,7 @@ const initialState = {
   auth: {
     requesting: true,
     isAuthenticated: false,
-    user: null,
+    user: {},
   },
 };
 
