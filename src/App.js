@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import { Landing } from 'components/layouts';
-import { Home, Account, ProductDetail, Cart, Pay } from 'pages';
+import { Home, Account, ProductDetail, Cart, Pay, CheckPackage } from 'pages';
 import { Auth } from 'components/auth';
 import { Dashboard, ProductManager, CategoryManager, PackageManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
@@ -30,6 +30,7 @@ function App() {
             <Route path="/login" element={<Auth />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/pay" element={<Pay />} />
+            <Route path="/check_package" element={<CheckPackage />} />
 
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />

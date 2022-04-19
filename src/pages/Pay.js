@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { Steps, Row, Col, Input, Radio, Select, Button } from 'antd';
+import { Steps, Row, Col, Input, Radio, Select, Button, message as messageAntd } from 'antd';
 import { ShoppingCartOutlined, IdcardOutlined, PercentageOutlined, CreditCardOutlined, LeftOutlined } from '@ant-design/icons';
+import { SiHomeassistantcommunitystore } from 'react-icons/si';
 import { FiPackage } from 'react-icons/fi';
+import { MdPayment } from 'react-icons/md';
+import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { BsFillCartPlusFill } from 'react-icons/bs';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { Client } from 'components/layouts';
+import { packageActions } from 'actions';
 import { selectAuth, selectCart } from 'selectors';
-import { sumMoney } from 'utils/number';
+import { sumMoney, moneyMask } from 'utils/number';
 
 const { Step } = Steps;
 const { Option } = Select;
@@ -18,6 +23,7 @@ const color_disable = '#0e2431';
 function Pay(props) {
   const navigate = useNavigate();
   const {
+    actions: { createPackage },
     selectAuthStatus: { user },
     selectCartInformation: { products },
   } = props;
@@ -33,25 +39,94 @@ function Pay(props) {
     district: '',
     address: '',
     note: '',
+    voucher: '',
+    is_pay: undefined,
   });
+  const { full_name, phone_number, email, full_address, provice, district, address, note, voucher, is_pay } = stateInfor;
+
+  const sumPay = sumMoney(products?.map(item => item.quantity * item.value_option));
 
   const onChangeInput = e => setStateInfor({ ...stateInfor, [e.target.name]: e.target.value });
 
   const styleIconStep = { width: 36, height: 36, borderRadius: 18, border: '1px solid #000' };
-  const { full_name, phone_number, email, provice, district, address, note } = stateInfor;
-  const sumPay = sumMoney(products.map(item => item.quantity * item.value_option));
 
   const handleGoBack = () => {
     if (stateStep === 0) navigate('/cart');
     else setStateStep(stateStep - 1);
   };
 
+  const handleNext = () => {
+    if (!full_name || !phone_number || !email) {
+      return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
+    }
+    if ((stateRadio === 1 && !stateStore) || (stateRadio === 2 && !provice && !district && !address)) {
+      return messageAntd.error('Bạn chưa nhập đầy đủ/lựa chọn địa chỉ nhận hàng');
+    }
+
+    setStateInfor({ ...stateInfor, full_address: stateRadio === 1 ? stateStore : `${address}-${district}-${provice}` });
+    if (stateStep === 3) {
+      if (!is_pay) {
+        return messageAntd.error('Vui lòng chọn phương thức thanh toán');
+      }
+      createPackage({
+        user_id: user._id,
+        products,
+        full_name,
+        phone_number,
+        email,
+        voucher,
+        value: sumPay,
+        address: full_address,
+        is_access: false,
+        note,
+        is_pay,
+      });
+    }
+
+    return setStateStep(stateStep + 1);
+  };
+
+  const renderItemPay = (text, icon) => {
+    return (
+      <div
+        className="box-shadow d-flex flex-column align-items-center justify-content-center p-8 border-radius-16 cursor-pointer"
+        style={(is_pay && is_pay === text && { border: '1px solid #f5222d', color: '#f5222d' }) || {}}
+        onClick={() => setStateInfor({ ...stateInfor, is_pay: text })}>
+        <div>{text}</div>
+        <div>{icon}</div>
+      </div>
+    );
+  };
+
+  const renderItemProduct = item => {
+    return (
+      <div className="box-shadow p-16 mt-16 cart-detail" style={{ borderRadius: 16 }}>
+        <div className="d-flex">
+          <div>
+            <img src={item.image_link} alt={item.name} width={160} height={160} />
+          </div>
+          <div className="ml-8 w-100">
+            <div className="d-flex justify-content-between w-100 fw-700 fz-16">
+              {item.name} ({item.name_option})
+            </div>
+            <div className="text-red fw-700 fz-16">{moneyMask(item.value_option)}</div>
+            <div className="d-flex align-items-center">
+              <div className="fw-500">Số lượng: {item.quantity}</div>
+            </div>
+            <div className="d-flex align-items-center">
+              <div className="fw-500">Tổng tiền: {moneyMask(item.quantity * item.value_option)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Client footer={false}>
-      <div style={{ padding: '16px' }}>
-        <Row>
-          <Col span={7}></Col>
-          <Col span={10}>
+      <div className="d-flex justify-content-center">
+        <div style={{ padding: '16px', maxWidth: 644 }}>
+          <div>
             <div className="  d-flex text-red fz-18 fw-700 align-items-center justify-content-center mb-16" style={{ position: 'relative' }}>
               <div
                 className="d-flex align-items-center justify-content-center cursor-pointer"
@@ -70,13 +145,9 @@ function Pay(props) {
                   : 'Hoàn tất'}
               </div>
             </div>
-          </Col>
-          <Col span={7}></Col>
-        </Row>
+          </div>
 
-        <Row>
-          <Col span={7}></Col>
-          <Col span={10} style={{ backgroundColor: '#fef2f2', borderRadius: 16 }}>
+          <div style={{ backgroundColor: '#fef2f2', borderRadius: 16 }}>
             <Steps current={stateStep} className="step-custom p-16" direction="horizontal" labelPlacement="vertical" onChange={e => setStateStep(e)}>
               <Step
                 title="Chọn sản phẩm"
@@ -133,7 +204,7 @@ function Pay(props) {
             {stateStep === 2 && (
               <div className="p-16">
                 <div className="box-shadow p-16 border-radius-16 d-flex" style={{ background: 'white' }}>
-                  <Input name="voucher" placeholder="Nhập phiếu giảm giá" />
+                  <Input name="voucher" value={voucher} onChange={onChangeInput} placeholder="Nhập phiếu giảm giá" />
                   <Button className="btn-buy ml-8" style={{ height: 36 }}>
                     Áp dụng
                   </Button>
@@ -214,37 +285,126 @@ function Pay(props) {
                   </div>
                 </>
               )}
+
+              {stateStep === 3 && (
+                <>
+                  <div className="box-shadow p-16 border-radius-16">
+                    <div className="fz-16 fw-500 text-upper text-center ">THÔNG TIN ĐẶT HÀNG</div>
+                    <div>
+                      Người nhận: <strong>{full_name}</strong>
+                    </div>
+                    <div>
+                      Số điện thoại: <strong>{phone_number}</strong>
+                    </div>
+                    <div>
+                      Email: <strong>{email}</strong>
+                    </div>
+                    <div>
+                      Nhận sản phẩm tại: <strong>{(stateRadio === 1 && stateStore) || `${address}-${district}-${provice}`}</strong>
+                    </div>
+                    <div>
+                      Tổng tiền: <strong>{sumPay}</strong>
+                    </div>
+                  </div>
+                  <div className="p-16">
+                    <div className="mt-8 mb-8 fz-16 fw-500">Chọn hình thức thanh toán</div>
+                    <Row gutter={4}>
+                      <Col span={12}>{renderItemPay('Thanh toán tại cửa hàng', <SiHomeassistantcommunitystore />)}</Col>
+                      <Col span={12}>{renderItemPay('Thanh toán chuyển khoản', <MdPayment />)}</Col>
+                    </Row>
+                  </div>
+                </>
+              )}
+              {stateStep === 4 && (
+                <>
+                  <div className="mb-8">
+                    Cảm ơn Quý khách hàng đã chọn mua hàng tại PhoneTop. Trong 15 phút, PhoneTop sẽ SMS hoặc gọi để xác nhận đơn hàng. * Các đơn hàng
+                    từ 21h30 tối tới 8h sáng hôm sau. PhoneTop sẽ liên hệ với Quý khách trước 10h trưa cùng ngày
+                  </div>
+                  <div className="box-shadow p-16 border-radius-16" style={{ backgroundColor: '#d4edda', color: '#155724' }}>
+                    <div className="fz-16 fw-700 text-upper text-center mb-b ">ĐẶT HÀNG THÀNH CÔNG</div>
+                    <div>
+                      Mã đơn hàng: <strong>{full_name}</strong>
+                    </div>
+                    <div>
+                      Người nhận: <strong>{full_name}</strong>
+                    </div>
+                    <div>
+                      Số điện thoại: <strong>{phone_number}</strong>
+                    </div>
+                    <div>
+                      Email: <strong>{email}</strong>
+                    </div>
+                    <div>
+                      Nhận sản phẩm tại: <strong>{(stateRadio === 1 && stateStore) || `${address}-${district}-${provice}`}</strong>
+                    </div>
+                    <div>
+                      Hình thức thanh toán: <strong>{is_pay}</strong>
+                    </div>
+                    <div>
+                      Tổng tiền: <strong>{sumPay}</strong>
+                    </div>
+                    {is_pay === 'Thanh toán chuyển khoản' && (
+                      <div className="p-8 border-radius-16 mt-8" style={{ backgroundColor: 'white', color: '#155724' }}>
+                        <div className="fw-700">Thông tin chuyển khoản:</div>
+                        <ul style={{ marginBottom: 0 }}>
+                          <li>Công ty TNHH Thương mại và dịch vụ kỹ thuật PanCake</li>
+                          <li>Ngân hàng ViettinBank - Sở giao dịch 2</li>
+                          <li>
+                            Số tài khoản: <strong>104870361932</strong>
+                          </li>
+                          <li>
+                            <strong>Hotline hỗ trợ: 0898709170</strong>
+                          </li>
+                          <li>
+                            <strong>Cú pháp chuyển khoản:</strong> [Tên cá nhân/tổ chức] + [SĐT mua hàng] + [mã thanh toán 6 kí tự] (nếu có)
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                  {products?.length > 0 && products.map((item, idx) => <div key={idx}>{renderItemProduct(item)}</div>)}
+                  <div className="d-flex mt-16">
+                    <Button className="btn-primary" block onClick={() => navigate('/check_package')}>
+                      <div>Kiểm tra đơn hàng</div>
+                      <div>
+                        <AiOutlineCheckCircle />
+                      </div>
+                    </Button>
+                    <Button className="btn-buy ml-8" block onClick={() => navigate('/home')}>
+                      <div>Tiếp tục mua hàng</div>
+                      <div>
+                        <BsFillCartPlusFill />
+                      </div>
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
-          </Col>
-          <Col span={7}></Col>
-        </Row>
-        <Row className="mt-16">
-          <Col span={7}></Col>
-          <Col span={10}>
-            <div className="cart-detail box-shadow p-16 border-radius-16">
-              <div className="d-flex justify-content-between mb-16 fw-700 fz-16">
-                <div>Tổng tiền tạm tính</div>
-                <div className="text-red">{sumPay}</div>
+          </div>
+          {stateStep !== 4 && (
+            <div>
+              <div className="box-shadow p-16 border-radius-16">
+                <div className="d-flex justify-content-between mb-16 fw-700 fz-16">
+                  <div>Tổng tiền tạm tính</div>
+                  <div className="text-red">{sumPay}</div>
+                </div>
+                <Button className="btn-buy fw-500 fz-16 mb-8" style={{ height: 60, textTransform: 'uppercase' }} block onClick={() => handleNext()}>
+                  Tiếp tục
+                </Button>
+                <Button className="btn-red fw-500 fz-16" style={{ height: 60, textTransform: 'uppercase' }} block>
+                  <Link to="/home">Chọn sản phẩm khác</Link>
+                </Button>
               </div>
-              <Button
-                className="btn-buy fw-500 fz-16 mb-8"
-                style={{ height: 60, textTransform: 'uppercase' }}
-                block
-                onClick={() => setStateStep(stateStep + 1)}>
-                Tiếp tục
-              </Button>
-              <Button className="btn-red fw-500 fz-16" style={{ height: 60, textTransform: 'uppercase' }} block>
-                <Link to="/home">Chọn sản phẩm khác</Link>
-              </Button>
             </div>
-          </Col>
-          <Col span={7}></Col>
-        </Row>
+          )}
+        </div>
       </div>
     </Client>
   );
 }
 
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...packageActions }, dispatch) });
 const mapStateToProps = state => ({ ...selectCart(state), ...selectAuth(state) });
 
-export default connect(mapStateToProps, null)(Pay);
+export default connect(mapStateToProps, mapDispatchToProps)(Pay);
