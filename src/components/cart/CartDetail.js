@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { bindActionCreators } from 'redux';

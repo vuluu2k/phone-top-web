@@ -48,6 +48,8 @@ body {
 
   //
   .step-custom {
+    display: block;
+
     .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
       background-color: #d70018;
     }
@@ -246,6 +248,14 @@ body {
       border-radius: 8px;
       height: 60px;
       background-color: $dust-red-6;
+    }
+
+    &.btn-primary {
+      color: white;
+      border-color: $daybreak-blue-7;
+      border-radius: 8px;
+      height: 60px;
+      background-color: $daybreak-blue-7;
     }
   }
 
