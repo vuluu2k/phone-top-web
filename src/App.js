@@ -3,9 +3,9 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import { Landing } from 'components/layouts';
-import { Home, Account, ProductDetail, Cart, Pay, CheckPackage } from 'pages';
+import { Home, Account, ProductDetail, Cart, Pay, CheckPackage, Blog } from 'pages';
 import { Auth } from 'components/auth';
-import { Dashboard, ProductManager, CategoryManager, PackageManager } from 'pages/admin';
+import { Dashboard, ProductManager, CategoryManager, PackageManager, BlogManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
 import { PrivateRoute } from 'components/routing';
 
@@ -31,16 +31,17 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/pay" element={<Pay />} />
             <Route path="/check_package" element={<CheckPackage />} />
+            <Route path="/blog" element={<Blog />} />
 
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/product-manager" element={<ProductManager />} />
               <Route path="/category-manager" element={<CategoryManager />} />
               <Route path="/package-manager" element={<PackageManager />} />
-              <Route path="/blog-manager" element={<CategoryManager />} />
+              <Route path="/blog-manager" element={<BlogManager />} />
               <Route path="/account-manager" element={<CategoryManager />} />
             </Route>
-            <Route path="/*" element={<div>Địa chỉ trang không tồn tại trên trang web</div>} />
+            <Route path="/*" element={<h1>Địa chỉ trang không tồn tại trên trang web PhoneTop .... (*-*)</h1>} />
           </Routes>
         </BrowserRouter>
       </UserRouting>
