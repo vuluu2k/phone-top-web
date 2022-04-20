@@ -91,7 +91,7 @@ function* logout() {
   localStorage.removeItem(LOCAL_CART);
   localStorage.removeItem(USER);
   localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
-  window.location.reload(false);
+  window.location.pathname = '/login';
 }
 
 function* loadUser() {
