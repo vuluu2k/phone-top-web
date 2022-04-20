@@ -54,7 +54,7 @@ function Client({ children, ...props }) {
                 <div className="fw-700">0898709170</div>
               </a>
             </div>
-            <Link to="/tracking" style={{ marginRight: 8 }}>
+            <Link to="/check_package" style={{ marginRight: 8 }}>
               <div className="text-center">
                 <ImTruck className="icon-header" />
                 <div className="fw-500">Tra Cứu đơn hàng</div>

@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 
 import { Client } from 'components/layouts';
 import { packageActions } from 'actions';
-import { selectAuth, selectCart } from 'selectors';
+import { selectAuth, selectCart, selectPackage } from 'selectors';
 import { sumMoney, moneyMask } from 'utils/number';
 
 const { Step } = Steps;
@@ -26,6 +26,7 @@ function Pay(props) {
     actions: { createPackage },
     selectAuthStatus: { user },
     selectCartInformation: { products },
+    selectListPackage: { packageNew },
   } = props;
   const [stateStep, setStateStep] = useState(1);
   const [stateRadio, setStateRadio] = useState(1);
@@ -42,6 +43,7 @@ function Pay(props) {
     voucher: '',
     is_pay: undefined,
   });
+
   const { full_name, phone_number, email, full_address, provice, district, address, note, voucher, is_pay } = stateInfor;
 
   const sumPay = sumMoney(products?.map(item => item.quantity * item.value_option));
@@ -324,7 +326,7 @@ function Pay(props) {
                   <div className="box-shadow p-16 border-radius-16" style={{ backgroundColor: '#d4edda', color: '#155724' }}>
                     <div className="fz-16 fw-700 text-upper text-center mb-b ">ĐẶT HÀNG THÀNH CÔNG</div>
                     <div>
-                      Mã đơn hàng: <strong>{full_name}</strong>
+                      Mã đơn hàng: <strong>{packageNew?._id || '#000'}</strong>
                     </div>
                     <div>
                       Người nhận: <strong>{full_name}</strong>
@@ -405,6 +407,6 @@ function Pay(props) {
 }
 
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...packageActions }, dispatch) });
-const mapStateToProps = state => ({ ...selectCart(state), ...selectAuth(state) });
+const mapStateToProps = state => ({ ...selectCart(state), ...selectAuth(state), ...selectPackage(state) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pay);
