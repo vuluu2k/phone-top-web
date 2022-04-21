@@ -3,7 +3,7 @@ import { Layout, Menu, Carousel, Image, Row, Col } from 'antd';
 import Icon, { MobileOutlined, LaptopOutlined, TabletOutlined, HomeOutlined } from '@ant-design/icons';
 import { IoWatchOutline } from 'react-icons/io5';
 import { CgUsb } from 'react-icons/cg';
-import { FaHeadphonesAlt } from 'react-icons/fa';
+import { FaHeadphonesAlt, FaRegNewspaper } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -12,6 +12,7 @@ import { productActions } from 'actions';
 import { Client } from 'components/layouts';
 import { ProductItem } from 'components/product';
 import { SilderCustom } from 'components/Common';
+import { Link } from 'react-router-dom';
 const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
 
@@ -67,6 +68,9 @@ function Home(props) {
                 </SubMenu>
               );
             })}
+            <Menu.Item key="/blog" icon={<FaRegNewspaper />}>
+              <Link to="/blog">Tin công nghệ</Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Content>

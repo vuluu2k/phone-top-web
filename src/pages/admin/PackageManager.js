@@ -17,7 +17,6 @@ function PackageManager(props) {
   useEffect(() => {
     actions.loadListPackage({ isAccess: ' ' });
   }, []);
-  console.log(props);
 
   const columns = [
     {

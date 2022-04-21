@@ -37,8 +37,6 @@ function ButtonCart({ cart, user_id, ...props }) {
 
   const { quantity } = stateQuantity;
 
-  console.log(props);
-
   return (
     <div className="d-flex" style={{ border: '1px solid #ddd', maxWidth: 100, borderRadius: 8 }}>
       <Button

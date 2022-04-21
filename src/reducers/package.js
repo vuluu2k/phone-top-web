@@ -63,7 +63,6 @@ const handleDelete = (state, payload) => {
 };
 
 const handleAccpet = (state, payload) => {
-  console.log(payload);
   const { package_accept } = payload;
   const listCurrent = state.list_package.viewPackage;
   const listAfterEdit = listCurrent.map(item => {

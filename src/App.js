@@ -15,6 +15,7 @@ import 'css/home.scss';
 import 'css/auth.scss';
 import 'css/product.scss';
 import 'css/cart.scss';
+import 'css/blog.scss';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function App() {
