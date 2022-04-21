@@ -97,13 +97,13 @@ function Admin({ children, ...props }) {
             className: 'trigger',
             onClick: () => toggle(),
           })}
+          <div className="fw-700 ml-8  fz-18">{props.title}</div>
         </Header>
         <Content
           style={{
             margin: '50px 16px',
             padding: '12px 0',
           }}>
-          <h1>{props.title}</h1>
           {children}
         </Content>
       </Layout>

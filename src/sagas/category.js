@@ -105,7 +105,6 @@ function* editCategory({ payload }) {
 
 function* deleteCategory({ payload }) {
   const { id } = payload;
-  console.log(id);
   const url = `${API_URL}/category/delete/${id}`;
   try {
     const response = yield call(axios.delete, url);

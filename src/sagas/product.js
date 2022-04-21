@@ -89,7 +89,6 @@ function* loadListHome() {
 
 function* createProduct({ payload }) {
   const { name, value, image, status, quantity, category, sub_category, options, profile, description } = payload;
-  console.log(payload);
   const url = `${API_URL}/product/create`;
   const body = {
     name,

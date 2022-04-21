@@ -54,7 +54,6 @@ function* startRequest(payload) {
 
 function* loadList({ payload }) {
   const { isAccess = ' ' } = payload;
-  console.log(isAccess);
   const url = `${API_URL}/package/view_package?isAccess=${isAccess}`;
 
   try {
@@ -114,7 +113,6 @@ function* createPackage({ payload }) {
   try {
     const response = yield call(axios.post, url, body);
 
-    console.log('res', response.data);
     if (!response.data.success) {
       yield put({ typ: CREATE_PACKAGE_ERROR, ...response.data });
     } else {
@@ -137,7 +135,6 @@ function* acceptPackage({ payload }) {
   try {
     const response = yield call(axios.post, url, body);
 
-    console.log('res', response.data);
     if (!response.data.success) {
       yield put({ typ: ACCEPT_PACKAGE_ERROR, ...response.data });
       messageAntd.error(response.data.message);
@@ -155,7 +152,6 @@ function* acceptPackage({ payload }) {
 
 function* deletePackage({ payload }) {
   const { id } = payload;
-  console.log(id);
   const url = `${API_URL}/package/delete_package/${id}`;
   try {
     const response = yield call(axios.delete, url);

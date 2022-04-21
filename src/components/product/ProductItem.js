@@ -9,7 +9,7 @@ export default function ProductItem({ id, name, value, imageLink }) {
     <Link to={`/product-detail/${id}`}>
       <div className="product-item" style={{ minHeight: 320 }}>
         <div className="text-center">
-          <Image src={imageLink} width={160} height={160} />
+          <Image src={imageLink} width={'100%'} />
         </div>
         <div>
           <div style={{ color: '#000', fontWeight: 500, fontSize: 14, marginTop: 16 }}>{name}</div>
