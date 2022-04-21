@@ -5,6 +5,7 @@ body {
   $geek-blue-3: #adc6ff;
   $geek-blue-2: #d6e4ff;
   $geek-blue-1: #f0f5ff;
+  $daybreak-blue-9: #003a8c;
   $daybreak-blue-8: #0050b3;
   $daybreak-blue-7: #096dd9;
   $daybreak-blue-6: #1890ff;
@@ -111,6 +112,10 @@ body {
 
   .text-upper {
     text-transform: uppercase;
+  }
+
+  .text-capitalize {
+    text-transform: capitalize;
   }
 
   //   flex-box
@@ -260,17 +265,16 @@ body {
   }
 
   .data-table {
-    border: 1px solid $neutral-6;
     box-sizing: border-box;
     box-shadow: 0px 8px 24px -4px rgba(24, 39, 75, 0.08);
-    border-radius: 8px;
     background: #ffffff;
 
     .data-table-title {
-      border-bottom: 1px solid $neutral-6;
+      background-color: $geek-blue-1;
       padding: 8px 16px;
 
       .title {
+        color: $daybreak-blue-9;
         text-transform: uppercase;
         font-weight: 500;
       }
