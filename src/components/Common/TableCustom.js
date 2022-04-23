@@ -5,7 +5,12 @@ export default function TableCustom({ children, ...props }) {
     <div className="data-table">
       <div className="data-table-title" style={props.style}>
         <div className="title">
-          {props.icon} {props.title} {props.refesh}
+          <div className="d-flex align-items-center justify-content-between">
+            <div>
+              {props.icon} {props.title} {props.refesh}
+            </div>
+            <div>{props.search}</div>
+          </div>
         </div>
       </div>
       <div className="data-table-container">{children}</div>
