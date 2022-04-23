@@ -27,7 +27,13 @@ const initialState = {
   productInfomation: {
     success: false,
     message: '',
+    requesting: true,
     products: [],
+    page_size: 0,
+    page_number: 0,
+    page_entries: 0,
+    page_totals: 0,
+    dataSearch: {},
   },
   productInfomationHome: {
     success: false,
@@ -39,6 +45,7 @@ const initialState = {
     tablet: [],
     accessory: [],
   },
+
   productStatusDel: {
     success: false,
     message: '',
@@ -64,12 +71,10 @@ const handleDelete = (state, payload) => {
   const listCurrent = state.productInfomation.products;
   const listFilter = listCurrent.filter(item => item._id !== id);
   return update(state, {
-    productStatusDel: {
+    productInfomation: {
       requesting: { $set: false },
       success: { $set: true },
       $merge: converObjToCamelKeys(payload),
-    },
-    productInfomation: {
       products: { $set: listFilter },
     },
   });
@@ -86,12 +91,10 @@ const handleEdit = (state, payload) => {
   });
 
   return update(state, {
-    productStatusEdit: {
+    productInfomation: {
       requesting: { $set: false },
       success: { $set: true },
       $merge: converObjToCamelKeys(payload),
-    },
-    productInfomation: {
       products: { $set: listAfterEdit },
     },
   });
@@ -101,13 +104,11 @@ const handleCreate = (state, payload) => {
   const { product } = payload;
   const listCurrent = state.productInfomation.products;
   return update(state, {
-    productStatusCreate: {
+    productInfomation: {
       requesting: { $set: false },
       success: { $set: true },
       $merge: converObjToCamelKeys(payload),
-    },
-    productInfomation: {
-      products: { $set: listCurrent.concat(product) },
+      products: { $set: [product].concat(listCurrent) },
     },
   });
 };

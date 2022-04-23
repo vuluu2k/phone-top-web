@@ -7,8 +7,8 @@ export default function Login(props) {
   const { username, password } = state;
   const {
     actions: { login },
-    selectLoginStatus: { success, message },
-    selectAuthStatus: { isAuthenticated },
+    selectLoginStatus: { message },
+    selectAuthStatus: { isAuthenticated, requesting, success },
   } = props;
 
   useEffect(() => {
@@ -21,21 +21,22 @@ export default function Login(props) {
   };
 
   const notification = () => {
-    if (success) {
-      messageAntd.success(message);
-    } else if (message !== '') {
-      messageAntd.error(message || '');
-    }
+    if (success && !requesting) {
+      return messageAntd.success(message || 'Đăng ký thành công');
+    } else if (!success && !requesting) return messageAntd.error(message || 'Đăng ký thất bại');
   };
+
+  const onClear = () => setState({ username: '', password: '' });
 
   const onSubmit = () => {
     if (!username || !password || username === '' || password === '') {
       messageAntd.error('Bạn chưa nhập tài khoản mật khẩu');
     }
     login({ username, password });
+    onClear();
   };
 
-  if (isAuthenticated) return <Navigate to="/dashboard" />;
+  if (isAuthenticated) return <Navigate to="/product-manager" />;
 
   return (
     <div>

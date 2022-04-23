@@ -109,8 +109,8 @@ function* editBlog({ payload }) {
 }
 
 function* deleteBlog({ payload }) {
-  const { id } = payload;
-  const url = `${API_URL}/blog/delete_blog/${id}`;
+  const { blog_id } = payload;
+  const url = `${API_URL}/blog/delete_blog/${blog_id}`;
   try {
     const response = yield call(axios.delete, url);
     if (!response.data.success) {

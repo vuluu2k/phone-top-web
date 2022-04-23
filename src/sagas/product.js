@@ -29,7 +29,7 @@ export default [productSagas];
 function* startRequest(payload) {
   switch (payload.type) {
     case LOAD_LIST_PRODUCT:
-      yield call(loadList);
+      yield call(loadList, payload);
       break;
     case LOAD_LIST_PRODUCT_HOME:
       yield call(loadListHome);
@@ -51,8 +51,13 @@ function* startRequest(payload) {
   }
 }
 
-function* loadList() {
-  const url = `${API_URL}/product/view`;
+function* loadList({ payload }) {
+  const { product_id, name, value, status, category, sub_category, page_number = 1, page_size = 10 } = payload;
+  const queryParams = `?product_id=${product_id}&name=${name}&value=${value}&status=${status}&category=${category}&sub_category=${sub_category}&page_number=${page_number}&page_size=${page_size}`;
+
+  console.log('payload', payload);
+
+  const url = `${API_URL}/product/view${queryParams}`;
 
   try {
     const response = yield call(axios.get, url);
@@ -119,6 +124,7 @@ function* createProduct({ payload }) {
 
 function* editProduct({ payload }) {
   const { id, name, value, image, status, quantity, category, sub_category, options, profile, description } = payload;
+
   const url = `${API_URL}/product/edit`;
   const body = {
     product_id: id,
