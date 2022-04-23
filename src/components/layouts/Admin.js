@@ -23,7 +23,7 @@ import { selectAuth } from 'selectors';
 const { Header, Sider, Content } = Layout;
 
 function Admin({ children, ...props }) {
-  const [state, setState] = useState({ collapsed: false, keyMenu: window.location.pathname || '/dashboard' });
+  const [state, setState] = useState({ collapsed: false, keyMenu: window.location.pathname || '/product-manager' });
   const { collapsed, keyMenu } = state;
   const {
     selectAuthStatus: { user },

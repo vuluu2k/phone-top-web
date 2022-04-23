@@ -26,9 +26,9 @@ const initialState = {
 };
 
 const handleDelete = (state, payload) => {
-  const { id } = payload;
+  const { blog } = payload;
   const listCurrent = state.blogData.blogs;
-  const listFilter = listCurrent.filter(item => item._id !== id);
+  const listFilter = listCurrent.filter(item => item._id !== blog._id);
   return update(state, {
     blogData: {
       requesting: { $set: false },
@@ -40,10 +40,10 @@ const handleDelete = (state, payload) => {
 };
 
 const handleEdit = (state, payload) => {
-  const { id, blog } = payload;
+  const { blog } = payload;
   const listCurrent = state.blogData.blogs;
   const listAfterEdit = listCurrent.map(item => {
-    if (item._id === id) {
+    if (item._id === blog._id) {
       return blog;
     }
     return item;

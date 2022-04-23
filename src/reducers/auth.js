@@ -17,11 +17,13 @@ const initialState = {
   statusRegister: {
     message: '',
     success: false,
+    requesting: true,
   },
   statusLogin: {
     message: '',
     success: false,
     accessToken: '',
+    requesting: true,
   },
   auth: {
     requesting: true,

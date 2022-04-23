@@ -10,7 +10,6 @@ export default function Register(props) {
   const {
     actions: { register },
     selectRegisterStatus: { message, success, requesting },
-    selectRegisterStatus,
     onButtonLogin,
   } = props;
 
@@ -21,15 +20,17 @@ export default function Register(props) {
   useEffect(() => {
     notification();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectRegisterStatus]);
+  }, [requesting]);
 
   const notification = () => {
-    if (success) {
-      messageAntd.success(message);
-      // onButtonLogin();
-    } else if (message !== '' && !requesting && !success) {
-      messageAntd.error(message || '');
-    }
+    if (success && !requesting) {
+      onButtonLogin();
+      return messageAntd.success(message || 'Đăng ký thành công');
+    } else if (!success && !requesting) return messageAntd.error(message || 'Đăng ký thất bại');
+  };
+
+  const onClear = () => {
+    setState({ username: '', email: '', password: '', phone_number: '', full_name: '' });
   };
 
   const onSubmit = () => {
@@ -53,6 +54,7 @@ export default function Register(props) {
       return messageAntd.error('Mật khẩu tối thiểu là 8 kí tự ', 1);
     }
     register({ username, email, password, phone_number, full_name });
+    onClear();
   };
 
   return (
@@ -83,7 +85,7 @@ export default function Register(props) {
         </Form.Item>
 
         <Form.Item>
-          <div className="btn-switch on" style={{ margin: '16px 12px 0' }} onClick={onSubmit}>
+          <div className="btn-switch on" style={{ margin: '16px 12px 0' }} onClick={() => onSubmit()}>
             Đăng ký
           </div>
         </Form.Item>
