@@ -20,6 +20,9 @@ import {
   DELETE_PACKAGE,
   DELETE_PACKAGE_SUCCESS,
   DELETE_PACKAGE_ERROR,
+  GET_TURNOVER,
+  GET_TURNOVER_SUCCESS,
+  GET_TURNOVER_ERROR,
 } from 'constants/package';
 
 import { API_URL } from 'env_config';
@@ -41,9 +44,9 @@ function* startRequest(payload) {
     case ACCEPT_PACKAGE:
       yield call(acceptPackage, payload);
       break;
-    // case EDIT_CATEGORY:
-    //   yield call(editCategory, payload);
-    //   break;
+    case GET_TURNOVER:
+      yield call(getTurnover, payload);
+      break;
     case DELETE_PACKAGE:
       yield call(deletePackage, payload);
       break;
@@ -168,6 +171,24 @@ function* deletePackage({ payload }) {
   }
 }
 
+function* getTurnover({ payload }) {
+  const { startDate, endDate } = payload;
+  const url = `${API_URL}/package/view_turnover?startDate=${startDate}&endDate=${endDate}`;
+  try {
+    const response = yield call(axios.get, url);
+    if (!response.data.success) {
+      yield put({ type: GET_TURNOVER_ERROR, ...response.data });
+    } else {
+      yield put({ type: GET_TURNOVER_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: GET_TURNOVER_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* packageSagas() {
-  yield takeLatest([LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE], startRequest);
+  yield takeLatest([LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE, GET_TURNOVER], startRequest);
 }

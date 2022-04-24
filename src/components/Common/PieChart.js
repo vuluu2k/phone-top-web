@@ -7,7 +7,7 @@ function PieChart(props) {
       type: 'pie',
     },
     title: {
-      text: 'Thống kê số lượng',
+      text: 'Thông kê mặt số lượng',
     },
     // subtitle: {
     //   text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>',
@@ -55,6 +55,7 @@ function PieChart(props) {
         ],
       },
     ],
+    series: props.series,
   };
 
   return <ReactHighcharts config={config} />;

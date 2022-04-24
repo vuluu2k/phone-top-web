@@ -20,10 +20,22 @@ export function formatText(amount, suffix) {
   return amount + suffix;
 }
 
-export function sumMoney(arrayNumber) {
+export function sumMoney(arrayNumber, number) {
   let sum = 0;
   arrayNumber?.map(item => {
     sum += item;
   });
+
+  if (number) return sum;
+
   return moneyMask(sum);
+}
+
+export function sumMoneyNumber(arrayNumber) {
+  let sum = 0;
+  arrayNumber?.map(item => {
+    sum += item;
+  });
+
+  return sum;
 }

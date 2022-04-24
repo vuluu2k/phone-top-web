@@ -24,7 +24,7 @@ function renderProductArray(product, title) {
       </h1>
       <Row gutter={15}>
         {product.map((a, index) => (
-          <Col key={index} span={4}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 6 }} xxl={{ span: 4 }} key={index} span={4}>
             <ProductItem name={a.name} value={a.value} imageLink={a.image_link} id={a._id} />
           </Col>
         ))}
@@ -45,6 +45,8 @@ function Home(props) {
   useEffect(() => {
     loadListProductHome();
   }, []);
+
+  console.log(window.innerWidth);
 
   return (
     <Client>
@@ -76,16 +78,16 @@ function Home(props) {
         <Content>
           <Carousel autoplay>
             <div>
-              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/iPhone_11.png" width={'100%'} />
+              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
             </div>
             <div>
-              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/iPhone_11.png" width={'100%'} />
+              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
             </div>
             <div>
-              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/iPhone_11.png" width={'100%'} />
+              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
             </div>
             <div>
-              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/iPhone_11.png" width={'100%'} />
+              <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
             </div>
           </Carousel>
         </Content>
