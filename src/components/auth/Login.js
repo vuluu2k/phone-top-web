@@ -14,7 +14,7 @@ export default function Login(props) {
   useEffect(() => {
     notification();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requesting]);
+  }, []);
 
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -23,7 +23,8 @@ export default function Login(props) {
   const notification = () => {
     if (success && !requesting) {
       return messageAntd.success(message || 'Đăng ký thành công');
-    } else if (!success && !requesting) return messageAntd.error(message || 'Đăng ký thất bại');
+    } else if (!success && !requesting && message !== '') return messageAntd.error(message || 'Đăng ký thất bại');
+    return;
   };
 
   const onClear = () => setState({ username: '', password: '' });

@@ -28,6 +28,7 @@ const initialState = {
     message: '',
     success: false,
     requesting: true,
+    user: undefined,
   },
   statusLogin: {
     message: '',
