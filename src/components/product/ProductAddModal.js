@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Row, Col, Input, Select, Upload } from 'antd';
+import { Modal, Button, Row, Col, Input, Select, Upload, message as messageAntd } from 'antd';
 import { CloseCircleOutlined, RollbackOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -13,6 +13,7 @@ import { getBase64 } from 'utils/file';
 import { moneyMask } from 'utils/number';
 import { ComfirmModal } from 'components/Common';
 import { selectProduct } from 'selectors';
+import validator from 'validator';
 
 const { Option } = Select;
 
@@ -186,39 +187,79 @@ function ProductAddModal(props) {
     imgWindow.document.write(image.outerHTML);
   };
 
+  const validate = () =>{
+    if (validator.isEmpty(String(name))||
+        validator.isEmpty(String(category))||
+        validator.isEmpty(String(sub_categorys))||
+        validator.equals(String(value),'0')||
+        validator.equals(String(quantity),'0')||
+        validator.isEmpty(String(profile.screen_pixel))||
+        validator.isEmpty(String(profile.screen_technology))||
+        validator.isEmpty(String(profile.screen_size))||
+        validator.isEmpty(String(profile.camera_font))||
+        validator.isEmpty(String(profile.camera_back))||
+        validator.isEmpty(String(profile.chipset))||
+        validator.isEmpty(String(profile.sim_card))||
+        validator.isEmpty(String(profile.os))||
+        validator.isEmpty(String(profile.bluetooth))||
+        validator.equals(String(profile.ram_capacity),'0')||
+        validator.equals(String(profile.rom_capacity,'0'))||
+        validator.equals(String(profile.baterry,'0'))||
+        validator.equals(String(profile.weight,'0'))||
+        validator.isEmpty(String(profile.frequency))
+    ){
+      messageAntd.error('Bạn chưa nhập đủ trường dữ liệu')
+      return false;
+    }
+    if (!validator.isNumeric(value)) {
+       messageAntd.error('Nhập lại giá trị sản phẩm(kiểu số)')
+      return false;
+    }
+    if (!validator.isNumeric(quantity)) {
+       messageAntd.error('Nhập lại số lượng sản phẩm(kiểu số)')
+      return false;
+       
+    }
+    return true;
+  }
+
   const onSubmitCreate = () => {
-    createProduct({
-      name,
-      value,
-      image: fileList[0].thumbUrl || fileList[0].url,
-      status,
-      quantity,
-      category,
-      sub_category,
-      options,
-      profile,
-      description: state.description,
-    });
-    onClose();
-    onClear();
+    if(validate()){
+      createProduct({
+        name,
+        value,
+        image: fileList[0].thumbUrl || fileList[0].url,
+        status,
+        quantity,
+        category,
+        sub_category,
+        options,
+        profile,
+        description: state.description,
+      });
+      onClose();
+      onClear();
+    }
   };
 
   const onSubmitEdit = () => {
-    editProduct({
-      id: productItem?._id,
-      name,
-      value,
-      image: fileList[0].thumbUrl || fileList[0].url,
-      status,
-      quantity,
-      category,
-      sub_category,
-      options,
-      profile,
-      description: state.description,
-    });
-    onClose();
-    onClear();
+    if (validate()){
+      editProduct({
+        id: productItem?._id,
+        name,
+        value,
+        image: fileList[0].thumbUrl || fileList[0].url,
+        status,
+        quantity,
+        category,
+        sub_category,
+        options,
+        profile,
+        description: state.description,
+      });
+      onClose();
+      onClear();
+    }
   };
 
   const onShowConfirmModalDel = () => setState({ ...state, visibleDel: true });
