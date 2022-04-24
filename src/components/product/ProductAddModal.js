@@ -187,7 +187,7 @@ function ProductAddModal(props) {
     imgWindow.document.write(image.outerHTML);
   };
 
-  const onSubmitCreate = () => {
+  const validate = () =>{
     if (validator.isEmpty(String(name))||
         validator.isEmpty(String(category))||
         validator.isEmpty(String(sub_categorys))||
@@ -208,46 +208,58 @@ function ProductAddModal(props) {
         validator.equals(String(profile.weight,'0'))||
         validator.isEmpty(String(profile.frequency))
     ){
-      return messageAntd.error('Bạn chưa nhập đủ trường dữ liệu')
+      messageAntd.error('Bạn chưa nhập đủ trường dữ liệu')
+      return false;
     }
     if (!validator.isNumeric(value)) {
-      return messageAntd.error('Nhập lại giá trị sản phẩm(kiểu số)')
+       messageAntd.error('Nhập lại giá trị sản phẩm(kiểu số)')
+      return false;
     }
     if (!validator.isNumeric(quantity)) {
-      return messageAntd.error('Nhập lại số lượng sản phẩm(kiểu số)')
+       messageAntd.error('Nhập lại số lượng sản phẩm(kiểu số)')
+      return false;
+       
     }
-    createProduct({
-      name,
-      value,
-      image: fileList[0].thumbUrl || fileList[0].url,
-      status,
-      quantity,
-      category,
-      sub_category,
-      options,
-      profile,
-      description: state.description,
-    });
-    onClose();
-    // onClear();
+    return true;
+  }
+
+  const onSubmitCreate = () => {
+    if(validate()){
+      createProduct({
+        name,
+        value,
+        image: fileList[0].thumbUrl || fileList[0].url,
+        status,
+        quantity,
+        category,
+        sub_category,
+        options,
+        profile,
+        description: state.description,
+      });
+      onClose();
+      onClear();
+    }
   };
 
   const onSubmitEdit = () => {
-    editProduct({
-      id: productItem?._id,
-      name,
-      value,
-      image: fileList[0].thumbUrl || fileList[0].url,
-      status,
-      quantity,
-      category,
-      sub_category,
-      options,
-      profile,
-      description: state.description,
-    });
-    onClose();
-    onClear();
+    if (validate()){
+      editProduct({
+        id: productItem?._id,
+        name,
+        value,
+        image: fileList[0].thumbUrl || fileList[0].url,
+        status,
+        quantity,
+        category,
+        sub_category,
+        options,
+        profile,
+        description: state.description,
+      });
+      onClose();
+      onClear();
+    }
   };
 
   const onShowConfirmModalDel = () => setState({ ...state, visibleDel: true });
