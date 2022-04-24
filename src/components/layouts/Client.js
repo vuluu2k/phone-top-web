@@ -109,9 +109,13 @@ function Client({ children, ...props }) {
         <Content style={{ padding: '0 200px', marginTop: 64, backgroundColor: '#fff' }}>
           {(keySearch && (
             <div>
-              {productSearchs.map(item => (
-                <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
-              ))}
+              <Row>
+                  {productSearchs.map(item => (
+                    <Col mb={4} sm={8} style={{padding: '4px'}}>
+                      <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
+                    </Col>
+                  ))}
+              </Row>
             </div>
           )) ||
             children}
