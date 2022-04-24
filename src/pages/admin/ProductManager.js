@@ -136,7 +136,6 @@ function ProductManager(props) {
   ];
 
   const handleFilterProduct = e => {
-    console.log(e[e.length - 1]);
     if (e?.length > 0 && e[0] === 'category') loadListProduct({ ...dataSearch, category: e[e.length - 2], sub_category: e[e.length - 1] });
     if (e?.length > 0 && e[0] === 'status') loadListProduct({ ...dataSearch, status: e[e.length - 1] });
   };

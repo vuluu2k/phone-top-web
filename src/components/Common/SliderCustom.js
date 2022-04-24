@@ -5,8 +5,8 @@ import { useSpring, animated } from 'react-spring';
 
 import { ProductItem } from 'components/product';
 
-const size = 6;
-const offset = 6;
+const size = (window.innerWidth <= 992 && 2) || (window.innerWidth <= 1600 && 4) || 6;
+const offset = (window.innerWidth <= 992 && 2) || (window.innerWidth <= 1600 && 4) || 6;
 let start = 0;
 let end = size;
 
@@ -40,14 +40,14 @@ export default function SliderCustom(props) {
       transform: 'translateX(200px)',
     },
   });
-
+  if (window.innerWidth <= 736) return null;
   return (
     <div className="slider-custom pos-relative">
       <h1 className="text-white text-upper">{props.title}</h1>
       <animated.div style={anim}>
         <Row gutter={15}>
           {item.map((a, index) => (
-            <Col key={index} span={4}>
+            <Col key={index} xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 6 }} xxl={{ span: 4 }}>
               <ProductItem name={a.name} value={a.value} imageLink={a.image_link} id={a._id} />
             </Col>
           ))}

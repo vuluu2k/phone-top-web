@@ -25,8 +25,6 @@ function Client({ children, ...props }) {
     selectProductInformation: { products: productSearchs },
   } = props;
 
-  console.log('client', props);
-
   const [keySearch, setKeySearch] = useState('');
 
   useEffect(() => {
@@ -110,11 +108,11 @@ function Client({ children, ...props }) {
           {(keySearch && (
             <div>
               <Row>
-                  {productSearchs.map(item => (
-                    <Col mb={4} sm={8} style={{padding: '4px'}}>
-                      <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
-                    </Col>
-                  ))}
+                {productSearchs.map(item => (
+                  <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 6 }} xxl={{ span: 4 }} style={{ padding: '4px' }}>
+                    <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
+                  </Col>
+                ))}
               </Row>
             </div>
           )) ||

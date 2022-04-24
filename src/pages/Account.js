@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Avatar, Button, Input } from 'antd';
+import { Row, Col, Avatar, Button, Input, message as messageAntd } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SaveOutlined } from '@ant-design/icons';
@@ -10,8 +10,10 @@ import { authActions } from 'actions';
 
 function Account(props) {
   const {
-    selectAuthStatus: { user },
+    actions: { editUser },
+    selectAuthStatus: { user, requesting, success, message },
   } = props;
+
   const [state, setState] = useState({
     statusChange: 'information',
     fullName: user?.full_name,
@@ -37,6 +39,25 @@ function Account(props) {
       newPasswordRepeat: '',
     });
   }, [user]);
+
+  useEffect(() => {
+    notification();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requesting]);
+
+  const notification = () => {
+    if (success && !requesting) {
+      return messageAntd.success(message || 'Cập nhật thành công');
+    } else if (!success && !requesting) return messageAntd.error(message || 'Cập nhật thất bại');
+  };
+
+  const onSubmitChangeInfor = () => {
+    editUser({ user_id: user._id, email: Email, phone_number: phoneNumber, full_name: fullName });
+  };
+
+  const onSubmitChangePassword = () => {
+    editUser({ user_id: user._id, new_password: newPassword, password: password, change_password: true });
+  };
 
   return (
     <Client>
@@ -81,7 +102,7 @@ function Account(props) {
                 <Input name="phoneNumber" value={phoneNumber} onChange={onChange} />
               </Row>
               <Row className="mt-16">
-                <Button className="btn-blue" icon={<SaveOutlined />} style={{ minWidth: 112 }}>
+                <Button className="btn-blue" icon={<SaveOutlined />} style={{ minWidth: 112 }} onClick={() => onSubmitChangeInfor()}>
                   Lưu
                 </Button>
               </Row>
@@ -91,15 +112,20 @@ function Account(props) {
               <>
                 <Row>
                   <div className="text">Nhập mật khẩu cũ</div>
-                  <Input type="password" name="fullName" value={password} onChange={onChange} />
+                  <Input type="password" name="password" value={password} onChange={onChange} />
                 </Row>
                 <Row>
                   <div className="text">Mật khẩu mới</div>
-                  <Input type="password" name="passsword" value={newPassword} onChange={onChange} />
+                  <Input type="password" name="newPassword" value={newPassword} onChange={onChange} />
                 </Row>
                 <Row>
                   <div className="text">Nhập lại mật khẩu mới</div>
-                  <Input type="password" name="passsword" value={newPasswordRepeat} onChange={onChange} />
+                  <Input type="password" name="newPasswordRepeat" value={newPasswordRepeat} onChange={onChange} />
+                </Row>
+                <Row className="mt-16">
+                  <Button className="btn-blue" icon={<SaveOutlined />} style={{ minWidth: 112 }} onClick={() => onSubmitChangePassword()}>
+                    Thay đổi mật khẩu
+                  </Button>
                 </Row>
               </>
             ))}

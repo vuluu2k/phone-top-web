@@ -17,6 +17,7 @@ import {
   // ADD_ITEM_CART_ERROR,
   EDIT_ITEM_CART,
   DELETE_ITEM_CART,
+  CLEAR_CART,
 } from 'constants/cart';
 import { LOCAL_CART } from 'constants';
 import { API_URL } from 'env_config';
@@ -42,6 +43,9 @@ function* startRequest(payload) {
       break;
     case DELETE_ITEM_CART:
       yield call(deleteCart, payload);
+      break;
+    case CLEAR_CART:
+      yield call(clearCart, payload);
       break;
     default:
       break;
@@ -196,6 +200,29 @@ function* deleteCart({ payload }) {
   }
 }
 
+function* clearCart({ payload }) {
+  const { user_id } = payload;
+  localStorage.removeItem(LOCAL_CART);
+  const url = `${API_URL}/cart/change`;
+  const body = {
+    user_id: user_id,
+    products: [],
+  };
+  try {
+    const response = yield call(axios.patch, url, body);
+    if (!response.data.success) {
+      yield put({ type: CHANGE_CART_ERROR, ...response.data });
+    } else {
+      yield put({ type: CHANGE_CART_SUCCESS, ...response.data, cart: [] });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CHANGE_CART_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* cartSagas() {
-  yield takeLatest([GET_CART, INIT_CART, CHANGE_CART, ADD_ITEM_CART, EDIT_ITEM_CART, DELETE_ITEM_CART], startRequest);
+  yield takeLatest([GET_CART, INIT_CART, CHANGE_CART, ADD_ITEM_CART, EDIT_ITEM_CART, DELETE_ITEM_CART, CLEAR_CART], startRequest);
 }

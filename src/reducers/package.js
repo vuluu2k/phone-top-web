@@ -14,6 +14,9 @@ import {
   DELETE_PACKAGE,
   DELETE_PACKAGE_SUCCESS,
   DELETE_PACKAGE_ERROR,
+  GET_TURNOVER,
+  GET_TURNOVER_SUCCESS,
+  GET_TURNOVER_ERROR,
 } from 'constants/package';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -26,12 +29,26 @@ const initialState = {
     message: '',
     packageNew: {},
     viewPackage: [],
+    requesting: true,
   },
 
   check_package: {
     success: false,
     message: '',
     checkPackage: {},
+    requesting: true,
+  },
+
+  list_turnover: {
+    success: false,
+    message: '',
+    requesting: true,
+    packages: [],
+    productCount: 0,
+    productCountOld: 0,
+    packageAcceptCount: 0,
+    packageNotAcceptCount: 0,
+    userCount: 0,
   },
 };
 
@@ -112,12 +129,12 @@ const packageReducer = (state = initialState, payload) => {
     case ACCEPT_PACKAGE_ERROR:
       return handleError(state, 'list_package', payload.message);
 
-    // case EDIT_CATEGORY:
-    //   return handleRequest(state, 'categoryStatusEdit');
-    // case EDIT_CATEGORY_SUCCESS:
-    //   return handleEdit(state, payload);
-    // case EDIT_CATEGORY_ERROR:
-    //   return handleError(state, 'categoryStatusEdit', payload.message);
+    case GET_TURNOVER:
+      return handleRequest(state, 'list_turnover', payload);
+    case GET_TURNOVER_SUCCESS:
+      return handleSuccess(state, 'list_turnover', payload);
+    case GET_TURNOVER_ERROR:
+      return handleError(state, 'list_turnover', payload.message);
 
     case DELETE_PACKAGE:
       return handleRequest(state, 'list_package');
