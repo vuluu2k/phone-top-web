@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu, message as messageAntd } from 'antd';
 import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
 import { ImTruck } from 'react-icons/im';
@@ -6,22 +6,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { authActions, cartActions } from 'actions';
-import { selectAuth, selectCart } from 'selectors';
+import { authActions, cartActions, productActions } from 'actions';
+import { selectAuth, selectCart, selectProduct } from 'selectors';
 import { CartDetail } from 'components/cart';
 import { sumMoney } from 'utils/number';
+import { ProductItem } from 'components/product';
 
 const { Header, Content, Footer } = Layout;
 
 function Client({ children, ...props }) {
   const navigate = useNavigate();
   const {
-    actions: { initCart, logout, hiddenCart, showCart },
+    actions: { initCart, logout, hiddenCart, showCart, loadListProduct },
     selectVisibleCart,
     selectAuthStatus,
     selectCartInformation: { products },
     footer = true,
+    selectProductInformation: { products: productSearchs },
   } = props;
+
+  console.log('client', props);
+
+  const [keySearch, setKeySearch] = useState('');
 
   useEffect(() => {
     initCart({ user_id: selectAuthStatus?.user?._id });
@@ -45,7 +51,16 @@ function Client({ children, ...props }) {
             <Link to="/home">
               <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} alt="logo" />
             </Link>
-            <Input placeholder="Bạn muốn tìm kiếm sản phẩm nào?" allowClear onChange style={{ width: 200, marginLeft: 16 }} />
+            <Input
+              placeholder="Bạn muốn tìm kiếm sản phẩm nào?"
+              value={keySearch}
+              allowClear
+              onChange={e => {
+                setKeySearch(e.target.value);
+                loadListProduct({ name: e.target.value });
+              }}
+              style={{ width: 200, marginLeft: 16 }}
+            />
 
             <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>
               <PhoneOutlined className="icon-header" style={{ marginRight: 8 }} />
@@ -92,7 +107,14 @@ function Client({ children, ...props }) {
           </div>
         </Header>
         <Content style={{ padding: '0 200px', marginTop: 64, backgroundColor: '#fff' }}>
-          {children}
+          {(keySearch && (
+            <div>
+              {productSearchs.map(item => (
+                <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
+              ))}
+            </div>
+          )) ||
+            children}
           <BackTop>
             <div className="back-top">
               <VerticalAlignTopOutlined />
@@ -183,7 +205,7 @@ function Client({ children, ...props }) {
   );
 }
 
-const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions, ...cartActions }, dispatch) });
-const mapStateToProps = state => ({ ...selectAuth(state), ...selectCart(state) });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions, ...cartActions, ...productActions }, dispatch) });
+const mapStateToProps = state => ({ ...selectAuth(state), ...selectCart(state), ...selectProduct(state) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Client);
