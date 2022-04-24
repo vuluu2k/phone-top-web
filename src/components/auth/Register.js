@@ -3,7 +3,7 @@ import { Input, Form, message as messageAntd } from 'antd';
 import validator from 'validator';
 
 export default function Register(props) {
-  const [state, setState] = useState({ username: '', email: '', password: '', phone_number: '', full_name: '' });
+  const [state, setState] = useState({ username: '', email: '', password: '', password_repeat: '', phone_number: '', full_name: '' });
 
   const { username, email, password, password_repeat, phone_number, full_name } = state;
 
@@ -24,6 +24,7 @@ export default function Register(props) {
 
   const notification = () => {
     if (success && !requesting) {
+      onClear();
       onButtonLogin();
       return messageAntd.success(message || 'Đăng ký thành công');
     } else if (!success && !requesting) return messageAntd.error(message || 'Đăng ký thất bại');
@@ -54,7 +55,6 @@ export default function Register(props) {
       return messageAntd.error('Mật khẩu tối thiểu là 8 kí tự ', 1);
     }
     register({ username, email, password, phone_number, full_name });
-    onClear();
   };
 
   return (

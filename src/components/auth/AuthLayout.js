@@ -30,7 +30,7 @@ function AuthLayout(props) {
               </div>
             </div>
             <div className="mt-16" style={{ width: 400 }}>
-              {(status && <Login {...props} />) || <Register {...props} onButtonLogin={() => onButtonLogin()} />}
+              {(status && <Login {...props} />) || <Register {...props} onButtonLogin={onButtonLogin} statusBtn={status} />}
             </div>
           </div>
         </div>
