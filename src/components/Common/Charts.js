@@ -8,7 +8,7 @@ function Charts(props) {
       type: 'areaspline',
     },
     title: {
-      text: 'Thông kê kết quả',
+      text: 'Thông kê kết quả doanh thu & phí vận chuyển',
     },
     legend: {
       layout: 'vertical',
@@ -21,7 +21,7 @@ function Charts(props) {
       backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
     },
     xAxis: {
-      categories: ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy', 'chủ nhật'],
+      categories: props?.categoriesX || ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy', 'chủ nhật'],
       plotBands: [
         {
           from: 4.5,
@@ -47,20 +47,7 @@ function Charts(props) {
         fillOpacity: 0.5,
       },
     },
-    series: [
-      {
-        name: 'Doanh thu',
-        data: [3, 4, 3, 5, 4, 10, 12],
-      },
-      {
-        name: 'Tiền COD',
-        data: [1, 3, 4, 3, 3, 5, 4],
-      },
-      {
-        name: 'Tiền COD',
-        data: [1, 9, 4, 3, 3, 5, 4],
-      },
-    ],
+    series: props.series,
   };
 
   return <ReactHighcharts config={config} />;

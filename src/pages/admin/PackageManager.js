@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Table, Button, Select } from 'antd';
+import { Table, Button, Select, message as messageAntd } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, CheckCircleOutlined } from '@ant-design/icons';
@@ -12,11 +12,23 @@ import { TableCustom } from 'components/Common';
 const { Option } = Select;
 
 function PackageManager(props) {
-  const { actions, selectListPackage } = props;
+  const {
+    actions,
+    selectListPackage: { viewPackage, requesting, message, success },
+  } = props;
 
   useEffect(() => {
     actions.loadListPackage({ isAccess: ' ' });
   }, []);
+
+  useEffect(() => {
+    if (viewPackage?.length > 0) {
+      if (message === 'Tải dữ liệu đơn hàng thành công') return;
+      if (success && !requesting) return messageAntd.success(message || 'Cập nhật thành công');
+      else if (!success && !requesting) return messageAntd.error(message || 'Cập nhật thất bại');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requesting]);
 
   const columns = [
     {
@@ -77,7 +89,9 @@ function PackageManager(props) {
               />
             )}
 
-            {!item.isAccess && <Button className="btn-red ml-8" size="small" icon={<DeleteOutlined />} />}
+            {!item.isAccess && (
+              <Button onClick={() => actions.deletePackage({ id: item._id })} className="btn-red ml-8" size="small" icon={<DeleteOutlined />} />
+            )}
           </div>
           <div className="mt-8">
             <Button
@@ -99,9 +113,9 @@ function PackageManager(props) {
         title="Thông tin đơn hàng"
         refesh={
           <Button
-            onClick={() => actions.loadListPackage({ isAccess: ' ' })}
+            onClick={() => actions.loadListPackage({})}
             style={{ borderRadius: 8 }}
-            icon={(selectListPackage?.requesting && <LoadingOutlined />) || <RedoOutlined />}
+            icon={(requesting && <LoadingOutlined />) || <RedoOutlined />}
           />
         }>
         <Select defaultValue="" style={{ width: '20%' }} onChange={e => actions.loadListPackage({ isAccess: e })}>
@@ -109,7 +123,7 @@ function PackageManager(props) {
           <Option value={true}>Đã xác thực</Option>
           <Option value={false}>Chưa xác thực</Option>
         </Select>
-        <Table columns={columns} dataSource={selectListPackage?.viewPackage} rowKey={record => record._id} scroll={{ y: 'calc(100vh - 350px)' }} />
+        <Table columns={columns} dataSource={viewPackage} loading={requesting} rowKey={record => record._id} scroll={{ y: 'calc(100vh - 350px)' }} />
       </TableCustom>
     </Admin>
   );

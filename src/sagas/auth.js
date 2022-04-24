@@ -11,7 +11,16 @@ import {
   LOAD_USER,
   LOAD_USER_SUCCESS,
   LOAD_USER_ERROR,
+  LOAD_LIST_USER,
+  LOAD_LIST_USER_SUCCESS,
+  LOAD_LIST_USER_ERROR,
   LOGOUT,
+  EDIT_USER,
+  EDIT_USER_SUCCESS,
+  EDIT_USER_ERROR,
+  DELETE_USER,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_ERROR,
 } from 'constants/auth';
 import { setToken } from 'utils/token';
 import { LOCAL_STORAGE_TOKEN_NAME, USER, LOCAL_CART } from 'constants';
@@ -30,6 +39,15 @@ function* startRequest(payload) {
       break;
     case LOAD_USER:
       yield call(loadUser, payload);
+      break;
+    case LOAD_LIST_USER:
+      yield call(loadListUser, payload);
+      break;
+    case EDIT_USER:
+      yield call(editUser, payload);
+      break;
+    case DELETE_USER:
+      yield call(deleteUser, payload);
       break;
     case LOGOUT:
       yield call(logout);
@@ -117,6 +135,61 @@ function* loadUser() {
   }
 }
 
+function* loadListUser({ payload }) {
+  const { name, email, phone_number } = payload;
+  const url = `${API_URL}/auth/view_auth?name=${name}&email=${email || ''}&phone_number=${phone_number || ''}`;
+  try {
+    const response = yield call(axios.get, url);
+    if (!response.data.success) {
+      yield put({ type: LOAD_LIST_USER_ERROR, ...response.data });
+    } else {
+      yield put({ type: LOAD_LIST_USER_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: LOAD_LIST_USER_ERROR, error: error });
+    return error;
+  }
+}
+
+function* editUser({ payload }) {
+  const { user_id, email, role, role_name, phone_number, full_name, password, new_password, change_password } = payload;
+  const url = `${API_URL}/auth/edit_auth`;
+  const body = { user_id, email, role, role_name, phone_number, full_name, password, new_password, change_password };
+  try {
+    const response = yield call(axios.patch, url, body);
+    if (!response.data.success) {
+      yield put({ type: EDIT_USER_ERROR, ...response.data });
+    } else {
+      yield put({ type: EDIT_USER_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: EDIT_USER_ERROR, error: error });
+    return error;
+  }
+}
+
+function* deleteUser({ payload }) {
+  const { id } = payload;
+  const url = `${API_URL}/auth/delete_auth/${id}`;
+  try {
+    const response = yield call(axios.delete, url);
+    if (!response.data.success) {
+      yield put({ type: DELETE_USER_ERROR, ...response.data });
+    } else {
+      yield put({ type: DELETE_USER_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: DELETE_USER_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* authSagas() {
-  yield takeLatest([REGISTER, LOGIN, LOAD_USER, LOGOUT], startRequest);
+  yield takeLatest([REGISTER, LOGIN, LOAD_USER, LOAD_LIST_USER, LOGOUT, EDIT_USER, DELETE_USER], startRequest);
 }

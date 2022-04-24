@@ -1,4 +1,14 @@
-import { INIT_CART, CHANGE_CART, GET_CART, ADD_ITEM_CART, EDIT_ITEM_CART, DELETE_ITEM_CART, SHOW_CART, HIDDEN_CART } from 'constants/cart';
+import {
+  INIT_CART,
+  CHANGE_CART,
+  GET_CART,
+  ADD_ITEM_CART,
+  EDIT_ITEM_CART,
+  DELETE_ITEM_CART,
+  SHOW_CART,
+  HIDDEN_CART,
+  CLEAR_CART,
+} from 'constants/cart';
 
 function initCart(payload) {
   return {
@@ -56,6 +66,13 @@ function hiddenCart(payload) {
   };
 }
 
-const cartActions = { initCart, changeCart, getCart, addCart, editCart, deleteCart, showCart, hiddenCart };
+function clearCart(payload) {
+  return {
+    type: CLEAR_CART,
+    payload,
+  };
+}
+
+const cartActions = { initCart, changeCart, getCart, addCart, editCart, deleteCart, showCart, hiddenCart, clearCart };
 
 export default cartActions;

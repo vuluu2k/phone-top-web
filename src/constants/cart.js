@@ -24,3 +24,5 @@ export const DELETE_ITEM_CART_ERROR = 'app/CART/DELETE_ITEM_CART_ERROR';
 
 export const SHOW_CART = 'app/CART/SHOW_CART';
 export const HIDDEN_CART = 'app/CART/HIDDEN_CART';
+
+export const CLEAR_CART = 'app/CART/CLEAR_CART';

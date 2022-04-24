@@ -55,8 +55,6 @@ function* loadList({ payload }) {
   const { product_id, name, value, status, category, sub_category, page_number = 1, page_size = 10 } = payload;
   const queryParams = `?product_id=${product_id}&name=${name}&value=${value}&status=${status}&category=${category}&sub_category=${sub_category}&page_number=${page_number}&page_size=${page_size}`;
 
-  console.log('payload', payload);
-
   const url = `${API_URL}/product/view${queryParams}`;
 
   try {

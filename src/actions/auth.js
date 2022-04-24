@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, REGISTER, LOAD_USER } from 'constants/auth';
+import { LOGIN, LOGOUT, REGISTER, LOAD_USER, EDIT_USER, LOAD_LIST_USER, DELETE_USER } from 'constants/auth';
 
 function login(payload) {
   return {
@@ -28,7 +28,28 @@ function loadUser(payload) {
   };
 }
 
-const authActions = { login, register, loadUser, logout };
+function loadListUser(payload) {
+  return {
+    type: LOAD_LIST_USER,
+    payload,
+  };
+}
+
+function editUser(payload) {
+  return {
+    type: EDIT_USER,
+    payload,
+  };
+}
+
+function deleteUser(payload) {
+  return {
+    type: DELETE_USER,
+    payload,
+  };
+}
+
+const authActions = { login, register, loadUser, logout, editUser, loadListUser, deleteUser };
 
 export { loadUser };
 

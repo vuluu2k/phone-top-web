@@ -11,9 +11,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { Client } from 'components/layouts';
-import { packageActions } from 'actions';
+import { packageActions, cartActions } from 'actions';
 import { selectAuth, selectCart, selectPackage } from 'selectors';
-import { sumMoney, moneyMask } from 'utils/number';
+import { sumMoney, moneyMask, sumMoneyNumber } from 'utils/number';
 import validator from 'validator';
 
 const { Step } = Steps;
@@ -24,7 +24,7 @@ const color_disable = '#0e2431';
 function Pay(props) {
   const navigate = useNavigate();
   const {
-    actions: { createPackage },
+    actions: { createPackage, clearCart },
     selectAuthStatus: { user },
     selectCartInformation: { products },
     selectListPackage: { packageNew },
@@ -48,6 +48,10 @@ function Pay(props) {
   const { full_name, phone_number, email, full_address, provice, district, address, note, voucher, is_pay } = stateInfor;
 
   const sumPay = sumMoney(products?.map(item => item.quantity * item.value_option));
+
+  const sumPayNumber = sumMoneyNumber(products?.map(item => item.quantity * item.value_option));
+
+  console.log(sumPayNumber);
 
   const onChangeInput = e => setStateInfor({ ...stateInfor, [e.target.name]: e.target.value });
 
@@ -85,12 +89,13 @@ function Pay(props) {
         phone_number,
         email,
         voucher,
-        value: sumPay,
+        value: sumPayNumber,
         address: full_address,
         is_access: false,
         note,
         is_pay,
       });
+      clearCart({ user_id: user._id });
     }
 
     return setStateStep(stateStep + 1);
@@ -414,7 +419,7 @@ function Pay(props) {
   );
 }
 
-const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...packageActions }, dispatch) });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...packageActions, ...cartActions }, dispatch) });
 const mapStateToProps = state => ({ ...selectCart(state), ...selectAuth(state), ...selectPackage(state) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pay);

@@ -5,7 +5,7 @@ import store from './store';
 import { Landing } from 'components/layouts';
 import { Home, Account, ProductDetail, Cart, Pay, CheckPackage, Blog } from 'pages';
 import { Auth } from 'components/auth';
-import { Dashboard, ProductManager, CategoryManager, PackageManager, BlogManager } from 'pages/admin';
+import { Dashboard, ProductManager, CategoryManager, PackageManager, BlogManager, AccountManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
 import { PrivateRoute } from 'components/routing';
 
@@ -40,7 +40,7 @@ function App() {
               <Route path="/category-manager" element={<CategoryManager />} />
               <Route path="/package-manager" element={<PackageManager />} />
               <Route path="/blog-manager" element={<BlogManager />} />
-              <Route path="/account-manager" element={<CategoryManager />} />
+              <Route path="/account-manager" element={<AccountManager />} />
             </Route>
             <Route path="/*" element={<h1>Địa chỉ trang không tồn tại trên trang web PhoneTop .... (*-*)</h1>} />
           </Routes>
