@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactHighcharts from 'react-highcharts';
-import Highcharts from 'highcharts';
 
 function PieChart(props) {
   const config = {
@@ -33,12 +32,13 @@ function PieChart(props) {
     },
 
     tooltip: {
-      headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>',
+      headerFormat: '<span style="font-size:11px">{series.data.name}</span><br>',
+      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> của tất cả<br/>',
     },
     series: [
       {
         innerSize: '50%',
+        colorByPoint: true,
         data: [
           {
             name: 'Sản phẩm',

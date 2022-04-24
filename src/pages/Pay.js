@@ -14,6 +14,7 @@ import { Client } from 'components/layouts';
 import { packageActions, cartActions } from 'actions';
 import { selectAuth, selectCart, selectPackage } from 'selectors';
 import { sumMoney, moneyMask, sumMoneyNumber } from 'utils/number';
+import validator from 'validator';
 
 const { Step } = Steps;
 const { Option } = Select;
@@ -62,8 +63,15 @@ function Pay(props) {
   };
 
   const handleNext = () => {
+    
     if (!full_name || !phone_number || !email) {
       return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
+    }
+    if(!validator.isMobilePhone(String(phone_number), 'vi-VN')){
+      return messageAntd.error('Bạn chưa nhập đúng số điện thoại')
+    }
+    if(!validator.isEmail(String(email))){
+      return messageAntd.error('Bạn chưa nhập đúng tài khoản email')
     }
     if ((stateRadio === 1 && !stateStore) || (stateRadio === 2 && !provice && !district && !address)) {
       return messageAntd.error('Bạn chưa nhập đầy đủ/lựa chọn địa chỉ nhận hàng');
