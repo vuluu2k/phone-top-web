@@ -118,7 +118,14 @@ const productReducer = (state = initialState, payload) => {
     case LOAD_LIST_PRODUCT:
       return handleRequest(state, 'productInfomation', payload);
     case LOAD_LIST_PRODUCT_SUCCESS:
-      return handleSuccess(state, 'productInfomation', payload);
+      return update(state, {
+        productInfomation: {
+          requesting: { $set: false },
+          success: { $set: true },
+          message: { $set: 'Lấy sản phẩm thành công' },
+          products: { $set: (payload.search && []) || payload.products },
+        },
+      });
     case LOAD_LIST_PRODUCT_ERROR:
       return handleError(state, 'productInfomation', payload.message);
 

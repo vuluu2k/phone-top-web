@@ -50,9 +50,9 @@ export default function Login(props) {
           <Input.Password placeholder="Mật khẩu" name="password" value={password} onChange={onChange} />
         </Form.Item>
 
-        <Form.Item name="remember" valuePropName="checked">
+        {/* <Form.Item name="remember" valuePropName="checked">
           <Checkbox className="d-flex mt-8">Nhớ mật khẩu</Checkbox>
-        </Form.Item>
+        </Form.Item> */}
 
         <div className="btn-switch on" style={{ margin: '16px 12px 0' }} onClick={() => onSubmit()}>
           Đăng nhập
