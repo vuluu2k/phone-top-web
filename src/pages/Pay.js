@@ -63,15 +63,14 @@ function Pay(props) {
   };
 
   const handleNext = () => {
-    
     if (!full_name || !phone_number || !email) {
       return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
     }
-    if(!validator.isMobilePhone(String(phone_number), 'vi-VN')){
-      return messageAntd.error('Bạn chưa nhập đúng số điện thoại')
+    if (!validator.isMobilePhone(String(phone_number), 'vi-VN')) {
+      return messageAntd.error('Bạn chưa nhập đúng số điện thoại');
     }
-    if(!validator.isEmail(String(email))){
-      return messageAntd.error('Bạn chưa nhập đúng tài khoản email')
+    if (!validator.isEmail(String(email))) {
+      return messageAntd.error('Bạn chưa nhập đúng tài khoản email');
     }
     if ((stateRadio === 1 && !stateStore) || (stateRadio === 2 && !provice && !district && !address)) {
       return messageAntd.error('Bạn chưa nhập đầy đủ/lựa chọn địa chỉ nhận hàng');
@@ -378,7 +377,7 @@ function Pay(props) {
                       </div>
                     )}
                   </div>
-                  {products?.length > 0 && products.map((item, idx) => <div key={idx}>{renderItemProduct(item)}</div>)}
+                  {packageNew?.products?.length > 0 && packageNew?.products?.map((item, idx) => <div key={idx}>{renderItemProduct(item)}</div>)}
                   <div className="d-flex mt-16">
                     <Button className="btn-primary" block onClick={() => navigate('/check_package')}>
                       <div>Kiểm tra đơn hàng</div>

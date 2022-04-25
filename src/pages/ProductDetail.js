@@ -55,7 +55,7 @@ function ProductDetail(props) {
 
   const handleAddCart = () => {
     addCart({ product_id: _id, name_option: nameState, value_option: valueState, image_link: image_link, user_id: user_id, name });
-    showCart();
+    user_id && showCart();
   };
 
   useEffect(() => {
@@ -159,6 +159,7 @@ function ProductDetail(props) {
       <Row gutter={30} style={{ paddingBottom: 16 }}>
         <Col span={16}>
           <div
+            className="description"
             style={{
               boxShadow: 'rgb(60 64 67 / 0.1) 0px 1px 2px 0px, rgb(60 64 67 / 0.15) 0px 2px 6px 2px',
               borderRadius: 16,
