@@ -32,6 +32,10 @@ function Client({ children, ...props }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectAuthStatus]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handlePay = () => {
     if (products.length > 0) {
       hiddenCart();
@@ -46,7 +50,7 @@ function Client({ children, ...props }) {
       <Layout className="layout">
         <Header className="header">
           <div className="d-flex align-items-center justify-content-between" style={{ height: 64 }}>
-            <Link to="/home">
+            <Link onClick={() => loadListProduct({ search: true })} to="/home">
               <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} alt="logo" />
             </Link>
             <Input
