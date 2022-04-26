@@ -111,7 +111,7 @@ function Client({ children, ...props }) {
             <div>
               <Row>
                   {productSearchs.map(item => (
-                    <Col mb={4} sm={8} style={{padding: '4px'}}>
+                    <Col xs={24} sm= {12} md={8}  lg={6} style={{ padding:'4px'}}>
                       <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
                     </Col>
                   ))}
