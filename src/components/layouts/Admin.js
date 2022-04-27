@@ -76,6 +76,9 @@ function Admin({ children, ...props }) {
           <Menu.Item key="/blog-manager" icon={<GrBlog />}>
             <Link to="/blog-manager">Tin tức</Link>
           </Menu.Item>
+          <Menu.Item key="/layout-manager" icon={<GrBlog />}>
+            <Link to="/layout-manager">Giao diện</Link>
+          </Menu.Item>
           <Menu.Item key="/account-manager" icon={<MdSupervisorAccount />}>
             <Link to="/account-manager">Tài khoản</Link>
           </Menu.Item>

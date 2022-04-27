@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu, message as messageAntd } from 'antd';
-import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu, message as messageAntd, Spin } from 'antd';
+import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined, LeftOutlined } from '@ant-design/icons';
 import { ImTruck } from 'react-icons/im';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -20,8 +20,9 @@ function Client({ children, ...props }) {
     actions: { initCart, logout, hiddenCart, showCart, loadListProduct },
     selectVisibleCart,
     selectAuthStatus,
-    selectCartInformation: { products },
+    selectCartInformation: { products, requesting },
     footer = true,
+    selectProductInformationHome: { requesting: requestingProduct },
     selectProductInformation: { products: productSearchs },
   } = props;
 
@@ -45,12 +46,19 @@ function Client({ children, ...props }) {
     }
   };
 
+  const goBackHome = () => {
+    setKeySearch('');
+    loadListProduct({ search: true });
+  };
+
+  console.log(window.location.href);
+
   return (
     <>
       <Layout className="layout">
-        <Header className="header">
+        <Header className="header header-responsive">
           <div className="d-flex align-items-center justify-content-between" style={{ height: 64 }}>
-            <Link onClick={() => loadListProduct({ search: true })} to="/home">
+            <Link onClick={() => goBackHome()} to="/home">
               <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} alt="logo" />
             </Link>
             <Input
@@ -67,19 +75,19 @@ function Client({ children, ...props }) {
             <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>
               <PhoneOutlined className="icon-header" style={{ marginRight: 8 }} />
               <a href="tel:0898709170">
-                <div className="fw-500">Gọi mua hàng</div>
-                <div className="fw-700">0898709170</div>
+                <div className="text-responsive fw-500">Gọi mua hàng</div>
+                <div className="text-responsive fw-700">0898709170</div>
               </a>
             </div>
             <Link to="/check_package" style={{ marginRight: 8 }}>
               <div className="text-center">
                 <ImTruck className="icon-header" />
-                <div className="fw-500">Tra Cứu đơn hàng</div>
+                <div className="text-responsive fw-500">Tra Cứu đơn hàng</div>
               </div>
             </Link>
             <div className="text-center cursor-pointer" onClick={() => showCart()}>
               <ShoppingCartOutlined className="icon-header" />
-              <div className="fw-500 text-white">Giỏ hàng</div>
+              <div className="text-responsive fw-500 text-white">Giỏ hàng</div>
             </div>
             {(selectAuthStatus?.user?.name && (
               <Dropdown
@@ -95,32 +103,43 @@ function Client({ children, ...props }) {
                 }>
                 <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
                   <UserOutlined className="icon-header" />
-                  <div className="fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
+                  <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
                 </div>
               </Dropdown>
             )) || (
               <Link to="/login">
                 <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
                   <UserOutlined className="icon-header" />
-                  <div className="fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
+                  <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
                 </div>
               </Link>
             )}
           </div>
         </Header>
-        <Content style={{ padding: '0 200px', marginTop: 64, backgroundColor: '#fff' }}>
-          {(keySearch && (
-            <div>
-              <Row>
-                {productSearchs.map(item => (
-                  <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 6 }} xxl={{ span: 4 }} style={{ padding: '4px' }}>
-                    <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          )) ||
-            children}
+        <Content style={{ padding: '0 200px', marginTop: 64 }} className="layout-content-responsive">
+          <Spin spinning={requesting || requestingProduct}>
+            {(keySearch && (
+              <div style={{ minHeight: ' calc(100vh - 348px)', marginTop: 16 }}>
+                <Row className="text-red fw-700 fz-16" onClick={() => goBackHome()} style={{ position: 'absolute', left: 0 }}>
+                  <LeftOutlined style={{ fontSize: 14 }} />
+                  Trở về
+                </Row>
+                <Row className="w-100" style={{ minHeight: 200 }}>
+                  {(productSearchs?.length > 0 &&
+                    productSearchs.map(item => (
+                      <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }} xxl={{ span: 4 }} style={{ padding: '4px' }}>
+                        <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
+                      </Col>
+                    ))) || (
+                    <div className="d-flex justify-content-center align-items-center w-100 h-100 fw-500 fz-16" style={{ minHeight: 200 }}>
+                      Không có sản phẩm tìm kiếm đang cần :(
+                    </div>
+                  )}
+                </Row>
+              </div>
+            )) ||
+              children}
+          </Spin>
           <BackTop>
             <div className="back-top">
               <VerticalAlignTopOutlined />
@@ -131,12 +150,12 @@ function Client({ children, ...props }) {
           <>
             <Footer style={{ color: 'white', padding: '16px 200px' }}>
               <Row>
-                <Col span={6}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }}>
                   <div>Tìm cửa hàng</div>
                   <div>Tìm cửa hàng gần nhất</div>
                   <div>Mua hàng từ xa</div>
                 </Col>
-                <Col span={6}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }}>
                   <div>
                     Gọi mua hàng:
                     <strong>
@@ -159,7 +178,7 @@ function Client({ children, ...props }) {
                     (8h00 - 22h00)
                   </div>
                 </Col>
-                <Col span={6}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }}>
                   <div>Mua hàng và thanh toán Online</div>
                   <div>Mua hàng trả góp Online</div>
                   <div>Tra thông tin đơn hàng</div>
@@ -167,7 +186,7 @@ function Client({ children, ...props }) {
                   <div>Quy định về việc sao lưu dữ liệu</div>
                   <div>Dịch vụ bảo hành điện thoại</div>
                 </Col>
-                <Col span={6}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }}>
                   <div>Quy chế hoạt động</div>
                   <div>Chính sách Bảo hành</div>
                   <div>Liên hệ hợp tác kinh doanh</div>
