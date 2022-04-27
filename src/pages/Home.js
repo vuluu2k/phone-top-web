@@ -17,20 +17,22 @@ const { SubMenu } = Menu;
 const { Content, Sider } = Layout;
 
 function renderProductArray(product, title) {
-  return (
-    <>
-      <h1 style={{ marginBottom: 16 }} className="text-upper">
-        {title}
-      </h1>
-      <Row gutter={15}>
-        {product.map((a, index) => (
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 6 }} xxl={{ span: 4 }} key={index} span={4}>
-            <ProductItem name={a.name} value={a.value} imageLink={a.image_link} id={a._id} />
-          </Col>
-        ))}
-      </Row>
-    </>
-  );
+  if (product?.length > 0)
+    return (
+      <>
+        <h1 style={{ marginBottom: 16 }} className="text-upper">
+          {title}
+        </h1>
+        <Row gutter={15}>
+          {product.map((a, index) => (
+            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }} xxl={{ span: 4 }} key={index} span={4}>
+              <ProductItem name={a.name} value={a.value} imageLink={a.image_link} id={a._id} />
+            </Col>
+          ))}
+        </Row>
+      </>
+    );
+  return null;
 }
 
 function Home(props) {
@@ -40,7 +42,7 @@ function Home(props) {
     },
     selectProductInformation: { products, dataSearch },
     actions: { loadListProductHome, loadListProduct },
-    selectProductInformationHome: { hot, mobile, laptop, watch, tablet, accessory },
+    selectProductInformationHome: { hot, productOther },
   } = props;
 
   useEffect(() => {
@@ -58,7 +60,7 @@ function Home(props) {
         <div>
           <Row>
             {products.map(item => (
-              <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 6 }} xxl={{ span: 4 }} style={{ padding: '4px' }}>
+              <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }} xxl={{ span: 4 }} style={{ padding: '4px' }}>
                 <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
               </Col>
             ))}
@@ -111,11 +113,9 @@ function Home(props) {
           <Layout>
             <SilderCustom item={hot} title="Sản phẩm bán chạy nhất" />
 
-            {mobile.length > 0 && renderProductArray(mobile, 'Điện thoại')}
-            {laptop.length > 0 && renderProductArray(laptop, 'Laptop, PC, Màn hình')}
-            {watch.length > 0 && renderProductArray(watch, 'Đồng hồ')}
-            {tablet.length > 0 && renderProductArray(tablet, 'Máy tính bảng')}
-            {accessory.length > 0 && renderProductArray(accessory, 'Phụ kiện')}
+            {productOther.map((item, idx) => (
+              <div key={idx}>{renderProductArray(item.products, item.category)}</div>
+            ))}
           </Layout>
         </>
       )}

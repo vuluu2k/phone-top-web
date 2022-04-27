@@ -1,0 +1,29 @@
+body {
+  .text-responsive {
+    align-items: center !important;
+  }
+
+  @media screen and (max-width: 1250px) {
+    .text-responsive {
+      display: none;
+    }
+    .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title {
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .header-responsive,
+    .layout-content-responsive {
+      padding: 0 50px !important;
+    }
+  }
+
+  @media screen and (max-width: 762px) {
+    .header-responsive,
+    .layout-content-responsive {
+      padding: 0 !important;
+    }
+  }
+}

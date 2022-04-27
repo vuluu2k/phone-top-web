@@ -16,6 +16,7 @@ import 'css/auth.scss';
 import 'css/product.scss';
 import 'css/cart.scss';
 import 'css/blog.scss';
+import 'css/responsive.scss';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
               <Route path="/package-manager" element={<PackageManager />} />
               <Route path="/blog-manager" element={<BlogManager />} />
               <Route path="/account-manager" element={<AccountManager />} />
+              <Route path="/layout-manager" element={<AccountManager />} />
             </Route>
             <Route path="/*" element={<h1>Địa chỉ trang không tồn tại trên trang web PhoneTop .... (*-*)</h1>} />
           </Routes>
