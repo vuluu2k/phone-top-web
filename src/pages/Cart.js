@@ -16,7 +16,7 @@ function Cart(props) {
     selectCartInformation: { products },
   } = props;
 
-  const sumPay = sumMoney(products.map(item => item.quantity * item.value_option));
+  const sumPay = sumMoney(products?.map(item => item.quantity * item.value_option));
 
   return (
     <Client footer={false}>

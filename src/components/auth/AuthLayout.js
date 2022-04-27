@@ -18,7 +18,7 @@ function AuthLayout(props) {
       <div className="dark-overlay">
         <div className="auth-inner">
           <div style={{ backgroundColor: 'white', borderRadius: 8, padding: 16, display: 'flex', flexDirection: 'column' }}>
-            <h3>Chào mừng bạn tới cửa hàng của chúng tôi</h3>
+            <h3>PhoneTop Nơi cuộc sống của công nghệ dành cho bạn!</h3>
             <div className="d-flex justify-content-center mt-16">
               <div className="d-flex" style={{ borderRadius: 14, boxShadow: '0 0 4px 1px #ff7e21' }}>
                 <div className={(status && 'btn-switch on') || 'btn-switch'} onClick={() => onButtonLogin()}>
