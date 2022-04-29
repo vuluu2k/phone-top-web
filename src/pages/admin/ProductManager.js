@@ -38,11 +38,12 @@ function ProductManager(props) {
 
   useEffect(() => {
     loadListProduct({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (products?.length > 0) {
-      if (message === 'Thành công tải lên danh sách') return;
+      if (message === 'Lấy sản phẩm thành công' || message === 'Thành công tải lên danh sách') return;
       if (success && !requesting) return messageAntd.success(message || 'Cập nhật thành công');
       else if (!success && !requesting) return messageAntd.error(message || 'Cập nhật thất bại');
     }
@@ -151,7 +152,7 @@ function ProductManager(props) {
   };
 
   return (
-    <Admin title="Quản lí sản phẩm">
+    <Admin title="Quản lý sản phẩm">
       <TableCustom
         title="Danh sách sản phẩm"
         refesh={
@@ -163,6 +164,9 @@ function ProductManager(props) {
         }
         search={
           <div className="d-flex">
+            <Button icon={<PlusOutlined />} style={{ backgroundColor: '#1890ff', color: '#fff', marginRight: 8 }} onClick={onShowAdd}>
+              Thêm sản phẩm
+            </Button>
             <Select
               defaultValue="name"
               style={{ textTransform: 'capitalize' }}
@@ -198,6 +202,7 @@ function ProductManager(props) {
                 dataSearch[item] !== 'undefined' &&
                 !['page_size', 'page_number', 'page_entries', 'page_totals'].includes(item) && (
                   <Tag
+                    key={item}
                     className="d-flex align-items-center justify-content-center"
                     onClose={() => loadListProduct({ ...dataSearch, [item]: undefined })}
                     style={{ height: 32 }}
@@ -214,7 +219,7 @@ function ProductManager(props) {
           className="data-custom"
           columns={columns}
           loading={requesting}
-          scroll={{ y: 'calc(100vh - 350px)' }}
+          scroll={{ y: 'calc(100vh - 282px)' }}
           dataSource={products}
           onRow={(record, rowIndex) => {
             return {
@@ -229,11 +234,6 @@ function ProductManager(props) {
         />
       </TableCustom>
 
-      <div style={{ position: 'fixed', bottom: 20, right: 16 }}>
-        <Tooltip placement="left" title="Thêm sản phẩm">
-          <Button shape="circle" icon={<PlusOutlined />} size="large" style={{ backgroundColor: '#1890ff', color: '#fff' }} onClick={onShowAdd} />
-        </Tooltip>
-      </div>
       {visibleAdd && <ProductAddModal visible={visibleAdd} onClose={onHidenAdd} categorys={categorys} createProduct={createProduct} />}
 
       {visibleProduct && (

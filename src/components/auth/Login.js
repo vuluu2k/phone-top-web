@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Checkbox, Form, message as messageAntd } from 'antd';
+import { Input, Form, message as messageAntd } from 'antd';
 import { Navigate } from 'react-router-dom';
 
 export default function Login(props) {
@@ -49,10 +49,6 @@ export default function Login(props) {
         <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}>
           <Input.Password placeholder="Mật khẩu" name="password" value={password} onChange={onChange} />
         </Form.Item>
-
-        {/* <Form.Item name="remember" valuePropName="checked">
-          <Checkbox className="d-flex mt-8">Nhớ mật khẩu</Checkbox>
-        </Form.Item> */}
 
         <div className="btn-switch on" style={{ margin: '16px 12px 0' }} onClick={() => onSubmit()}>
           Đăng nhập

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button } from 'antd';
+import { Button } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
@@ -7,8 +7,6 @@ import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Client } from 'components/layouts';
 import { blogActions } from 'actions';
 import { selectBlog } from 'selectors';
-
-const { Meta } = Card;
 
 function Blog(props) {
   const {
@@ -18,6 +16,7 @@ function Blog(props) {
   const [stateMoreDescription, setStateMoreDescription] = useState(false);
   useEffect(() => {
     actions.loadListBlog({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

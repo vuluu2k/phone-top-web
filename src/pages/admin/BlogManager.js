@@ -171,7 +171,7 @@ function BlogManager(props) {
 
   return (
     <div className="blog-manager">
-      <Admin title="Quản lí tin tức">
+      <Admin title="Quản lý tin tức">
         <Spin spinning={requesting}>
           <TableCustom title="Đăng tin tức mới">
             <div className="d-flex">

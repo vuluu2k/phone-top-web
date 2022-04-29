@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { DatePicker } from 'antd';
+import { DatePicker, Spin, Row, Col } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import dayjs from 'dayjs';
@@ -7,10 +7,11 @@ import moment from 'moment';
 import { groupBy } from 'lodash';
 
 import { Admin } from 'components/layouts';
-import { Charts, PieChart } from 'components/Common';
+import { Charts, PieChart, TableCustom } from 'components/Common';
 import { packageActions } from 'actions';
 import { selectPackage } from 'selectors';
 import { sumMoneyNumber } from 'utils/number';
+import { moneyMask } from 'utils/number';
 
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD HH:mm';
@@ -20,7 +21,7 @@ const endDate = dayjs().startOf().format(dateFormat);
 function Dashboard(props) {
   const {
     actions: { getTurnover },
-    selectListTurnover: { packages, productCount, productCountOld, packageAcceptCount, packageNotAcceptCount, userCount },
+    selectListTurnover: { packages, productCount, productCountOld, packageAcceptCount, packageNotAcceptCount, userCount, requesting },
   } = props;
 
   useEffect(() => {
@@ -28,6 +29,7 @@ function Dashboard(props) {
       startDate: startDate,
       endDate: endDate,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onChange(value, dateString) {
@@ -43,51 +45,79 @@ function Dashboard(props) {
 
   const valueArray = keyArray.map(key => sumMoneyNumber(turnoverArray[key].map(item => item.value)));
 
+  const sumTurnover = valueArray.reduce((prev, next) => prev + next, 0);
+
   return (
-    <Admin title="Báo cáo - live">
-      <RangePicker
-        showTime={{ format: 'HH:mm' }}
-        onChange={onChange}
-        defaultValue={[moment(startDate, dateFormat), moment(endDate, dateFormat)]}
-        placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
-        format={dateFormat}
-      />
-      <Charts
-        series={[
-          { name: 'Doanh thu', data: valueArray.reverse() },
-          { name: 'Tiền COD', data: [] },
-        ]}
-        categoriesX={keyArray.reverse()}
-      />
-      <PieChart
-        series={[
-          {
-            innerSize: '50%',
-            data: [
-              {
-                name: 'Sản phẩm',
-                y: productCount,
-              },
-              {
-                name: 'Sản phẩm tồn kho',
-                y: productCountOld,
-              },
-              {
-                name: 'Đơn hàng xác thực thanh toán',
-                y: packageAcceptCount,
-              },
-              {
-                name: 'Đơn hàng chưa xác thực thanh toán',
-                y: packageNotAcceptCount,
-              },
-              {
-                name: 'Khách hàng',
-                y: userCount,
-              },
-            ],
-          },
-        ]}
-      />
+    <Admin title="Thông kê dữ liệu PhoneTop">
+      <TableCustom title="Thông kê dữ liệu">
+        <RangePicker
+          showTime={{ format: 'HH:mm' }}
+          onChange={onChange}
+          defaultValue={[moment(startDate, dateFormat), moment(endDate, dateFormat)]}
+          placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+          format={dateFormat}
+        />
+        <Spin spinning={requesting}>
+          <Charts
+            series={[
+              { name: 'Doanh thu', data: valueArray.reverse() },
+              { name: 'Tiền COD', data: [] },
+            ]}
+            categoriesX={keyArray.reverse()}
+          />
+          <Row>
+            <Col xs={24} md={12}>
+              <PieChart
+                series={[
+                  {
+                    innerSize: '50%',
+                    data: [
+                      {
+                        name: 'Sản phẩm',
+                        y: productCount,
+                      },
+                      {
+                        name: 'Sản phẩm tồn kho',
+                        y: productCountOld,
+                      },
+                      {
+                        name: 'Đơn hàng xác thực thanh toán',
+                        y: packageAcceptCount,
+                      },
+                      {
+                        name: 'Đơn hàng chưa xác thực thanh toán',
+                        y: packageNotAcceptCount,
+                      },
+                      {
+                        name: 'Khách hàng',
+                        y: userCount,
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </Col>
+            <Col xs={24} md={12}>
+              <TableCustom disable style={{ width: '100%' }}>
+                <Row gutter={8}>
+                  <Col xs={24} md={12}>
+                    <div className="p-8" style={{ background: '#bddaf5' }}>
+                      <div className="fw-700 fz-18">Tổng doanh thu</div>
+                      <div className="fw-500 fz-16">{moneyMask(sumTurnover || 0)}</div>
+                    </div>
+                  </Col>
+                  <Col xs={24} md={12}>
+                    <div className="p-8" style={{ background: '#a9ff96' }}>
+                      <div className="fw-700 fz-18">Tổng phí ship</div>
+                      <div className="fw-500 fz-16">{moneyMask(0)}</div>
+                    </div>
+                  </Col>
+                </Row>
+              </TableCustom>
+            </Col>
+          </Row>
+        </Spin>
+      </TableCustom>
     </Admin>
   );
 }

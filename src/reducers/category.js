@@ -85,7 +85,7 @@ const handleCreate = (state, payload) => {
       $merge: converObjToCamelKeys(payload),
     },
     categoryInfomation: {
-      categorys: { $set: listCurrent.concat(category) },
+      categorys: { $set: listCurrent.concat([category]) },
     },
   });
 };

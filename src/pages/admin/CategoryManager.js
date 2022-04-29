@@ -109,9 +109,9 @@ function CategoryManager(props) {
   ];
 
   return (
-    <Admin title="Danh mục">
+    <Admin title="Quản lý danh mục">
       <TableCustom title="Thông tin danh mục">
-        <Button icon={<PlusOutlined />} className="mb-8 btn-blue" onClick={() => onShowCreate()}>
+        <Button icon={<PlusOutlined />} className="mb-8" type="primary" onClick={() => onShowCreate()}>
           Thêm danh mục
         </Button>
         <Table className="data-custom" columns={columns} dataSource={categorys} rowKey={record => record._id} size="small" />
