@@ -7,8 +7,8 @@ import { FaHeadphonesAlt, FaRegNewspaper } from 'react-icons/fa';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { selectCategory, selectProduct } from 'selectors';
-import { productActions } from 'actions';
+import { selectCategory, selectProduct, selectLayout } from 'selectors';
+import { productActions, layoutActions } from 'actions';
 import { Client } from 'components/layouts';
 import { ProductItem } from 'components/product';
 import { SilderCustom } from 'components/Common';
@@ -41,12 +41,15 @@ function Home(props) {
       selectCategoryInformation: { categorys },
     },
     selectProductInformation: { products, dataSearch },
-    actions: { loadListProductHome, loadListProduct },
+    actions: { loadListProductHome, loadListProduct, loadListLayout },
     selectProductInformationHome: { hot, productOther },
+    selectLayoutInformation: { layouts },
   } = props;
 
   useEffect(() => {
     loadListProductHome();
+    loadListLayout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadListProductWithCategory = key => {
@@ -95,18 +98,12 @@ function Home(props) {
             </Sider>
             <Content>
               <Carousel autoplay>
-                <div>
-                  <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
-                </div>
-                <div>
-                  <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
-                </div>
-                <div>
-                  <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
-                </div>
-                <div>
-                  <Image src="https://cdn.cellphones.com.vn/media/ltsoft/promotion/S22_1.png" width={'100%'} />
-                </div>
+                {layouts.length > 0 &&
+                  layouts.map(item => (
+                    <div key={item._id}>
+                      <Image src={item.image_link} width={'100%'} height={'100%'} />
+                    </div>
+                  ))}
               </Carousel>
             </Content>
           </Layout>
@@ -123,11 +120,12 @@ function Home(props) {
   );
 }
 
-const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...productActions }, dispatch) });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...productActions, ...layoutActions }, dispatch) });
 
 const mapStateToProps = state => ({
   selectCategory: selectCategory(state),
   ...selectProduct(state),
+  ...selectLayout(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

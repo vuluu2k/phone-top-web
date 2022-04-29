@@ -119,6 +119,7 @@ const productReducer = (state = initialState, payload) => {
           requesting: { $set: false },
           success: { $set: true },
           message: { $set: 'Lấy sản phẩm thành công' },
+          $merge: converObjToCamelKeys(payload),
           products: { $set: (payload.search && []) || payload.products },
         },
       });

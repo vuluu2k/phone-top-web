@@ -34,10 +34,15 @@ function Charts(props) {
       title: {
         text: 'Dòng tiền (vnđ)',
       },
+      labels: {
+        formatter: function () {
+          return this.value + ' vnđ';
+        },
+      },
     },
     tooltip: {
       shared: true,
-      valueSuffix: 'vnđ',
+      valueSuffix: ' vnđ',
     },
     credits: {
       enabled: false,

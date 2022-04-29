@@ -19,6 +19,7 @@ function PackageManager(props) {
 
   useEffect(() => {
     actions.loadListPackage({ isAccess: ' ' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -108,7 +109,7 @@ function PackageManager(props) {
   ];
 
   return (
-    <Admin title="Quản lí đơn hàng">
+    <Admin title="Quản lý đơn hàng">
       <TableCustom
         title="Thông tin đơn hàng"
         refesh={
@@ -123,7 +124,7 @@ function PackageManager(props) {
           <Option value={true}>Đã xác thực</Option>
           <Option value={false}>Chưa xác thực</Option>
         </Select>
-        <Table columns={columns} dataSource={viewPackage} loading={requesting} rowKey={record => record._id} scroll={{ y: 'calc(100vh - 350px)' }} />
+        <Table columns={columns} dataSource={viewPackage} loading={requesting} rowKey={record => record._id} scroll={{ y: 'calc(100vh - 292px)' }} />
       </TableCustom>
     </Admin>
   );

@@ -4,3 +4,4 @@ export { default as CategoryManager } from './CategoryManager';
 export { default as PackageManager } from './PackageManager';
 export { default as BlogManager } from './BlogManager';
 export { default as AccountManager } from './AccountManager';
+export { default as LayoutManager } from './LayoutManager';

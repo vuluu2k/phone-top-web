@@ -5,6 +5,7 @@ import productReducer from './product';
 import cartReducer from './cart';
 import packageReducer from './package';
 import blogReducer from './blog';
+import layoutReducer from './layout';
 
 const rootReducers = combineReducers({
   auth: authReducer,
@@ -13,6 +14,7 @@ const rootReducers = combineReducers({
   cart: cartReducer,
   package: packageReducer,
   blog: blogReducer,
+  layout: layoutReducer,
 });
 
 export default rootReducers;
