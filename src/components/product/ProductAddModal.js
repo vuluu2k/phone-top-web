@@ -6,7 +6,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 
 import { TableCustom } from 'components/Common';
 import { getBase64 } from 'utils/file';
@@ -30,8 +30,8 @@ function ProductAddModal(props) {
     category: productItem?.category || '',
     sub_category: productItem?.sub_category || '',
     status: productItem?.status || 'Mới',
-    value: productItem?.value || 0,
-    quantity: productItem?.quantity || 0,
+    value: productItem?.value || null,
+    quantity: productItem?.quantity || 1,
     options: productItem?.options || [],
     name_option: '',
     value_option: '',
@@ -41,13 +41,13 @@ function ProductAddModal(props) {
       camera_font: '',
       camera_back: '',
       chipset: '',
-      ram_capacity: 0,
-      rom_capacity: 0,
-      baterry: 0,
+      ram_capacity: null,
+      rom_capacity: null,
+      baterry: null,
       sim_card: '',
       os: '',
       screen_pixel: '',
-      weight: 0,
+      weight: null,
       bluetooth: '',
       scan_frequency: '',
     },
@@ -70,8 +70,8 @@ function ProductAddModal(props) {
       category: productItem?.category || '',
       sub_category: productItem?.sub_category || '',
       status: productItem?.status || 'Mới',
-      value: productItem?.value || 0,
-      quantity: productItem?.quantity || 0,
+      value: productItem?.value || null,
+      quantity: productItem?.quantity || 1,
       options: productItem?.options || [],
       name_option: '',
       value_option: '',
@@ -81,13 +81,13 @@ function ProductAddModal(props) {
         camera_font: '',
         camera_back: '',
         chipset: '',
-        ram_capacity: 0,
-        rom_capacity: 0,
-        baterry: 0,
+        ram_capacity: null,
+        rom_capacity: null,
+        baterry: null,
         sim_card: '',
         os: '',
         screen_pixel: '',
-        weight: 0,
+        weight: null,
         bluetooth: '',
         scan_frequency: '',
       },
@@ -187,44 +187,44 @@ function ProductAddModal(props) {
     imgWindow.document.write(image.outerHTML);
   };
 
-  const validate = () =>{
-    if (validator.isEmpty(String(name))||
-        validator.isEmpty(String(category))||
-        validator.isEmpty(String(sub_categorys))||
-        validator.equals(String(value),'0')||
-        validator.equals(String(quantity),'0')||
-        validator.isEmpty(String(profile.screen_pixel))||
-        validator.isEmpty(String(profile.screen_technology))||
-        validator.isEmpty(String(profile.screen_size))||
-        validator.isEmpty(String(profile.camera_font))||
-        validator.isEmpty(String(profile.camera_back))||
-        validator.isEmpty(String(profile.chipset))||
-        validator.isEmpty(String(profile.sim_card))||
-        validator.isEmpty(String(profile.os))||
-        validator.isEmpty(String(profile.bluetooth))||
-        validator.equals(String(profile.ram_capacity),'0')||
-        validator.equals(String(profile.rom_capacity,'0'))||
-        validator.equals(String(profile.baterry,'0'))||
-        validator.equals(String(profile.weight,'0'))||
-        validator.isEmpty(String(profile.frequency))
-    ){
-      messageAntd.error('Bạn chưa nhập đủ trường dữ liệu')
+  const validate = () => {
+    if (
+      validator.isEmpty(String(name)) ||
+      validator.isEmpty(String(category)) ||
+      validator.isEmpty(String(sub_categorys)) ||
+      validator.equals(String(value), null) ||
+      validator.equals(String(quantity), null)
+      // validator.isEmpty(String(profile.screen_pixel)) ||
+      // validator.isEmpty(String(profile.screen_technology)) ||
+      // validator.isEmpty(String(profile.screen_size)) ||
+      // validator.isEmpty(String(profile.camera_font)) ||
+      // validator.isEmpty(String(profile.camera_back)) ||
+      // validator.isEmpty(String(profile.chipset)) ||
+      // validator.isEmpty(String(profile.sim_card)) ||
+      // validator.isEmpty(String(profile.os)) ||
+      // validator.isEmpty(String(profile.bluetooth)) ||
+      // validator.equals(String(profile.ram_capacity), null) ||
+      // validator.equals(String(profile.rom_capacity, null)) ||
+      // validator.equals(String(profile.baterry, null)) ||
+      // validator.equals(String(profile.weight, null)) ||
+      // validator.isEmpty(String(profile.frequency))
+    ) {
+      messageAntd.error('Bạn chưa nhập đủ trường dữ liệu');
       return false;
     }
     if (!validator.isNumeric(value)) {
-       messageAntd.error('Nhập lại giá trị sản phẩm(kiểu số)')
+      messageAntd.error('Nhập lại giá trị sản phẩm(kiểu số)');
       return false;
     }
     if (!validator.isNumeric(quantity)) {
-       messageAntd.error('Nhập lại số lượng sản phẩm(kiểu số)')
+      messageAntd.error('Nhập lại số lượng sản phẩm(kiểu số)');
       return false;
-       
     }
     return true;
-  }
+  };
 
   const onSubmitCreate = () => {
-    if(validate()){
+    if (validate()) {
       createProduct({
         name,
         value,
@@ -243,7 +243,7 @@ function ProductAddModal(props) {
   };
 
   const onSubmitEdit = () => {
-    if (validate()){
+    if (validate()) {
       editProduct({
         id: productItem?._id,
         name,
@@ -278,7 +278,7 @@ function ProductAddModal(props) {
       category: '',
       sub_category: '',
       status: 'Mới',
-      value: 0,
+      value: null,
       quantity: 1,
       options: [],
       name_option: '',
@@ -289,13 +289,13 @@ function ProductAddModal(props) {
         camera_font: '',
         camera_back: '',
         chipset: '',
-        ram_capacity: 0,
-        rom_capacity: 0,
-        baterry: 0,
+        ram_capacity: null,
+        rom_capacity: null,
+        baterry: null,
         sim_card: '',
         os: '',
         screen_pixel: '',
-        weight: 0,
+        weight: null,
         bluetooth: '',
         scan_frequency: '',
       },

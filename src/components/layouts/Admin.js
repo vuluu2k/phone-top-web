@@ -4,13 +4,13 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  DashboardOutlined,
   LogoutOutlined,
-  OrderedListOutlined,
   MobileOutlined,
+  LayoutOutlined,
 } from '@ant-design/icons';
 import { FiPackage } from 'react-icons/fi';
-import { GrBlog } from 'react-icons/gr';
+import { BiNews } from 'react-icons/bi';
 import { BiCategory } from 'react-icons/bi';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { connect } from 'react-redux';
@@ -41,28 +41,30 @@ function Admin({ children, ...props }) {
     <Layout className="layout-admin">
       <Sider
         trigger={null}
-        theme="light"
         collapsible
+        theme="dark"
         collapsed={collapsed}
         className="hf-100"
         style={{ position: 'fixed', filter: 'drop-shadow(0px 3px 8px rgba(0, 0, 0, 0.15))', zIndex: 2 }}
         width={200}>
         <div className="d-flex justify-content-center align-items-center p-8">
-          <div style={{ fontSize: 18, fontWeight: 'bold', padding: '3px 0' }}>{collapsed ? 'P' : 'PhoneTop'}</div>
+          <div className="text-white" style={{ fontSize: 18, fontWeight: 'bold', padding: '3px 0' }}>
+            {collapsed ? 'P' : 'PhoneTop'}
+          </div>
         </div>
         <div className="logo" />
         <Divider style={{ backgroundColor: '#f0f0f0', height: 1, margin: 0 }} />
         <div className="d-flex align-items-center w-100 mt-8 mb-8" style={{ marginLeft: !collapsed ? 16 : 24 }}>
-          <Avatar size={30} icon={<UserOutlined />} />
+          <Avatar size={30} icon={<UserOutlined style={{ color: '#000' }} />} style={{ backgroundColor: '#FFD600' }} />
           {!collapsed && (
-            <div className="fw-500 ml-8" style={{ textTransform: 'capitalize' }}>
+            <div className="fw-500  ml-8" style={{ textTransform: 'capitalize', color: '#FFD600' }}>
               {user?.name}
             </div>
           )}
         </div>
-        <Menu theme="light" mode="inline" selectedKeys={[keyMenu]} onClick={e => handleChangeMenu(e.key)}>
-          <Menu.Item key="/dashboard" icon={<VideoCameraOutlined />}>
-            <Link to="/dashboard">Báo cáo - live</Link>
+        <Menu theme="dark" mode="inline" selectedKeys={[keyMenu]} onClick={e => handleChangeMenu(e.key)}>
+          <Menu.Item key="/dashboard" icon={<DashboardOutlined />}>
+            <Link to="/dashboard">Thống kê</Link>
           </Menu.Item>
           <Menu.Item key="/product-manager" icon={<MobileOutlined />}>
             <Link to="/product-manager">Sản phẩm</Link>
@@ -73,10 +75,10 @@ function Admin({ children, ...props }) {
           <Menu.Item key="/category-manager" icon={<BiCategory />}>
             <Link to="/category-manager">Danh mục</Link>
           </Menu.Item>
-          <Menu.Item key="/blog-manager" icon={<GrBlog />}>
+          <Menu.Item key="/blog-manager" icon={<BiNews />}>
             <Link to="/blog-manager">Tin tức</Link>
           </Menu.Item>
-          <Menu.Item key="/layout-manager" icon={<GrBlog />}>
+          <Menu.Item key="/layout-manager" icon={<LayoutOutlined />}>
             <Link to="/layout-manager">Giao diện</Link>
           </Menu.Item>
           <Menu.Item key="/account-manager" icon={<MdSupervisorAccount />}>
@@ -86,9 +88,13 @@ function Admin({ children, ...props }) {
         <div className="w-100" style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }} onClick={() => handleLogOut()}>
           <div className="fw-500 d-flex align-items-center">
             <div style={{ marginLeft: !collapsed ? 4 : 10 }}>
-              <LogoutOutlined />
+              <LogoutOutlined className="text-white" />
             </div>
-            {!collapsed && <div style={{ marginLeft: 8 }}>Đăng xuất</div>}
+            {!collapsed && (
+              <div className="text-white" style={{ marginLeft: 8 }}>
+                Đăng xuất
+              </div>
+            )}
           </div>
         </div>
       </Sider>
