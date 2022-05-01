@@ -227,7 +227,7 @@ function Client({ children, ...props }) {
         }>
         <CartDetail user_id={selectAuthStatus?.user?._id} />
       </Drawer>
-      <MessengerCustomerChat pageId="117602084263347" appId="690880528891606" />
+      <MessengerCustomerChat pageId="117602084263347" appId="690880528891606" themeColor="#d70018" language="vn" loggedInGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?" loggedOutGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?" greetingDialogDisplay="show" />
     </>
   );
 }
