@@ -227,7 +227,7 @@ function Client({ children, ...props }) {
         }>
         <CartDetail user_id={selectAuthStatus?.user?._id} />
       </Drawer>
-      {/* <MessengerCustomerChat pageId="<PAGE_ID>" appId="<APP_ID>" htmlRef="<REF_STRING>" /> */}
+      <MessengerCustomerChat pageId="117602084263347" appId="690880528891606" />
     </>
   );
 }
