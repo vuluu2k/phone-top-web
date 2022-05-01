@@ -5,6 +5,7 @@ import { ImTruck } from 'react-icons/im';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import MessengerCustomerChat from 'react-messenger-customer-chat';
 
 import { authActions, cartActions, productActions } from 'actions';
 import { selectAuth, selectCart, selectProduct } from 'selectors';
@@ -107,13 +108,13 @@ function Client({ children, ...props }) {
                 </div>
               </Dropdown>
             )) || (
-              <Link to="/login">
-                <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
-                  <UserOutlined className="icon-header" />
-                  <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
-                </div>
-              </Link>
-            )}
+                <Link to="/login">
+                  <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
+                    <UserOutlined className="icon-header" />
+                    <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
+                  </div>
+                </Link>
+              )}
           </div>
         </Header>
         <Content style={{ padding: '0 200px', marginTop: 64 }} className="layout-content-responsive">
@@ -131,10 +132,10 @@ function Client({ children, ...props }) {
                         <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
                       </Col>
                     ))) || (
-                    <div className="d-flex justify-content-center align-items-center w-100 h-100 fw-500 fz-16" style={{ minHeight: 200 }}>
-                      Không có sản phẩm tìm kiếm đang cần :(
-                    </div>
-                  )}
+                      <div className="d-flex justify-content-center align-items-center w-100 h-100 fw-500 fz-16" style={{ minHeight: 200 }}>
+                        Không có sản phẩm tìm kiếm đang cần :(
+                      </div>
+                    )}
                 </Row>
               </div>
             )) ||
@@ -226,6 +227,7 @@ function Client({ children, ...props }) {
         }>
         <CartDetail user_id={selectAuthStatus?.user?._id} />
       </Drawer>
+      {/* <MessengerCustomerChat pageId="<PAGE_ID>" appId="<APP_ID>" htmlRef="<REF_STRING>" /> */}
     </>
   );
 }
