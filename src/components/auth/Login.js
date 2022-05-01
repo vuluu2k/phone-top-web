@@ -14,7 +14,7 @@ export default function Login(props) {
   useEffect(() => {
     notification();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [message]);
 
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -22,6 +22,7 @@ export default function Login(props) {
 
   const notification = () => {
     if (success && !requesting) {
+      onClear();
       return messageAntd.success(message || 'Đăng ký thành công');
     } else if (!success && !requesting && message !== '') return messageAntd.error(message || 'Đăng ký thất bại');
     return;
@@ -34,7 +35,6 @@ export default function Login(props) {
       messageAntd.error('Bạn chưa nhập tài khoản mật khẩu');
     }
     login({ username, password });
-    onClear();
   };
 
   if (isAuthenticated) return <Navigate to="/product-manager" />;

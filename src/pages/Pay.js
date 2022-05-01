@@ -153,10 +153,10 @@ function Pay(props) {
                 {stateStep === 1
                   ? 'Thông tin đặt hàng'
                   : stateStep === 2
-                  ? 'Phiếu giảm giá'
-                  : stateStep === 3
-                  ? 'Chọn phương thức thanh toán'
-                  : 'Hoàn tất'}
+                    ? 'Phiếu giảm giá'
+                    : stateStep === 3
+                      ? 'Chọn phương thức thanh toán'
+                      : 'Hoàn tất'}
               </div>
             </div>
           </div>
@@ -263,16 +263,16 @@ function Pay(props) {
                           </Col>
                         </>
                       )) || (
-                        <Select defaultValue="" className="w-100" value={stateStore} onChange={e => setStateStore(e)}>
-                          <Option value="">Chọn cơ sơ muốn nhận máy</Option>
-                          <Option value="CS1-Xuân Phương-Nam Từ Liêm-Hà Nội">CS1-Xuân Phương-Nam Từ Liêm-Hà Nội</Option>
-                          <Option value="CS2-Thường Tín-Thanh Xuân-Hà Nội">CS2-Thường Tín-Thanh Xuân-Hà Nội</Option>
-                        </Select>
-                      )}
+                          <Select defaultValue="" className="w-100" value={stateStore} onChange={e => setStateStore(e)}>
+                            <Option value="">Chọn cơ sơ muốn nhận máy</Option>
+                            <Option value="CS1-Xuân Phương-Nam Từ Liêm-Hà Nội">CS1-Xuân Phương-Nam Từ Liêm-Hà Nội</Option>
+                            <Option value="CS2-Thường Tín-Thanh Xuân-Hà Nội">CS2-Thường Tín-Thanh Xuân-Hà Nội</Option>
+                          </Select>
+                        )}
                     </Row>
                   </div>
                   <div className="mt-8">
-                    <TextArea rows={2} name="note" value={note} onChange={onChangeInput} placeholder="Yêu cầu khác" maxLength={6} />
+                    <TextArea rows={2} name="note" value={note} onChange={onChangeInput} placeholder="Yêu cầu khác" />
                   </div>
                 </>
               )}
