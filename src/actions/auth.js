@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, REGISTER, LOAD_USER, EDIT_USER, LOAD_LIST_USER, DELETE_USER } from 'constants/auth';
+import { LOGIN, LOGOUT, REGISTER, LOAD_USER, EDIT_USER, LOAD_LIST_USER, DELETE_USER, SWITCH_AUTH } from 'constants/auth';
 
 function login(payload) {
   return {
@@ -49,7 +49,14 @@ function deleteUser(payload) {
   };
 }
 
-const authActions = { login, register, loadUser, logout, editUser, loadListUser, deleteUser };
+function switchStateAuth(payload) {
+  return {
+    type: SWITCH_AUTH,
+    payload,
+  };
+}
+
+const authActions = { login, register, loadUser, logout, editUser, loadListUser, deleteUser, switchStateAuth };
 
 export { loadUser };
 

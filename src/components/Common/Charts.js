@@ -52,6 +52,7 @@ function Charts(props) {
         fillOpacity: 0.5,
       },
     },
+
     series: props.series,
   };
 

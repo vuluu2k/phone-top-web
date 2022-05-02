@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Table, Button, Select, message as messageAntd } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, message as messageAntd } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, CheckCircleOutlined } from '@ant-design/icons';
@@ -8,14 +8,21 @@ import { Admin } from 'components/layouts';
 import { packageActions } from 'actions';
 import { selectPackage } from 'selectors';
 import { TableCustom } from 'components/Common';
+import { SnyTabs } from 'components/Lib';
 
-const { Option } = Select;
+const options = [
+  { value: '', label: 'Tất cả' },
+  { value: true, label: 'Đã xác nhận' },
+  { value: false, label: 'Chưa xác nhận' },
+];
 
 function PackageManager(props) {
   const {
     actions,
     selectListPackage: { viewPackage, requesting, message, success },
   } = props;
+
+  const [selectTab, setSelectTab] = useState('');
 
   useEffect(() => {
     actions.loadListPackage({ isAccess: ' ' });
@@ -30,6 +37,11 @@ function PackageManager(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requesting]);
+
+  const handleSelectTab = (value, _) => {
+    actions.loadListPackage({ isAccess: value });
+    setSelectTab(value);
+  };
 
   const columns = [
     {
@@ -119,12 +131,25 @@ function PackageManager(props) {
             icon={(requesting && <LoadingOutlined />) || <RedoOutlined />}
           />
         }>
-        <Select defaultValue="" style={{ width: '20%' }} onChange={e => actions.loadListPackage({ isAccess: e })}>
-          <Option value="">Tất cả</Option>
-          <Option value={true}>Đã xác thực</Option>
-          <Option value={false}>Chưa xác thực</Option>
-        </Select>
-        <Table columns={columns} dataSource={viewPackage} loading={requesting} rowKey={record => record._id} scroll={{ y: 'calc(100vh - 292px)' }} />
+        <SnyTabs options={options} value={selectTab} onClick={handleSelectTab} />
+        <Table
+          columns={columns}
+          dataSource={viewPackage}
+          loading={requesting}
+          rowKey={record => record._id}
+          size="small"
+          scroll={{ y: 'calc(100vh - 292px)' }}
+          pagination={{
+            style: { width: '100%', textAlign: 'center' },
+            pageSize: 20,
+            showSizeChanger: false,
+            showTotal: (total, range) => (
+              <div>
+                Hiển thị: {range[1]}/{total} đơn
+              </div>
+            ),
+          }}
+        />
       </TableCustom>
     </Admin>
   );

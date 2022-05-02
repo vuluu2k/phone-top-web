@@ -25,6 +25,7 @@ import { API_URL } from 'env_config';
 let cart = [];
 let quantity = 1;
 
+// eslint-disable-next-line
 export default [cartSagas];
 
 function* startRequest(payload) {

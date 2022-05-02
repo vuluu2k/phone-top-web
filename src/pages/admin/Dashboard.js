@@ -58,62 +58,68 @@ function Dashboard(props) {
           format={dateFormat}
         />
         <Spin spinning={requesting}>
-          <Charts
-            series={[
-              { name: 'Doanh thu', data: valueArray.reverse() },
-              { name: 'Tiền COD', data: [] },
-            ]}
-            categoriesX={keyArray.reverse()}
-          />
           <Row>
-            <Col xs={24} md={12}>
-              <PieChart
+            <Col span={24}>
+              <Charts
                 series={[
-                  {
-                    innerSize: '50%',
-                    data: [
-                      {
-                        name: 'Sản phẩm',
-                        y: productCount,
-                      },
-                      {
-                        name: 'Sản phẩm tồn kho',
-                        y: productCountOld,
-                      },
-                      {
-                        name: 'Đơn hàng xác thực thanh toán',
-                        y: packageAcceptCount,
-                      },
-                      {
-                        name: 'Đơn hàng chưa xác thực thanh toán',
-                        y: packageNotAcceptCount,
-                      },
-                      {
-                        name: 'Khách hàng',
-                        y: userCount,
-                      },
-                    ],
-                  },
+                  { name: 'Doanh thu', data: valueArray.reverse() },
+                  { name: 'Tiền COD', data: [] },
                 ]}
+                categoriesX={keyArray.reverse()}
               />
             </Col>
-            <Col xs={24} md={12}>
-              <TableCustom disable style={{ width: '100%' }}>
-                <Row gutter={8}>
-                  <Col xs={24} md={12}>
-                    <div className="p-8" style={{ background: '#bddaf5' }}>
-                      <div className="fw-700 fz-18">Tổng doanh thu</div>
-                      <div className="fw-500 fz-16">{moneyMask(sumTurnover || 0)}</div>
-                    </div>
-                  </Col>
-                  <Col xs={24} md={12}>
-                    <div className="p-8" style={{ background: '#a9ff96' }}>
-                      <div className="fw-700 fz-18">Tổng phí ship</div>
-                      <div className="fw-500 fz-16">{moneyMask(0)}</div>
-                    </div>
-                  </Col>
-                </Row>
-              </TableCustom>
+            <Col span={24}>
+              <Row>
+                <Col xs={24} md={12}>
+                  <PieChart
+                    series={[
+                      {
+                        innerSize: '50%',
+                        data: [
+                          {
+                            name: 'Sản phẩm',
+                            y: productCount,
+                          },
+                          {
+                            name: 'Sản phẩm tồn kho',
+                            y: productCountOld,
+                          },
+                          {
+                            name: 'Đơn hàng xác thực thanh toán',
+                            y: packageAcceptCount,
+                          },
+                          {
+                            name: 'Đơn hàng chưa xác thực thanh toán',
+                            y: packageNotAcceptCount,
+                          },
+                          {
+                            name: 'Khách hàng',
+                            y: userCount,
+                          },
+                        ],
+                      },
+                    ]}
+                  />
+                </Col>
+                <Col xs={24} md={12}>
+                  <TableCustom disable style={{ width: '100%' }}>
+                    <Row gutter={8}>
+                      <Col xs={24} md={12}>
+                        <div className="p-8" style={{ background: '#bddaf5' }}>
+                          <div className="fw-700 fz-18">Tổng doanh thu</div>
+                          <div className="fw-500 fz-16">{moneyMask(sumTurnover || 0)}</div>
+                        </div>
+                      </Col>
+                      <Col xs={24} md={12}>
+                        <div className="p-8" style={{ background: '#a9ff96' }}>
+                          <div className="fw-700 fz-18">Tổng phí ship</div>
+                          <div className="fw-500 fz-16">{moneyMask(0)}</div>
+                        </div>
+                      </Col>
+                    </Row>
+                  </TableCustom>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Spin>

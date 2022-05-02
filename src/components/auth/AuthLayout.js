@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { Button } from 'antd'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { useNavigate } from 'react-router-dom';
+import { LeftOutlined } from '@ant-design/icons'
 
 import Login from './Login';
 import Register from './Register';
@@ -9,9 +12,13 @@ import authActions from 'actions/auth';
 import { selectAuth } from 'selectors';
 
 function AuthLayout(props) {
-  const [status, setStatus] = useState(true);
-  const onButtonLogin = () => setStatus(true);
-  const onButtonRegister = () => setStatus(false);
+  const navigate = useNavigate();
+  const { switchAuth, actions } = props
+
+  useEffect(() => {
+    actions.switchStateAuth({ status: true })
+    // eslint-disable-next-line
+  }, [])
 
   return (
     <div className="auth container">
@@ -21,20 +28,21 @@ function AuthLayout(props) {
             <h3>PhoneTop Nơi cuộc sống của công nghệ dành cho bạn!</h3>
             <div className="d-flex justify-content-center mt-16">
               <div className="d-flex" style={{ borderRadius: 14, boxShadow: '0 0 4px 1px #ff7e21' }}>
-                <div className={(status && 'btn-switch on') || 'btn-switch'} onClick={() => onButtonLogin()}>
+                <div className={(switchAuth && 'btn-switch on') || 'btn-switch'} onClick={() => actions.switchStateAuth({ status: true })}>
                   Đăng nhập
                 </div>
-                <div className={(!status && 'btn-switch on') || 'btn-switch'} onClick={() => onButtonRegister()}>
+                <div className={(!switchAuth && 'btn-switch on') || 'btn-switch'} onClick={() => actions.switchStateAuth({ status: false })}>
                   Đăng ký
                 </div>
               </div>
             </div>
             <div className="mt-16" style={{ width: 400 }}>
-              {(status && <Login {...props} />) || <Register {...props} onButtonLogin={onButtonLogin} statusBtn={status} />}
+              {(switchAuth && <Login {...props} />) || <Register {...props} />}
             </div>
           </div>
         </div>
       </div>
+      <Button icon={<LeftOutlined />} className="btn-switch on" style={{ position: 'fixed', top: 12, left: 12, border: 'none' }} onClick={() => navigate('/home')}>Trang chủ</Button>
     </div>
   );
 }

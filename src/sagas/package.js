@@ -28,6 +28,7 @@ import {
 import { API_URL } from 'env_config';
 import { message as messageAntd } from 'antd';
 
+// eslint-disable-next-line
 export default [packageSagas];
 
 function* startRequest(payload) {

@@ -7,16 +7,10 @@ import {
   CHANGE_CART_ERROR,
   SHOW_CART,
   HIDDEN_CART,
-  ADD_ITEM_CART,
-  // ADD_ITEM_CART_SUCCESS,
-  // ADD_ITEM_CART_ERROR,
-  EDIT_ITEM_CART,
-  DELETE_ITEM_CART,
 } from 'constants/cart';
 
-import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
+import { handleRequest, handleError } from 'utils/handleReducer';
 import update from 'immutability-helper';
-import { converObjToCamelKeys } from 'utils';
 
 const initialState = {
   cartInfomation: {
