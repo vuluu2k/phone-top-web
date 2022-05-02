@@ -25,7 +25,9 @@ import {
 import { setToken } from 'utils/token';
 import { LOCAL_STORAGE_TOKEN_NAME, USER, LOCAL_CART } from 'constants';
 import { API_URL } from 'env_config';
+import { message as messageAntd } from 'antd';
 
+// eslint-disable-next-line
 export default [authSagas];
 
 function* startRequest(payload) {
@@ -58,7 +60,7 @@ function* startRequest(payload) {
 }
 
 function* register({ payload }) {
-  const { username, email, password, phone_number, full_name } = payload;
+  const { username, email, password, phone_number, full_name, role } = payload;
 
   const url = `${API_URL}/auth/register`;
   const body = {
@@ -67,6 +69,7 @@ function* register({ payload }) {
     password: password,
     phone_number: phone_number,
     full_name: full_name,
+    role: role,
   };
 
   try {
@@ -74,8 +77,12 @@ function* register({ payload }) {
 
     if (!response.data.success) {
       yield put({ type: REGISTER_ERROR, ...response.data });
+      messageAntd.error(response.data.message);
+    } else {
+      yield put({ type: REGISTER_SUCCESS, ...response.data });
+      messageAntd.success(response.data.message);
     }
-    yield put({ type: REGISTER_SUCCESS, ...response.data });
+
     return response.data;
   } catch (error) {
     console.log(error);
@@ -91,10 +98,14 @@ function* login({ payload }) {
   const body = { name: username, password: password };
   try {
     const response = yield call(axios.post, url, body);
+
     if (!response.data.success) {
       yield put({ type: LOGIN_ERROR, ...response.data });
+      messageAntd.error(response.data.message);
     } else {
       yield put({ type: LOGIN_SUCCESS, ...response.data });
+      messageAntd.success(response.data.message);
+
       localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.accessToken);
     }
     return response.data;
@@ -106,10 +117,10 @@ function* login({ payload }) {
 }
 
 function* logout() {
-  localStorage.removeItem(LOCAL_CART);
-  localStorage.removeItem(USER);
-  localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
-  window.location.pathname = '/login';
+  yield localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+  yield localStorage.removeItem(USER);
+  yield localStorage.removeItem(LOCAL_CART);
+  yield (window.location.pathname = '/login');
 }
 
 function* loadUser() {
@@ -136,8 +147,9 @@ function* loadUser() {
 }
 
 function* loadListUser({ payload }) {
-  const { name, email, phone_number } = payload;
-  const url = `${API_URL}/auth/view_auth?name=${name}&email=${email || ''}&phone_number=${phone_number || ''}`;
+  const { name, email, phone_number, role } = payload;
+
+  const url = `${API_URL}/auth/view_auth?name=${name}&email=${email || ''}&phone_number=${phone_number || ''}&role=${role || ''}`;
   try {
     const response = yield call(axios.get, url);
     if (!response.data.success) {

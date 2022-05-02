@@ -6,21 +6,24 @@ const selectRegisterStatus = createSelector(selectAuthDomain(), substate => subs
 const selectLoginStatus = createSelector(selectAuthDomain(), substate => substate.statusLogin);
 const selectAuthStatus = createSelector(selectAuthDomain(), substate => substate.auth);
 const selectListAuth = createSelector(selectAuthDomain(), substate => substate.list_auth);
+const switchAuth = createSelector(selectAuthDomain(), substate => substate.switch_auth);
 
 const selectAuth = createSelector(
   selectRegisterStatus,
   selectLoginStatus,
   selectAuthStatus,
   selectListAuth,
+  switchAuth,
 
-  (selectRegisterStatus, selectLoginStatus, selectAuthStatus, selectListAuth) => ({
+  (selectRegisterStatus, selectLoginStatus, selectAuthStatus, selectListAuth, switchAuth) => ({
     selectRegisterStatus,
     selectLoginStatus,
     selectAuthStatus,
     selectListAuth,
+    switchAuth
   })
 );
 
-export { selectRegisterStatus, selectLoginStatus, selectAuthStatus, selectListAuth };
+export { selectRegisterStatus, selectLoginStatus, selectAuthStatus, selectListAuth, switchAuth };
 
 export default selectAuth;

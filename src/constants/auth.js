@@ -22,3 +22,5 @@ export const EDIT_USER_ERROR = 'app/EDIT_USER_ERROR';
 export const DELETE_USER = 'app/DELETE_USER';
 export const DELETE_USER_SUCCESS = 'app/DELETE_USER_SUCCESS';
 export const DELETE_USER_ERROR = 'app/DELETE_USER_ERROR';
+
+export const SWITCH_AUTH = 'app/SWITCH_AUTH';

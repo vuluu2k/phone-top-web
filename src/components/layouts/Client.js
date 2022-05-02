@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu, message as messageAntd, Spin } from 'antd';
-import { UserOutlined, VerticalAlignTopOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined, LeftOutlined } from '@ant-design/icons';
+import { UserOutlined, UpOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined, LeftOutlined } from '@ant-design/icons';
 import { ImTruck } from 'react-icons/im';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -70,7 +70,7 @@ function Client({ children, ...props }) {
                 setKeySearch(e.target.value);
                 loadListProduct({ name: e.target.value });
               }}
-              style={{ width: 200, marginLeft: 16 }}
+              style={{ width: 280, marginLeft: 16 }}
             />
 
             <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>
@@ -143,7 +143,7 @@ function Client({ children, ...props }) {
           </Spin>
           <BackTop>
             <div className="back-top">
-              <VerticalAlignTopOutlined />
+              <UpOutlined />
             </div>
           </BackTop>
         </Content>

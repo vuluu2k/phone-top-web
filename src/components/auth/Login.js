@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Form, message as messageAntd } from 'antd';
+import { Input, Form, message as messageAntd, Button } from 'antd';
 import { Navigate } from 'react-router-dom';
 
 export default function Login(props) {
@@ -7,25 +7,20 @@ export default function Login(props) {
   const { username, password } = state;
   const {
     actions: { login },
-    selectLoginStatus: { message },
     selectAuthStatus: { isAuthenticated, requesting, success },
   } = props;
 
   useEffect(() => {
     notification();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message]);
+  }, [requesting]);
 
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
   const notification = () => {
-    if (success && !requesting) {
-      onClear();
-      return messageAntd.success(message || 'Đăng ký thành công');
-    } else if (!success && !requesting && message !== '') return messageAntd.error(message || 'Đăng ký thất bại');
-    return;
+    if (success && !requesting) onClear();
   };
 
   const onClear = () => setState({ username: '', password: '' });
@@ -43,16 +38,16 @@ export default function Login(props) {
     <div>
       <Form name="basic" initialValues={{ remember: false }} autoComplete="off">
         <Form.Item name="username" rules={[{ required: true, message: 'Vui lòng nhập tên tài khoản!' }]}>
-          <Input placeholder="Tài khoản" name="username" value={username} onChange={onChange} />
+          <Input placeholder="Tài khoản" name="username" value={username} onChange={onChange} onPressEnter={() => onSubmit()} />
         </Form.Item>
 
         <Form.Item name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}>
-          <Input.Password placeholder="Mật khẩu" name="password" value={password} onChange={onChange} />
+          <Input.Password placeholder="Mật khẩu" name="password" value={password} onChange={onChange} onPressEnter={() => onSubmit()} />
         </Form.Item>
 
-        <div className="btn-switch on" style={{ margin: '16px 12px 0' }} onClick={() => onSubmit()}>
+        <Button className="btn-switch on" style={{ margin: '16px 12px 0' }} loading={requesting} onClick={() => onSubmit()} block>
           Đăng nhập
-        </div>
+        </Button>
       </Form>
     </div>
   );

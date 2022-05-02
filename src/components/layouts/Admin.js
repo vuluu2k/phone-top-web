@@ -29,6 +29,8 @@ function Admin({ children, ...props }) {
     selectAuthStatus: { user },
   } = props;
 
+  document.title = props.title;
+
   const toggle = () => setState({ ...state, collapsed: !collapsed });
 
   const handleChangeMenu = key => setState({ ...state, keyMenu: key });
@@ -81,9 +83,11 @@ function Admin({ children, ...props }) {
           <Menu.Item key="/layout-manager" icon={<LayoutOutlined />}>
             <Link to="/layout-manager">Giao diện</Link>
           </Menu.Item>
-          <Menu.Item key="/account-manager" icon={<MdSupervisorAccount />}>
-            <Link to="/account-manager">Tài khoản</Link>
-          </Menu.Item>
+          {user?.role === 1 && (
+            <Menu.Item key="/account-manager" icon={<MdSupervisorAccount />}>
+              <Link to="/account-manager">Tài khoản</Link>
+            </Menu.Item>
+          )}
         </Menu>
         <div className="w-100" style={{ position: 'absolute', bottom: 20, left: 20, cursor: 'pointer' }} onClick={() => handleLogOut()}>
           <div className="fw-500 d-flex align-items-center">

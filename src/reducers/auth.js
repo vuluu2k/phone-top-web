@@ -18,35 +18,28 @@ import {
   DELETE_USER,
   DELETE_USER_SUCCESS,
   DELETE_USER_ERROR,
+  SWITCH_AUTH,
 } from 'constants/auth';
 import update from 'immutability-helper';
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
 import { converObjToCamelKeys } from 'utils';
 
 const initialState = {
-  statusRegister: {
-    message: '',
-    success: false,
-    requesting: true,
-    user: undefined,
-  },
-  statusLogin: {
-    message: '',
-    success: false,
-    accessToken: '',
-    requesting: true,
-  },
   auth: {
-    requesting: true,
+    message: '',
+    success: false,
+    requesting: false,
     isAuthenticated: false,
     user: {},
   },
   list_auth: {
     message: '',
     success: false,
-    requesting: true,
+    requesting: false,
     auths: [],
+    dataSearch: {}
   },
+  switch_auth: false,
 };
 
 const handleDelete = (state, payload) => {
@@ -61,33 +54,42 @@ const handleDelete = (state, payload) => {
       auths: { $set: listFilter },
       $merge: converObjToCamelKeys(payload),
     },
+
   });
 };
 
 const authReducer = (state = initialState, payload) => {
   switch (payload.type) {
     case REGISTER:
-      return handleRequest(state, 'statusRegister', payload);
+      return handleRequest(state, 'auth', payload);
 
     case REGISTER_SUCCESS:
-      return handleSuccess(state, 'statusRegister', payload);
+      return update(state, {
+        auth: {
+          message: { $set: '' },
+          success: { $set: false },
+          requesting: { $set: false },
+          $merge: converObjToCamelKeys(payload),
+        },
+        switch_auth: { $set: true },
+      });
 
     case REGISTER_ERROR:
-      return handleError(state, 'statusRegister', payload.message);
+      return handleError(state, 'auth', payload.message);
 
     case LOGIN:
-      return handleRequest(state, 'statusLogin', payload);
+      return handleRequest(state, 'auth', payload);
     case LOGIN_SUCCESS:
-      return handleSuccess(state, 'statusLogin', payload);
+      return handleSuccess(state, 'auth', payload);
     case LOGIN_ERROR:
-      return handleError(state, 'statusLogin', payload.message);
+      return handleError(state, 'auth', payload.message);
 
     case LOGOUT:
       return update(state, {
         auth: {
           requesting: { $set: true },
           isAuthenticated: { $set: false },
-          user: { $set: null },
+          user: { $set: {} },
         },
       });
 
@@ -118,6 +120,11 @@ const authReducer = (state = initialState, payload) => {
       return handleDelete(state, payload);
     case DELETE_USER_ERROR:
       return handleError(state, 'list_auth', payload.message);
+
+    case SWITCH_AUTH:
+      return update(state, {
+        switch_auth: { $set: payload?.payload?.status }
+      })
 
     default:
       return state;

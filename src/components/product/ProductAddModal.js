@@ -193,7 +193,7 @@ function ProductAddModal(props) {
       validator.isEmpty(String(category)) ||
       validator.isEmpty(String(sub_categorys)) ||
       validator.equals(String(value), null) ||
-      validator.equals(String(quantity), null)
+      validator.equals(String(quantity), null) ||
       // validator.isEmpty(String(profile.screen_pixel)) ||
       // validator.isEmpty(String(profile.screen_technology)) ||
       // validator.isEmpty(String(profile.screen_size)) ||
@@ -203,8 +203,8 @@ function ProductAddModal(props) {
       // validator.isEmpty(String(profile.sim_card)) ||
       // validator.isEmpty(String(profile.os)) ||
       // validator.isEmpty(String(profile.bluetooth)) ||
-      // validator.equals(String(profile.ram_capacity), null) ||
-      // validator.equals(String(profile.rom_capacity, null)) ||
+      validator.equals(String(profile.ram_capacity), null) ||
+      validator.equals(String(profile.rom_capacity, null))
       // validator.equals(String(profile.baterry, null)) ||
       // validator.equals(String(profile.weight, null)) ||
       // validator.isEmpty(String(profile.frequency))

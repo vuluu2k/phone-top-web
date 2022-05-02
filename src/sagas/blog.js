@@ -18,6 +18,7 @@ import {
 
 import { API_URL } from 'env_config';
 
+// eslint-disable-next-line
 export default [blogSagas];
 
 function* startRequest(payload) {

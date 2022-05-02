@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Image, Button, Tooltip, Cascader, Tag, message as messageAntd, Input, Select } from 'antd';
+import { Table, Image, Button, Cascader, Tag, message as messageAntd, Input, Select } from 'antd';
 import { RedoOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -230,7 +230,16 @@ function ProductManager(props) {
           }}
           rowKey={record => record._id}
           size="small"
-          pagination={{ position: ['bottomLeft'] }}
+          pagination={{
+            style: { width: '100%', textAlign: 'center' },
+            pageSize: 20,
+            showSizeChanger: false,
+            showTotal: (total, range) => (
+              <div>
+                Hiển thị: {range[1]}/{total} sản phẩm
+              </div>
+            ),
+          }}
         />
       </TableCustom>
 
