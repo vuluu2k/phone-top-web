@@ -21,10 +21,10 @@ function Client({ children, ...props }) {
     actions: { initCart, logout, hiddenCart, showCart, loadListProduct },
     selectVisibleCart,
     selectAuthStatus,
-    selectCartInformation: { products, requesting },
+    selectCartInformation: { products, requestingCart },
     footer = true,
-    selectProductInformationHome: { requesting: requestingProduct },
-    selectProductInformation: { products: productSearchs },
+    selectProductInformationHome: { requesting: requestingProductHome },
+    selectProductInformation: { products: productSearchs, requesting: requestingProduct },
   } = props;
 
   const [keySearch, setKeySearch] = useState('');
@@ -118,7 +118,7 @@ function Client({ children, ...props }) {
           </div>
         </Header>
         <Content style={{ padding: '0 200px', marginTop: 64 }} className="layout-content-responsive">
-          <Spin spinning={requesting || requestingProduct}>
+          <Spin spinning={requestingCart || requestingProductHome || requestingProduct}>
             {(keySearch && (
               <div style={{ minHeight: ' calc(100vh - 348px)', marginTop: 16 }}>
                 <Row className="text-red fw-700 fz-16" onClick={() => goBackHome()} style={{ position: 'absolute', left: 0 }}>
