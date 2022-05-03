@@ -92,8 +92,8 @@ function ProductDetail(props) {
       </Row>
       <Row gutter={30} style={{ paddingBottom: '16px' }}>
         <Col span={8}>
-          <div className="product-item-detail d-flex align-item-center justify-content-center">
-            <Image src={image_link} width={180} height={180} />
+          <div className="product-item-detail d-flex align-items-center justify-content-center">
+            <Image src={image_link} width="80%" />
           </div>
         </Col>
         <Col span={16}>
