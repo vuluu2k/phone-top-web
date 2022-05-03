@@ -16,6 +16,7 @@ const initialState = {
   cartInfomation: {
     success: false,
     message: '',
+    requesting: false,
     products: [],
   },
   visibleCart: false,

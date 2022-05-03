@@ -27,7 +27,7 @@ const initialState = {
   productInfomation: {
     success: false,
     message: '',
-    requesting: true,
+    requesting: false,
     products: [],
     page_size: 0,
     page_number: 0,
