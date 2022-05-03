@@ -108,13 +108,13 @@ function Client({ children, ...props }) {
                 </div>
               </Dropdown>
             )) || (
-                <Link to="/login">
-                  <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
-                    <UserOutlined className="icon-header" />
-                    <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
-                  </div>
-                </Link>
-              )}
+              <Link to="/login">
+                <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
+                  <UserOutlined className="icon-header" />
+                  <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
+                </div>
+              </Link>
+            )}
           </div>
         </Header>
         <Content style={{ padding: '0 200px', marginTop: 64 }} className="layout-content-responsive">
@@ -132,10 +132,10 @@ function Client({ children, ...props }) {
                         <ProductItem id={item._id} name={item.name} imageLink={item.image_link} value={item.value} />
                       </Col>
                     ))) || (
-                      <div className="d-flex justify-content-center align-items-center w-100 h-100 fw-500 fz-16" style={{ minHeight: 200 }}>
-                        Không có sản phẩm tìm kiếm đang cần :(
-                      </div>
-                    )}
+                    <div className="d-flex justify-content-center align-items-center w-100 h-100 fw-500 fz-16" style={{ minHeight: 200 }}>
+                      Không có sản phẩm tìm kiếm đang cần :(
+                    </div>
+                  )}
                 </Row>
               </div>
             )) ||
@@ -149,7 +149,7 @@ function Client({ children, ...props }) {
         </Content>
         {footer && (
           <>
-            <Footer style={{ color: 'white', padding: '16px 200px' }}>
+            <Footer className="footer-custom" style={{ color: 'white', padding: '16px 200px' }}>
               <Row>
                 <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }}>
                   <div>Tìm cửa hàng</div>
@@ -227,7 +227,15 @@ function Client({ children, ...props }) {
         }>
         <CartDetail user_id={selectAuthStatus?.user?._id} />
       </Drawer>
-      <MessengerCustomerChat pageId="117602084263347" appId="690880528891606" themeColor="#d70018" language="vn" loggedInGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?" loggedOutGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?" greetingDialogDisplay="show" />
+      <MessengerCustomerChat
+        pageId="117602084263347"
+        appId="690880528891606"
+        themeColor="#d70018"
+        language="vn"
+        loggedInGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?"
+        loggedOutGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?"
+        greetingDialogDisplay="show"
+      />
     </>
   );
 }

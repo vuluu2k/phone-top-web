@@ -42,8 +42,8 @@ function Home(props) {
     },
     selectProductInformation: { products, dataSearch },
     actions: { loadListProductHome, loadListProduct, loadListLayout },
-    selectProductInformationHome: { hot, productOther },
-    selectLayoutInformation: { layouts },
+    selectProductInformationHome: { hot, productOther, requesting: requestingProductHome },
+    selectLayoutInformation: { layouts, requesting: requestingLayout },
   } = props;
 
   useEffect(() => {
@@ -96,16 +96,18 @@ function Home(props) {
                 </Menu.Item>
               </Menu>
             </Sider>
-            <Content>
-              <Carousel autoplay>
-                {layouts.length > 0 &&
-                  layouts.map(item => (
-                    <div key={item._id}>
-                      <Image src={item.image_link} width={'100%'} height={'100%'} />
-                    </div>
-                  ))}
-              </Carousel>
-            </Content>
+            {!requestingProductHome && !requestingLayout && (
+              <Content>
+                <Carousel autoplay>
+                  {layouts.length > 0 &&
+                    layouts.map(item => (
+                      <div key={item._id} className="w-100">
+                        <Image src={item.image_link} width={'100%'} height={'100%'} />
+                      </div>
+                    ))}
+                </Carousel>
+              </Content>
+            )}
           </Layout>
           <Layout>
             <SilderCustom item={hot} title="Sản phẩm bán chạy nhất" />

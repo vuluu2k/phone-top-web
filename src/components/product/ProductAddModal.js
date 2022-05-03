@@ -189,11 +189,13 @@ function ProductAddModal(props) {
 
   const validate = () => {
     if (
-      validator.isEmpty(String(name)) ||
-      validator.isEmpty(String(category)) ||
-      validator.isEmpty(String(sub_categorys)) ||
-      validator.equals(String(value), null) ||
-      validator.equals(String(quantity), null) ||
+      !name ||
+      !category ||
+      !sub_categorys ||
+      !value ||
+      !quantity ||
+      !ram_capacity ||
+      !rom_capacity
       // validator.isEmpty(String(profile.screen_pixel)) ||
       // validator.isEmpty(String(profile.screen_technology)) ||
       // validator.isEmpty(String(profile.screen_size)) ||
@@ -203,8 +205,6 @@ function ProductAddModal(props) {
       // validator.isEmpty(String(profile.sim_card)) ||
       // validator.isEmpty(String(profile.os)) ||
       // validator.isEmpty(String(profile.bluetooth)) ||
-      validator.equals(String(profile.ram_capacity), null) ||
-      validator.equals(String(profile.rom_capacity, null))
       // validator.equals(String(profile.baterry, null)) ||
       // validator.equals(String(profile.weight, null)) ||
       // validator.isEmpty(String(profile.frequency))
@@ -212,11 +212,11 @@ function ProductAddModal(props) {
       messageAntd.error('Bạn chưa nhập đủ trường dữ liệu');
       return false;
     }
-    if (!validator.isNumeric(value)) {
+    if (!validator.isNumeric(String(value))) {
       messageAntd.error('Nhập lại giá trị sản phẩm(kiểu số)');
       return false;
     }
-    if (!validator.isNumeric(quantity)) {
+    if (!validator.isNumeric(String(quantity))) {
       messageAntd.error('Nhập lại số lượng sản phẩm(kiểu số)');
       return false;
     }
@@ -311,7 +311,7 @@ function ProductAddModal(props) {
       description: '',
     });
     setStateDescription({
-      description: Editor.createEmpty(),
+      description: EditorState.createEmpty(),
     });
   };
   const styleTable = { padding: '4px 16px' };
@@ -355,11 +355,15 @@ function ProductAddModal(props) {
                   </div>
                   <Input placeholder="Nhập tên sản phẩm" name="name" value={name} onChange={onChange} />
                   <div className="text">Ảnh sản phẩm</div>
-                  <Upload listType="picture-card" fileList={fileList} onChange={onChangeImage} onPreview={onPreview} maxCount={1}>
+                  <Upload listType="picture-card" method="get" fileList={fileList} onChange={onChangeImage} onPreview={onPreview} maxCount={1}>
                     {fileList.length < 5 && '+ Tải lên'}
                   </Upload>
                   <div className="text">Giá trị sản phẩm</div>
                   <Input placeholder="Nhập giá trị sản phẩm" name="value" value={value} onChange={onChange} />
+                  <div className="text">Ram</div>
+                  <Input placeholder="Dung lượng ram" name="ram_capacity" value={ram_capacity} onChange={onChangeObj} />
+                  <div className="text">Rom</div>
+                  <Input placeholder="Dung lượng bộ nhớ trong" name="rom_capacity" value={rom_capacity} onChange={onChangeObj} />
                   <div className="text">Số lượng</div>
                   <Input placeholder="Nhập giá trị sản phẩm" name="quantity" value={quantity} onChange={onChange} />
                   <div className="text">Trạng thái</div>
@@ -443,10 +447,6 @@ function ProductAddModal(props) {
                   <Input placeholder="Camera sau" name="camera_back" value={camera_back} onChange={onChangeObj} />
                   <div className="text">Chipset</div>
                   <Input placeholder="Chipset" name="chipset" value={chipset} onChange={onChangeObj} />
-                  <div className="text">Ram</div>
-                  <Input placeholder="Dung lượng ram" name="ram_capacity" value={ram_capacity} onChange={onChangeObj} />
-                  <div className="text">Rom</div>
-                  <Input placeholder="Dung lượng bộ nhớ trong" name="rom_capacity" value={rom_capacity} onChange={onChangeObj} />
                   <div className="text">Dung lượng pin</div>
                   <Input placeholder="Dung lượng pin" name="baterry" value={baterry} onChange={onChangeObj} />
                   <div className="text">Thẻ sim</div>
