@@ -153,10 +153,10 @@ function Pay(props) {
                 {stateStep === 1
                   ? 'Thông tin đặt hàng'
                   : stateStep === 2
-                    ? 'Phiếu giảm giá'
-                    : stateStep === 3
-                      ? 'Chọn phương thức thanh toán'
-                      : 'Hoàn tất'}
+                  ? 'Phiếu giảm giá'
+                  : stateStep === 3
+                  ? 'Chọn phương thức thanh toán'
+                  : 'Hoàn tất'}
               </div>
             </div>
           </div>
@@ -263,12 +263,12 @@ function Pay(props) {
                           </Col>
                         </>
                       )) || (
-                          <Select defaultValue="" className="w-100" value={stateStore} onChange={e => setStateStore(e)}>
-                            <Option value="">Chọn cơ sơ muốn nhận máy</Option>
-                            <Option value="CS1-Xuân Phương-Nam Từ Liêm-Hà Nội">CS1-Xuân Phương-Nam Từ Liêm-Hà Nội</Option>
-                            <Option value="CS2-Thường Tín-Thanh Xuân-Hà Nội">CS2-Thường Tín-Thanh Xuân-Hà Nội</Option>
-                          </Select>
-                        )}
+                        <Select defaultValue="" className="w-100" value={stateStore} onChange={e => setStateStore(e)}>
+                          <Option value="">Chọn cơ sơ muốn nhận máy</Option>
+                          <Option value="CS1-Xuân Phương-Nam Từ Liêm-Hà Nội">CS1-Xuân Phương-Nam Từ Liêm-Hà Nội</Option>
+                          <Option value="CS2-Thường Tín-Thanh Xuân-Hà Nội">CS2-Thường Tín-Thanh Xuân-Hà Nội</Option>
+                        </Select>
+                      )}
                     </Row>
                   </div>
                   <div className="mt-8">
@@ -356,7 +356,7 @@ function Pay(props) {
                       Hình thức thanh toán: <strong>{is_pay}</strong>
                     </div>
                     <div>
-                      Tổng tiền: <strong>{sumPay}</strong>
+                      Tổng tiền: <strong>{moneyMask(packageNew.value)}</strong>
                     </div>
                     {is_pay === 'Thanh toán chuyển khoản' && (
                       <div className="p-8 border-radius-16 mt-8" style={{ backgroundColor: 'white', color: '#155724' }}>

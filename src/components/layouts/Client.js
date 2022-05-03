@@ -52,14 +52,12 @@ function Client({ children, ...props }) {
     loadListProduct({ search: true });
   };
 
-  console.log(window.location.href);
-
   return (
     <>
       <Layout className="layout">
         <Header className="header header-responsive">
           <div className="d-flex align-items-center justify-content-between" style={{ height: 64 }}>
-            <Link onClick={() => goBackHome()} to="/home">
+            <Link to="/home">
               <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} alt="logo" />
             </Link>
             <Input
@@ -121,7 +119,7 @@ function Client({ children, ...props }) {
           <Spin spinning={requestingCart || requestingProductHome || requestingProduct}>
             {(keySearch && (
               <div style={{ minHeight: ' calc(100vh - 348px)', marginTop: 16 }}>
-                <Row className="text-red fw-700 fz-16" onClick={() => goBackHome()} style={{ position: 'absolute', left: 0 }}>
+                <Row className="text-red fw-700 fz-16 d-flex align-items-center mb-8" onClick={() => goBackHome()}>
                   <LeftOutlined style={{ fontSize: 14 }} />
                   Trở về
                 </Row>

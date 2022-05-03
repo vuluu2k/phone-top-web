@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Layout, Menu, Carousel, Image, Row, Col } from 'antd';
-import Icon, { MobileOutlined, LaptopOutlined, TabletOutlined, HomeOutlined } from '@ant-design/icons';
+import Icon, { MobileOutlined, LaptopOutlined, TabletOutlined, HomeOutlined, LeftOutlined } from '@ant-design/icons';
 import { IoWatchOutline } from 'react-icons/io5';
 import { CgUsb } from 'react-icons/cg';
 import { FaHeadphonesAlt, FaRegNewspaper } from 'react-icons/fa';
@@ -57,10 +57,18 @@ function Home(props) {
     loadListProduct({ ...dataSearch, category: keys[0], sub_category: keys[1] });
   };
 
+  const goBackHome = () => {
+    loadListProduct({ search: true });
+  };
+
   return (
     <Client>
       {(products.length > 0 && (
         <div>
+          <Row className="text-red fw-700 fz-16 d-flex align-items-center mt-16 mb-8" onClick={() => goBackHome()}>
+            <LeftOutlined style={{ fontSize: 14 }} />
+            Trở về
+          </Row>
           <Row>
             {products.map(item => (
               <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }} xl={{ span: 6 }} xxl={{ span: 4 }} style={{ padding: '4px' }}>
