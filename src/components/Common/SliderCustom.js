@@ -12,6 +12,7 @@ let end = size;
 
 export default function SliderCustom(props) {
   const [item, setItem] = useState(props.item.slice(start, end));
+
   useEffect(() => {
     setItem(props.item.slice(start, end));
   }, [props.item]);
