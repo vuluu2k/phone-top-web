@@ -121,7 +121,7 @@ function Client({ children, ...props }) {
           <Spin spinning={requestingCart || requestingProductHome || requestingProduct}>
             {(keySearch && (
               <div style={{ minHeight: ' calc(100vh - 348px)', marginTop: 16 }}>
-                <Row className="text-red fw-700 fz-16" onClick={() => goBackHome()} style={{ position: 'absolute', left: 0 }}>
+                <Row className="text-red fw-700 fz-16 d-flex align-items-center mb-8" onClick={() => goBackHome()}>
                   <LeftOutlined style={{ fontSize: 14 }} />
                   Trở về
                 </Row>
