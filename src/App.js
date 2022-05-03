@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 import { Landing } from 'components/layouts';
-import { Home, Account, ProductDetail, Cart, Pay, CheckPackage, Blog } from 'pages';
+import { Home, Account, ProductDetail, Cart, Pay, CheckPackage, Blog, Error } from 'pages';
 import { Auth } from 'components/auth';
 import { Dashboard, ProductManager, CategoryManager, PackageManager, BlogManager, AccountManager, LayoutManager } from 'pages/admin';
 import { UserRouting } from 'components/user';
@@ -45,7 +45,7 @@ function App() {
               <Route path="/account-manager" element={<AccountManager />} />
               <Route path="/layout-manager" element={<LayoutManager />} />
             </Route>
-            <Route path="/*" element={<h1>Địa chỉ trang không tồn tại trên trang web PhoneTop .... (*-*)</h1>} />
+            <Route path="/*" element={<Error />} />
           </Routes>
         </BrowserRouter>
       </UserRouting>
