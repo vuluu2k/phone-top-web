@@ -15,14 +15,16 @@ body {
 
   @media screen and (max-width: 992px) {
     .header-responsive,
-    .layout-content-responsive {
+    .layout-content-responsive,
+    .footer-custom {
       padding: 0 50px !important;
     }
   }
 
   @media screen and (max-width: 762px) {
     .header-responsive,
-    .layout-content-responsive {
+    .layout-content-responsive,
+    .footer-custom {
       padding: 0 !important;
     }
   }
