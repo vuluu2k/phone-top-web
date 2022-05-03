@@ -42,53 +42,57 @@ function CheckPackage(props) {
           KIỂM TRA
         </Button>
       </div>
-      <Row gutter={8}>
-        <Col span={12}>
-          <div className="box-shadow p-16 border-radius-16">
-            <div className="fz-16 text-upper fw-700">Thông tin người nhận</div>
-            <div>
-              <strong>Họ và tên:</strong> {checkPackage?.full_name}
-            </div>
-            <div>
-              <strong>Số điện thoại:</strong> {checkPackage?.phone_number}
-            </div>
-            <div>
-              <strong>Trạng thái: </strong>
-              {checkPackage?.current_status_vi}
-            </div>
+      {checkPackage?.full_name && (
+        <>
+          <Row gutter={8}>
+            <Col span={12}>
+              <div className="box-shadow p-16 border-radius-16">
+                <div className="fz-16 text-upper fw-700">Thông tin người nhận</div>
+                <div>
+                  <strong>Họ và tên:</strong> {checkPackage?.full_name}
+                </div>
+                <div>
+                  <strong>Số điện thoại:</strong> {checkPackage?.phone_number}
+                </div>
+                <div>
+                  <strong>Trạng thái: </strong>
+                  {checkPackage?.current_status_vi}
+                </div>
+              </div>
+            </Col>
+            <Col span={12}>
+              <div className="box-shadow p-16 border-radius-16">
+                <div className="fz-16 text-upper fw-700">Thông tin sản phẩm</div>
+                <div>
+                  <strong>Sản phẩm:</strong>{' '}
+                  {checkPackage?.products?.map((item, idx) => (
+                    <span key={idx}>{item.name + ','}</span>
+                  ))}
+                </div>
+                <div>
+                  <strong>Giá trị:</strong> {checkPackage?.value}
+                </div>
+                <div>
+                  <strong>Thanh toán:</strong> {checkPackage?.is_pay}
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <div className="box-shadow p-16 border-radius-16 mt-16">
+            <div className="fz-16 text-upper fw-700">Hành trình</div>
+            {(checkPackage?.historys?.length > 0 &&
+              checkPackage?.historys?.map(item => (
+                <div className="mt-16">
+                  <Row>
+                    <Col span={6}>{item.status_vi}</Col>
+                    <Col span={12}>{item.note}</Col>
+                    <Col span={6}>{dayjs(item.createdAt).format('DD/MM/YYYY')}</Col>
+                  </Row>
+                </div>
+              ))) || <div>Hành trình đơn hàng chưa được cập nhật do chưa được xác nhận thanh toán</div>}
           </div>
-        </Col>
-        <Col span={12}>
-          <div className="box-shadow p-16 border-radius-16">
-            <div className="fz-16 text-upper fw-700">Thông tin sản phẩm</div>
-            <div>
-              <strong>Sản phẩm:</strong>{' '}
-              {checkPackage?.products?.map((item, idx) => (
-                <span key={idx}>{item.name + ','}</span>
-              ))}
-            </div>
-            <div>
-              <strong>Giá trị:</strong> {checkPackage?.value}
-            </div>
-            <div>
-              <strong>Thanh toán:</strong> {checkPackage?.is_pay}
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <div className="box-shadow p-16 border-radius-16 mt-16">
-        <div className="fz-16 text-upper fw-700">Hành trình</div>
-        {(checkPackage?.historys?.length > 0 &&
-          checkPackage?.historys?.map(item => (
-            <div className="mt-16">
-              <Row>
-                <Col span={6}>{item.status_vi}</Col>
-                <Col span={12}>{item.note}</Col>
-                <Col span={6}>{dayjs(item.createdAt).format('DD/MM/YYYY')}</Col>
-              </Row>
-            </div>
-          ))) || <div>Hành trình đơn hàng chưa được cập nhật do chưa được xác nhận thanh toán</div>}
-      </div>
+        </>
+      )}
     </Client>
   );
 }

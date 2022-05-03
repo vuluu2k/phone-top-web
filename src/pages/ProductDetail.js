@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { message, Row, Col, Image, Button, Divider } from 'antd';
-import { CheckCircleOutlined, MobileOutlined, FileProtectOutlined, AccountBookOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  MobileOutlined,
+  FileProtectOutlined,
+  AccountBookOutlined,
+  DownOutlined,
+  UpOutlined,
+  LeftOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { useNavigate } from 'react-router-dom';
 
 import { cartActions } from 'actions';
 import { selectAuth, selectCart } from 'selectors';
@@ -15,6 +24,7 @@ import { moneyMask } from 'utils/number';
 const text_empty = 'Thông số chưa cập nhật';
 
 function ProductDetail(props) {
+  const navigate = useNavigate();
   let { id } = useParams();
   const [state, setState] = useState({ productItem: {}, selectOption: -1, nameState: '', valueState: null, user_id: undefined });
   const [stateMoreDescription, setStateMoreDescription] = useState(false);
@@ -76,7 +86,11 @@ function ProductDetail(props) {
 
   return (
     <Client>
-      <Row gutter={30} style={{ padding: '16px 0' }}>
+      <Row className="text-red fw-700 fz-16 d-flex align-items-center mt-16 mb-8" onClick={() => navigate('/home')}>
+        <LeftOutlined style={{ fontSize: 14 }} />
+        Trở về
+      </Row>
+      <Row gutter={30} style={{ paddingBottom: '16px' }}>
         <Col span={8}>
           <div className="product-item-detail d-flex align-item-center justify-content-center">
             <Image src={image_link} width={180} height={180} />

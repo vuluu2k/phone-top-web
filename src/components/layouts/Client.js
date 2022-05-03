@@ -52,14 +52,12 @@ function Client({ children, ...props }) {
     loadListProduct({ search: true });
   };
 
-  console.log(window.location.href);
-
   return (
     <>
       <Layout className="layout">
         <Header className="header header-responsive">
           <div className="d-flex align-items-center justify-content-between" style={{ height: 64 }}>
-            <Link onClick={() => goBackHome()} to="/home">
+            <Link to="/home">
               <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} alt="logo" />
             </Link>
             <Input
