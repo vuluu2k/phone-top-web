@@ -23,7 +23,7 @@ function Blog(props) {
     <Client>
       <div className="mb-16">
         {blogs.map(item => (
-          <div key={item._id} className="text-align box-shadow mt-16 p-16 border-radius-16 description">
+          <div key={item._id} className="text-align box-shadow mt-16 p-16 border-radius-16 description" style={{ background: '#fff' }}>
             <img alt={item.title} src={item.image_link} width="100%" />
             <div
               style={{
