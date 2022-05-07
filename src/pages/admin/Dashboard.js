@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { groupBy } from 'lodash';
+import locale from 'antd/lib/date-picker/locale/vi_VN';
 
 import { Admin } from 'components/layouts';
 import { Charts, PieChart, TableCustom } from 'components/Common';
@@ -13,10 +14,18 @@ import { selectPackage } from 'selectors';
 import { sumMoneyNumber } from 'utils/number';
 import { moneyMask } from 'utils/number';
 
+moment.locale('vi');
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD HH:mm';
 const startDate = dayjs().subtract(7, 'day').startOf().format(dateFormat);
 const endDate = dayjs().startOf().format(dateFormat);
+
+const subtractDate = (subtract, date = moment()) => date.subtract(subtract, 'days');
+
+const yesterday = subtractDate(1);
+const before07day = subtractDate(7);
+const before30Day = subtractDate(30);
+const before60Day = subtractDate(60);
 
 function Dashboard(props) {
   const {
@@ -56,6 +65,22 @@ function Dashboard(props) {
           defaultValue={[moment(startDate, dateFormat), moment(endDate, dateFormat)]}
           placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
           format={dateFormat}
+          ranges={{
+            'Hôm nay': [moment().startOf('day'), moment().endOf('day')],
+            'Hôm qua': [yesterday.startOf('day'), moment().endOf('day')],
+            'Tháng này': [moment().startOf('month').startOf('day'), moment().endOf('month').endOf('day')],
+            '7 ngày trước': [before07day.startOf('day'), moment().endOf('day')],
+            '30 ngày trước': [before30Day.startOf('day'), moment().endOf('day')],
+            '60 ngày trước': [before60Day.startOf('day'), moment().endOf('day')],
+          }}
+          locale={{
+            ...locale,
+            lang: {
+              ...locale.lang,
+              now: 'Current Time',
+              ok: 'Đặt ngày',
+            },
+          }}
         />
         <Spin spinning={requesting}>
           <Row>
