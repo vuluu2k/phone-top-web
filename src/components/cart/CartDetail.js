@@ -19,14 +19,16 @@ function CartDetail(props) {
 
   const renderItem = item => {
     return (
-      <div className="box-shadow p-16 mb-16 cart-detail" style={{ borderRadius: 16 }}>
+      <div className="box-shadow p-16 mb-16 cart-detail" style={{ borderRadius: 16, backgroundColor: 'white' }}>
         <div className="d-flex">
           <div>
             <img src={item.image_link} alt={item.name} width={160} height={160} />
           </div>
           <div className="ml-8 w-100">
             <div className="d-flex justify-content-between w-100 fw-700 fz-16">
-              {item.name} ({item.name_option})
+              <div>
+                {item.name} ({item.name_option})
+              </div>
               <div>
                 <CloseCircleOutlined
                   className="cursor-pointer"
