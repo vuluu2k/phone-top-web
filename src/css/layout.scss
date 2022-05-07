@@ -33,8 +33,8 @@ $calendula-gold-4: #ffd666;
 $sunset-orange-1: #fff7e6;
 $logo-snappy: #2a2565;
 body {
-  background: #f0f2f5;
   .layout {
+    background: #f0f2f5;
     .ant-layout-header {
       padding: 0 200px;
       line-height: 20px;
@@ -101,10 +101,12 @@ body {
     }
   }
 
+  background-color: #d9dbea;
   .layout-admin {
     background-color: #d9dbea;
     .ant-layout {
       background-color: #d9dbea;
+      min-height: 100vh;
     }
 
     .ant-layout-header {
