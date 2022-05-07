@@ -35,6 +35,27 @@ $logo-snappy: #2a2565;
 body {
   .layout {
     background: #f0f2f5;
+
+    .ant-input-search .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
+      border-radius: 8px 0px 0px 8px;
+    }
+
+    .ant-input-search > .ant-input-group > .ant-input-group-addon:last-child .ant-input-search-button {
+      border-radius: 0 8px 8px 0;
+      border: none;
+      &:hover {
+        border: none;
+      }
+    }
+
+    .ant-input-search > .ant-input-group > .ant-input-group-addon {
+      border-radius: 8px;
+      border: none;
+      &:hover {
+        border: none;
+      }
+    }
+
     .ant-layout-header {
       padding: 0 200px;
       line-height: 20px;
