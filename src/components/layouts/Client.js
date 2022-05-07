@@ -13,6 +13,8 @@ import { CartDetail } from 'components/cart';
 import { sumMoney } from 'utils/number';
 import { ProductItem } from 'components/product';
 
+const { Search } = Input;
+
 const { Header, Content, Footer } = Layout;
 
 function Client({ children, ...props }) {
@@ -65,7 +67,7 @@ function Client({ children, ...props }) {
                 alt="logo"
               />
             </Link>
-            <Input
+            <Search
               placeholder="Bạn muốn tìm kiếm sản phẩm nào?"
               value={keySearch}
               allowClear
@@ -73,7 +75,7 @@ function Client({ children, ...props }) {
                 setKeySearch(e.target.value);
                 loadListProduct({ name: e.target.value });
               }}
-              style={{ width: 280, marginLeft: 16 }}
+              style={{ minWidth: 280, maxWidth: 290, marginLeft: 16 }}
             />
 
             <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>
