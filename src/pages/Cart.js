@@ -34,7 +34,7 @@ function Cart(props) {
         {(products?.length > 0 && (
           <>
             <CartDetail screen="page" />
-            <div className="cart-detail box-shadow p-16 border-radius-16">
+            <div className="cart-detail box-shadow p-16 border-radius-16 bg-white">
               <div className="d-flex justify-content-between mb-16 fw-700 fz-16">
                 <div>Tổng tiền tạm tính</div>
                 <div className="text-red">{sumPay}</div>

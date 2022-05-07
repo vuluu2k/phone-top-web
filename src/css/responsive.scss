@@ -25,7 +25,11 @@ body {
     .header-responsive,
     .layout-content-responsive,
     .footer-custom {
-      padding: 0 !important;
+      padding: 0 10px !important;
+    }
+
+    .responsive-client-logo {
+      display: none;
     }
   }
 }

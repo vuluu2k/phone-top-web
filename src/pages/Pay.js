@@ -58,7 +58,7 @@ function Pay(props) {
   const styleIconStep = { width: 36, height: 36, borderRadius: 18, border: '1px solid #000' };
 
   const handleGoBack = () => {
-    if (stateStep === 0) navigate('/cart');
+    if (stateStep === 1) navigate('/cart');
     else setStateStep(stateStep - 1);
   };
 
@@ -164,6 +164,7 @@ function Pay(props) {
           <div style={{ backgroundColor: '#fef2f2', borderRadius: 16 }}>
             <Steps current={stateStep} className="step-custom p-16" direction="horizontal" labelPlacement="vertical" onChange={e => setStateStep(e)}>
               <Step
+                disabled
                 title="Chọn sản phẩm"
                 icon={
                   <div
@@ -174,6 +175,7 @@ function Pay(props) {
                 }
               />
               <Step
+                disabled
                 title="Thông tin"
                 icon={
                   <div
@@ -184,6 +186,7 @@ function Pay(props) {
                 }
               />
               <Step
+                disabled
                 title="Phiếu giảm giá"
                 icon={
                   <div
@@ -194,6 +197,7 @@ function Pay(props) {
                 }
               />
               <Step
+                disabled
                 title="Thanh toán"
                 icon={
                   <div
@@ -204,6 +208,7 @@ function Pay(props) {
                 }
               />
               <Step
+                disabled
                 title="Hoàn tất"
                 icon={
                   <div
@@ -398,7 +403,7 @@ function Pay(props) {
           </div>
           {stateStep !== 4 && (
             <div>
-              <div className="box-shadow p-16 border-radius-16">
+              <div className="box-shadow p-16 border-radius-16 mt-16 bg-white">
                 <div className="d-flex justify-content-between mb-16 fw-700 fz-16">
                   <div>Tổng tiền tạm tính</div>
                   <div className="text-red">{sumPay}</div>

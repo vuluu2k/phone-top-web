@@ -1,13 +1,13 @@
-.cart-detail {
-  min-width: 500px;
-}
-
+.cart-detail,
 .pay-detail {
-  width: 500px;
+  min-width: 500px;
+  max-width: 500px;
 }
 
 @media screen and (max-width: 768px) {
-  .cart-detail {
+  .cart-detail,
+  .pay-detail {
     min-width: 300px;
+    max-width: 300px;
   }
 }

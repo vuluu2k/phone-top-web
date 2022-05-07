@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Avatar, Button, Input, message as messageAntd } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { SaveOutlined } from '@ant-design/icons';
+import { SaveOutlined, UserOutlined } from '@ant-design/icons';
 
 import { Client } from 'components/layouts';
 import { selectAuth } from 'selectors';
@@ -64,16 +64,22 @@ function Account(props) {
       <Row style={{ margin: '16px 0' }}>
         <Col span={6} style={{ padding: 16 }}>
           <div className="d-flex align-items-center justify-content-center">
-            <Avatar size={60} />
+            <Avatar icon={<UserOutlined />} size={60} />
             <div className="ml-8 fw-500">{user?.name}</div>
           </div>
           <div className="mt-16">
-            <Button type="text" block onClick={() => setState({ ...state, statusChange: 'information' })}>
+            <Button
+              type={(statusChange === 'information' && 'danger') || 'text'}
+              block
+              onClick={() => setState({ ...state, statusChange: 'information' })}>
               Thông tin tài khoản
             </Button>
           </div>
           <div>
-            <Button type="text" block onClick={() => setState({ ...state, statusChange: 'changePassword' })}>
+            <Button
+              type={(statusChange === 'changePassword' && 'danger') || 'text'}
+              block
+              onClick={() => setState({ ...state, statusChange: 'changePassword' })}>
               Đổi mật khẩu
             </Button>
           </div>

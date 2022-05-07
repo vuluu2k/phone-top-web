@@ -58,7 +58,12 @@ function Client({ children, ...props }) {
         <Header className="header header-responsive">
           <div className="d-flex align-items-center justify-content-between" style={{ height: 64 }}>
             <Link to="/home">
-              <img src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png" height={64} alt="logo" />
+              <img
+                src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png"
+                className="responsive-client-logo"
+                height={64}
+                alt="logo"
+              />
             </Link>
             <Input
               placeholder="Bạn muốn tìm kiếm sản phẩm nào?"
