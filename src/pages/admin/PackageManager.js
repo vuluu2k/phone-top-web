@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, message as messageAntd } from 'antd';
+import { Table, Button, message as messageAntd, Input } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, CheckCircleOutlined } from '@ant-design/icons';
@@ -16,16 +16,18 @@ const options = [
   { value: false, label: 'Chưa xác nhận' },
 ];
 
+const { Search } = Input;
+
 function PackageManager(props) {
   const {
     actions,
-    selectListPackage: { viewPackage, requesting, message, success },
+    selectListPackage: { viewPackage, requesting, message, success, dataSearch },
   } = props;
 
   const [selectTab, setSelectTab] = useState('');
 
   useEffect(() => {
-    actions.loadListPackage({ isAccess: ' ' });
+    actions.loadListPackage({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -126,10 +128,21 @@ function PackageManager(props) {
         title="Thông tin đơn hàng"
         refesh={
           <Button
-            onClick={() => actions.loadListPackage({})}
+            onClick={() => actions.loadListPackage(dataSearch)}
             style={{ borderRadius: 8 }}
             icon={(requesting && <LoadingOutlined />) || <RedoOutlined />}
           />
+        }
+        search={
+          <>
+            <Search
+              placeholder="Nhập số điện thoại hoặc mã đơn hàng"
+              style={{ width: 400 }}
+              onChange={e => actions.loadListPackage({ ...dataSearch, codePackage: e.target.value, phoneNumber: e.target.value })}
+              onSearch={e => actions.loadListPackage({ ...dataSearch, codePackage: e, phoneNumber: e })}
+              allowClear
+            />
+          </>
         }>
         <SnyTabs options={options} value={selectTab} onClick={handleSelectTab} />
         <Table
