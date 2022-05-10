@@ -30,6 +30,7 @@ const initialState = {
     packageNew: {},
     viewPackage: [],
     requesting: true,
+    dataSearch: {},
   },
 
   check_package: {

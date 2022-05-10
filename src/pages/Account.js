@@ -5,13 +5,14 @@ import { bindActionCreators } from 'redux';
 import { SaveOutlined, UserOutlined } from '@ant-design/icons';
 
 import { Client } from 'components/layouts';
-import { selectAuth } from 'selectors';
-import { authActions } from 'actions';
+import { selectAuth, selectPackage } from 'selectors';
+import { authActions, packageActions } from 'actions';
 
 function Account(props) {
   const {
-    actions: { editUser },
+    actions: { editUser, loadListPackage },
     selectAuthStatus: { user, requesting, success, message },
+    selectListPackage: { viewPackage },
   } = props;
 
   const [state, setState] = useState({
@@ -23,6 +24,7 @@ function Account(props) {
     newPassword: '',
     newPasswordRepeat: '',
   });
+
   const { statusChange, fullName, Email, phoneNumber, password, newPassword, newPasswordRepeat } = state;
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -38,7 +40,11 @@ function Account(props) {
       newPassword: '',
       newPasswordRepeat: '',
     });
+    loadListPackage({ userId: user.user_id });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  console.log(viewPackage);
 
   useEffect(() => {
     notification();
@@ -81,6 +87,14 @@ function Account(props) {
               block
               onClick={() => setState({ ...state, statusChange: 'changePassword' })}>
               Đổi mật khẩu
+            </Button>
+          </div>
+          <div>
+            <Button
+              type={(statusChange === 'myPackage' && 'danger') || 'text'}
+              block
+              onClick={() => setState({ ...state, statusChange: 'myPackage' })}>
+              Đơn hàng của bạn
             </Button>
           </div>
         </Col>
@@ -134,14 +148,38 @@ function Account(props) {
                   </Button>
                 </Row>
               </>
-            ))}
+            )) || (
+              <div style={{ overflow: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
+                {viewPackage?.length > 0 &&
+                  viewPackage.map((item, idx) => (
+                    <div key={idx} className="box-shadow mt-16 p-8">
+                      <div className="d-flex">
+                        {item.products?.length > 0 &&
+                          item.products?.map((pr, idx) => (
+                            <div key={idx} className="d-flex flex-column justify-content-center align-items-center">
+                              <div>
+                                <img src={pr.image_link} alt={pr.name} width="150" />
+                              </div>
+                              <div>{pr.name}</div>
+                            </div>
+                          ))}
+                      </div>
+                      <div>
+                        <strong>Trạng thái đơn hàng :</strong>
+                        {item.current_status_vi}
+                        {item.isAccess || <span>| Đơn hàng chưa được xác nhận vui lòng liên hệ với PhoneTop để được xác nhận ngay</span>}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
         </Col>
       </Row>
     </Client>
   );
 }
 
-const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions }, dispatch) });
-const mapStateToProps = state => ({ ...selectAuth(state) });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...authActions, ...packageActions }, dispatch) });
+const mapStateToProps = state => ({ ...selectAuth(state), ...selectPackage(state) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);
