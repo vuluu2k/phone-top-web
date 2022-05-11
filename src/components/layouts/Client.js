@@ -75,7 +75,7 @@ function Client({ children, ...props }) {
                 setKeySearch(e.target.value);
                 loadListProduct({ name: e.target.value });
               }}
-              style={{ minWidth: 280, maxWidth: 290, marginLeft: 16 }}
+              style={{ maxWidth: 290, marginLeft: 16 }}
             />
 
             <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>

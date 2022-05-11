@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Avatar, Button, Input, message as messageAntd } from 'antd';
+import { Row, Col, Avatar, Button, Input, message as messageAntd, Modal } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { SaveOutlined, UserOutlined } from '@ant-design/icons';
+import { SaveOutlined, UserOutlined, LeftOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 import { Client } from 'components/layouts';
 import { selectAuth, selectPackage } from 'selectors';
 import { authActions, packageActions } from 'actions';
 
 function Account(props) {
+  const navigate = useNavigate();
   const {
-    actions: { editUser, loadListPackage },
+    actions: { editUser, loadListPackage, deletePackage },
     selectAuthStatus: { user, requesting, success, message },
     selectListPackage: { viewPackage },
   } = props;
@@ -24,6 +26,12 @@ function Account(props) {
     newPassword: '',
     newPasswordRepeat: '',
   });
+
+  const [showCancel, setShowCancel] = useState(false);
+  const [reason, setReason] = useState('');
+
+  const onShowCancel = () => setShowCancel(true);
+  const onHiddenCancel = () => setShowCancel(false);
 
   const { statusChange, fullName, Email, phoneNumber, password, newPassword, newPasswordRepeat } = state;
   const onChange = e => {
@@ -67,6 +75,10 @@ function Account(props) {
 
   return (
     <Client>
+      <Row className="text-red fw-700 fz-16 d-flex align-items-center mt-16 mb-8 cursor-pointer" onClick={() => navigate('/home')}>
+        <LeftOutlined style={{ fontSize: 14 }} />
+        Trang chủ
+      </Row>
       <Row style={{ margin: '16px 0' }}>
         <Col span={6} style={{ padding: 16 }}>
           <div className="d-flex align-items-center justify-content-center">
@@ -149,32 +161,67 @@ function Account(props) {
                 </Row>
               </>
             )) || (
-              <div style={{ overflow: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
+              <div style={{ overflow: 'auto', maxHeight: 'calc(100vh - 200px)', padding: '0 12px' }}>
                 {viewPackage?.length > 0 &&
                   viewPackage.map((item, idx) => (
                     <div key={idx} className="box-shadow mt-16 p-8">
                       <div className="d-flex">
                         {item.products?.length > 0 &&
                           item.products?.map((pr, idx) => (
-                            <div key={idx} className="d-flex flex-column justify-content-center align-items-center">
+                            <div key={idx} className="d-flex flex-column justify-content-center align-items-center p-8">
                               <div>
                                 <img src={pr.image_link} alt={pr.name} width="150" />
                               </div>
-                              <div>{pr.name}</div>
+                              <div className="fw-500">
+                                {pr.name} (số lượng: {pr.quantity})
+                              </div>
                             </div>
                           ))}
                       </div>
                       <div>
-                        <strong>Trạng thái đơn hàng :</strong>
-                        {item.current_status_vi}
-                        {item.isAccess || <span>| Đơn hàng chưa được xác nhận vui lòng liên hệ với PhoneTop để được xác nhận ngay</span>}
+                        <strong>Trạng thái đơn hàng :</strong> {item.current_status_vi}
+                        {item.isAccess || (
+                          <span className="text-red fw-500">
+                            {' '}
+                            | Đơn hàng chưa được xác nhận thanh toán vui lòng liên hệ với PhoneTop để được xác nhận ngay
+                          </span>
+                        )}
                       </div>
+                      {item.isAccess || (
+                        <Button type="primary" onClick={() => deletePackage({ id: item._id })} danger>
+                          Hủy đơn hàng
+                        </Button>
+                      )}
+                      {item.isAccess && item.current_status_en !== 'success' && (
+                        <Button type="primary" danger onClick={onShowCancel}>
+                          Gửi yêu cầu hủy đơn
+                        </Button>
+                      )}
                     </div>
                   ))}
               </div>
             )}
         </Col>
       </Row>
+      <Modal
+        title="Gửi yêu cầu hủy đơn"
+        visible={showCancel}
+        onCancel={onHiddenCancel}
+        footer={
+          <>
+            <div className="d-flex justify-content-end">
+              <Button type="primary" className="mr-8">
+                Hủy bỏ
+              </Button>
+              <Button type="primary" danger>
+                Gửi
+              </Button>
+            </div>
+          </>
+        }>
+        <div>Nhập lí do</div>
+        <Input name="reason" value={reason} onChange={e => setReason(e.target.value)} />
+      </Modal>
     </Client>
   );
 }
