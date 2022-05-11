@@ -17,6 +17,9 @@ import {
   GET_TURNOVER,
   GET_TURNOVER_SUCCESS,
   GET_TURNOVER_ERROR,
+  SEND_REQUEST_CANCEL,
+  SEND_REQUEST_CANCEL_SUCCESS,
+  SEND_REQUEST_CANCEL_ERROR,
 } from 'constants/package';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -100,6 +103,26 @@ const handleAccpet = (state, payload) => {
   });
 };
 
+const handleChange = (state, payload) => {
+  const { request } = payload;
+  const listCurrent = state.list_package.viewPackage;
+  const listAfterEdit = listCurrent.map(item => {
+    if (item._id === request._id) {
+      return request;
+    }
+    return item;
+  });
+
+  return update(state, {
+    productInfomation: {
+      requesting: { $set: false },
+      success: { $set: true },
+      viewPackage: { $set: listAfterEdit },
+      $merge: converObjToCamelKeys(payload),
+    },
+  });
+};
+
 const packageReducer = (state = initialState, payload) => {
   switch (payload.type) {
     case LOAD_LIST_PACKAGE:
@@ -142,6 +165,13 @@ const packageReducer = (state = initialState, payload) => {
     case DELETE_PACKAGE_SUCCESS:
       return handleDelete(state, payload);
     case DELETE_PACKAGE_ERROR:
+      return handleError(state, 'list_package', payload.message);
+
+    case SEND_REQUEST_CANCEL:
+      return handleRequest(state, 'list_package');
+    case SEND_REQUEST_CANCEL_SUCCESS:
+      return handleChange(state, payload);
+    case SEND_REQUEST_CANCEL_ERROR:
       return handleError(state, 'list_package', payload.message);
 
     default:

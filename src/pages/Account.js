@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SaveOutlined, UserOutlined, LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import { Client } from 'components/layouts';
 import { selectAuth, selectPackage } from 'selectors';
@@ -12,7 +13,7 @@ import { authActions, packageActions } from 'actions';
 function Account(props) {
   const navigate = useNavigate();
   const {
-    actions: { editUser, loadListPackage, deletePackage },
+    actions: { editUser, loadListPackage, deletePackage, sendRequest },
     selectAuthStatus: { user, requesting, success, message },
     selectListPackage: { viewPackage },
   } = props;
@@ -27,11 +28,11 @@ function Account(props) {
     newPasswordRepeat: '',
   });
 
-  const [showCancel, setShowCancel] = useState(false);
+  const [showCancel, setShowCancel] = useState({ show: false, id: '' });
   const [reason, setReason] = useState('');
 
-  const onShowCancel = () => setShowCancel(true);
-  const onHiddenCancel = () => setShowCancel(false);
+  const onShowCancel = id => setShowCancel({ ...showCancel, show: true, id });
+  const onHiddenCancel = () => setShowCancel({ ...showCancel, show: false });
 
   const { statusChange, fullName, Email, phoneNumber, password, newPassword, newPasswordRepeat } = state;
   const onChange = e => {
@@ -80,7 +81,7 @@ function Account(props) {
         Trang chủ
       </Row>
       <Row style={{ margin: '16px 0' }}>
-        <Col span={6} style={{ padding: 16 }}>
+        <Col xs={24} lg={6} style={{ padding: 16 }}>
           <div className="d-flex align-items-center justify-content-center">
             <Avatar icon={<UserOutlined />} size={60} />
             <div className="ml-8 fw-500">{user?.name}</div>
@@ -110,7 +111,7 @@ function Account(props) {
             </Button>
           </div>
         </Col>
-        <Col span={18} style={{ backgroundColor: 'white', padding: 16, minHeight: 'calc(100vh - 298px)' }}>
+        <Col xs={24} lg={18} style={{ backgroundColor: 'white', padding: 16, minHeight: 'calc(100vh - 298px)' }}>
           {(statusChange === 'information' && (
             <>
               <div>
@@ -161,10 +162,28 @@ function Account(props) {
                 </Row>
               </>
             )) || (
-              <div style={{ overflow: 'auto', maxHeight: 'calc(100vh - 200px)', padding: '0 12px' }}>
+              <div style={{ overflow: 'auto scroll', maxHeight: 'calc(100vh - 200px)', padding: '0 12px' }}>
                 {viewPackage?.length > 0 &&
                   viewPackage.map((item, idx) => (
                     <div key={idx} className="box-shadow mt-16 p-8">
+                      <div className="d-flex align-items-center justify-content-between">
+                        <div>
+                          <strong>Được tạo: </strong>
+                          {dayjs(item?.createdAt).format('HH:mm DD/MM/YYYY')}
+                        </div>
+                        <div className="d-flex justify-content-end">
+                          {item.isAccess || (
+                            <Button type="primary" onClick={() => deletePackage({ id: item._id })} danger>
+                              Hủy đơn hàng
+                            </Button>
+                          )}
+                          {item.isAccess && item.current_status_en !== 'success' && (
+                            <Button type="primary" danger onClick={() => onShowCancel(item._id)}>
+                              Gửi yêu cầu hủy đơn
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                       <div className="d-flex">
                         {item.products?.length > 0 &&
                           item.products?.map((pr, idx) => (
@@ -187,15 +206,11 @@ function Account(props) {
                           </span>
                         )}
                       </div>
-                      {item.isAccess || (
-                        <Button type="primary" onClick={() => deletePackage({ id: item._id })} danger>
-                          Hủy đơn hàng
-                        </Button>
-                      )}
-                      {item.isAccess && item.current_status_en !== 'success' && (
-                        <Button type="primary" danger onClick={onShowCancel}>
-                          Gửi yêu cầu hủy đơn
-                        </Button>
+
+                      {item?.isRequest?.isTrash && (
+                        <div className="fw-500">
+                          Bạn đã gửi yêu cầu hủy đơn này với lí do <span class="text-red">{item?.isRequest?.note}</span>
+                        </div>
                       )}
                     </div>
                   ))}
@@ -205,15 +220,22 @@ function Account(props) {
       </Row>
       <Modal
         title="Gửi yêu cầu hủy đơn"
-        visible={showCancel}
+        visible={showCancel?.show}
         onCancel={onHiddenCancel}
         footer={
           <>
             <div className="d-flex justify-content-end">
-              <Button type="primary" className="mr-8">
+              <Button type="primary" className="mr-8" onClick={onHiddenCancel}>
                 Hủy bỏ
               </Button>
-              <Button type="primary" danger>
+              <Button
+                type="primary"
+                danger
+                onClick={() => {
+                  if (!reason) return messageAntd.error('Bạn chưa nhập lí do');
+                  sendRequest({ codePackage: showCancel?.id, note: reason });
+                  onHiddenCancel();
+                }}>
                 Gửi
               </Button>
             </div>

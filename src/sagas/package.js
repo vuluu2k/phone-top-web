@@ -14,15 +14,15 @@ import {
   ACCEPT_PACKAGE,
   ACCEPT_PACKAGE_SUCCESS,
   ACCEPT_PACKAGE_ERROR,
-  // EDIT_PACKAGE,
-  // EDIT_PACKAGE_SUCCESS,
-  // EDIT_PACKAGE_ERROR,
   DELETE_PACKAGE,
   DELETE_PACKAGE_SUCCESS,
   DELETE_PACKAGE_ERROR,
   GET_TURNOVER,
   GET_TURNOVER_SUCCESS,
   GET_TURNOVER_ERROR,
+  SEND_REQUEST_CANCEL,
+  SEND_REQUEST_CANCEL_SUCCESS,
+  SEND_REQUEST_CANCEL_ERROR,
 } from 'constants/package';
 
 import { API_URL } from 'env_config';
@@ -50,6 +50,9 @@ function* startRequest(payload) {
       break;
     case DELETE_PACKAGE:
       yield call(deletePackage, payload);
+      break;
+    case SEND_REQUEST_CANCEL:
+      yield call(sendRequest, payload);
       break;
     default:
       break;
@@ -196,6 +199,30 @@ function* getTurnover({ payload }) {
   }
 }
 
+function* sendRequest({ payload }) {
+  const { codePackage, note } = payload;
+  const url = `${API_URL}/package/request_cancel_package`;
+  const body = { codePackage, note };
+  try {
+    const response = yield call(axios.post, url, body);
+    if (!response.data.success) {
+      messageAntd.error(response.data.message);
+      yield put({ type: SEND_REQUEST_CANCEL_ERROR, ...response.data });
+    } else {
+      messageAntd.success(response.data.message);
+      yield put({ type: SEND_REQUEST_CANCEL_SUCCESS, ...response.data });
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: SEND_REQUEST_CANCEL_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* packageSagas() {
-  yield takeLatest([LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE, GET_TURNOVER], startRequest);
+  yield takeLatest(
+    [LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE, GET_TURNOVER, SEND_REQUEST_CANCEL],
+    startRequest
+  );
 }
