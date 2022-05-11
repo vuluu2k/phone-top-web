@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, message as messageAntd, Input } from 'antd';
+import { Table, Button, Input } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, CheckCircleOutlined } from '@ant-design/icons';
@@ -21,7 +21,7 @@ const { Search } = Input;
 function PackageManager(props) {
   const {
     actions,
-    selectListPackage: { viewPackage, requesting, message, success, dataSearch },
+    selectListPackage: { viewPackage, requesting, dataSearch },
   } = props;
 
   const [selectTab, setSelectTab] = useState('');
@@ -30,15 +30,6 @@ function PackageManager(props) {
     actions.loadListPackage({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (viewPackage?.length > 0) {
-      if (message === 'Tải dữ liệu đơn hàng thành công') return;
-      if (success && !requesting) return messageAntd.success(message || 'Cập nhật thành công');
-      else if (!success && !requesting) return messageAntd.error(message || 'Cập nhật thất bại');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requesting]);
 
   const handleSelectTab = (value, _) => {
     actions.loadListPackage({ isAccess: value });

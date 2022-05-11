@@ -1,4 +1,12 @@
-import { LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, GET_TURNOVER, DELETE_PACKAGE } from 'constants/package';
+import {
+  LOAD_LIST_PACKAGE,
+  CREATE_PACKAGE,
+  CHECK_PACKAGE,
+  ACCEPT_PACKAGE,
+  GET_TURNOVER,
+  DELETE_PACKAGE,
+  SEND_REQUEST_CANCEL,
+} from 'constants/package';
 
 function loadListPackage(payload) {
   return {
@@ -42,6 +50,13 @@ function deletePackage(payload) {
   };
 }
 
-const packageActions = { loadListPackage, createPackage, checkPackage, acceptPackage, getTurnover, deletePackage };
+function sendRequest(payload) {
+  return {
+    type: SEND_REQUEST_CANCEL,
+    payload,
+  };
+}
+
+const packageActions = { loadListPackage, createPackage, checkPackage, acceptPackage, getTurnover, deletePackage, sendRequest };
 
 export default packageActions;

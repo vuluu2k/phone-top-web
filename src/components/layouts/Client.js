@@ -75,7 +75,7 @@ function Client({ children, ...props }) {
                 setKeySearch(e.target.value);
                 loadListProduct({ name: e.target.value });
               }}
-              style={{ minWidth: 280, maxWidth: 290, marginLeft: 16 }}
+              style={{ maxWidth: 290, marginLeft: 16 }}
             />
 
             <div className="d-flex align-items-center" style={{ marginLeft: 16, textAlign: 'center' }}>
@@ -97,6 +97,9 @@ function Client({ children, ...props }) {
             </div>
             {(selectAuthStatus?.user?.name && (
               <Dropdown
+                trigger="click"
+                className="cursor-pointer"
+                overlayClassName="account-custom-select"
                 overlay={
                   <Menu>
                     <Menu.Item key="logout" icon={<LogoutOutlined />} onClick={() => logout()}>
@@ -107,7 +110,7 @@ function Client({ children, ...props }) {
                     </Menu.Item>
                   </Menu>
                 }>
-                <div className="text-center" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
+                <div className="text-center cursor-pointer" style={{ backgroundColor: 'rgba(255,255,255,0.2)', padding: 8, borderRadius: 16 }}>
                   <UserOutlined className="icon-header" />
                   <div className="text-responsive fw-500 text-white">{selectAuthStatus?.user?.name || 'Tài khoản'}</div>
                 </div>
