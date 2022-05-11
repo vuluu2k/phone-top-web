@@ -53,8 +53,6 @@ function Account(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  console.log(viewPackage);
-
   useEffect(() => {
     notification();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,7 +176,7 @@ function Account(props) {
                             </Button>
                           )}
                           {item.isAccess && item.current_status_en !== 'success' && (
-                            <Button type="primary" danger onClick={() => onShowCancel(item._id)}>
+                            <Button type="primary" danger onClick={() => onShowCancel(item._id)} disabled={item?.isRequest?.isTrash}>
                               Gửi yêu cầu hủy đơn
                             </Button>
                           )}
@@ -209,7 +207,10 @@ function Account(props) {
 
                       {item?.isRequest?.isTrash && (
                         <div className="fw-500">
-                          Bạn đã gửi yêu cầu hủy đơn này với lí do <span class="text-red">{item?.isRequest?.note}</span>
+                          Bạn đã gửi yêu cầu hủy đơn này với lí do <span className="text-red">{item?.isRequest?.note}</span>
+                          <Button type="link" onClick={() => sendRequest({ codePackage: item?._id, note: '', isTrash: false })}>
+                            Hủy yêu cầu
+                          </Button>
                         </div>
                       )}
                     </div>
@@ -233,7 +234,7 @@ function Account(props) {
                 danger
                 onClick={() => {
                   if (!reason) return messageAntd.error('Bạn chưa nhập lí do');
-                  sendRequest({ codePackage: showCancel?.id, note: reason });
+                  sendRequest({ codePackage: showCancel?.id, note: reason, isTrash: true });
                   onHiddenCancel();
                 }}>
                 Gửi

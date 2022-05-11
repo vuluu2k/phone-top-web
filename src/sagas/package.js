@@ -200,9 +200,9 @@ function* getTurnover({ payload }) {
 }
 
 function* sendRequest({ payload }) {
-  const { codePackage, note } = payload;
+  const { codePackage, note, isTrash } = payload;
   const url = `${API_URL}/package/request_cancel_package`;
-  const body = { codePackage, note };
+  const body = { codePackage, note, isTrash };
   try {
     const response = yield call(axios.post, url, body);
     if (!response.data.success) {

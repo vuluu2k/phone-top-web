@@ -354,4 +354,11 @@ body {
       height: 100%;
     }
   }
+
+  .account-custom-select {
+    border-radius: 8px !important;
+    .ant-dropdown-menu {
+      border-radius: 8px !important;
+    }
+  }
 }

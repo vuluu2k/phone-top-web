@@ -106,7 +106,10 @@ const handleAccpet = (state, payload) => {
 const handleChange = (state, payload) => {
   const { request } = payload;
   const listCurrent = state.list_package.viewPackage;
+
   const listAfterEdit = listCurrent.map(item => {
+    console.log(item._id === request._id);
+
     if (item._id === request._id) {
       return request;
     }
@@ -114,7 +117,7 @@ const handleChange = (state, payload) => {
   });
 
   return update(state, {
-    productInfomation: {
+    list_package: {
       requesting: { $set: false },
       success: { $set: true },
       viewPackage: { $set: listAfterEdit },
