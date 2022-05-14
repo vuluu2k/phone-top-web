@@ -23,6 +23,9 @@ import {
   SEND_REQUEST_CANCEL,
   SEND_REQUEST_CANCEL_SUCCESS,
   SEND_REQUEST_CANCEL_ERROR,
+  SEND_SHIPPER,
+  SEND_SHIPPER_SUCCESS,
+  SEND_SHIPPER_ERROR,
 } from 'constants/package';
 
 import { API_URL } from 'env_config';
@@ -53,6 +56,9 @@ function* startRequest(payload) {
       break;
     case SEND_REQUEST_CANCEL:
       yield call(sendRequest, payload);
+      break;
+    case SEND_SHIPPER:
+      yield call(sendShipper, payload);
       break;
     default:
       break;
@@ -167,11 +173,11 @@ function* deletePackage({ payload }) {
   try {
     const response = yield call(axios.delete, url);
     if (!response.data.success) {
-      yield put({ type: DELETE_PACKAGE_ERROR, ...response.data });
       messageAntd.error(response.data.message);
+      yield put({ type: DELETE_PACKAGE_ERROR, ...response.data });
     } else {
-      yield put({ type: DELETE_PACKAGE_SUCCESS, ...response.data });
       messageAntd.success(response.data.message);
+      yield put({ type: DELETE_PACKAGE_SUCCESS, ...response.data });
     }
     return response.data;
   } catch (error) {
@@ -220,9 +226,33 @@ function* sendRequest({ payload }) {
   }
 }
 
+function* sendShipper({ payload }) {
+  const { package_id } = payload;
+  const url = `${API_URL}/package/send_shipper`;
+  const body = {
+    package_id,
+  };
+  try {
+    const response = yield call(axios.post, url, body);
+    if (!response.data.success) {
+      messageAntd.error(response.data.message);
+      yield put({ typ: SEND_SHIPPER_ERROR, ...response.data });
+    } else {
+      messageAntd.success(response.data.message);
+      yield put({ type: SEND_SHIPPER_SUCCESS, ...response.data });
+    }
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: SEND_SHIPPER_ERROR, message: error });
+    return error;
+  }
+}
+
 export function* packageSagas() {
   yield takeLatest(
-    [LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE, GET_TURNOVER, SEND_REQUEST_CANCEL],
+    [LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE, GET_TURNOVER, SEND_REQUEST_CANCEL, SEND_SHIPPER],
     startRequest
   );
 }

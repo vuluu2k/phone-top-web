@@ -2,13 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Input } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import {
+  RedoOutlined,
+  LoadingOutlined,
+  DeleteOutlined,
+  PhoneOutlined,
+  MailOutlined,
+  CheckCircleOutlined,
+  UserSwitchOutlined,
+} from '@ant-design/icons';
 
 import { Admin } from 'components/layouts';
 import { packageActions } from 'actions';
 import { selectPackage } from 'selectors';
 import { TableCustom } from 'components/Common';
 import { SnyTabs } from 'components/Lib';
+import { moneyMask } from 'utils/number';
 
 const options = [
   { value: '', label: 'Tất cả' },
@@ -47,12 +56,13 @@ function PackageManager(props) {
       title: 'Tên khách hàng',
       key: 'full_name',
       dataIndex: 'full_name',
-      render: (_, item) => <div>{item.full_name}</div>,
+      render: (_, item) => <div>{item?.user_id?.full_name}</div>,
     },
     {
       title: 'Số điện thoại',
       key: 'phone_number',
       dataIndex: 'phone_number',
+      render: (_, item) => <div>{item?.user_id?.phone_number}</div>,
     },
     {
       title: 'Sản phẩm',
@@ -69,9 +79,16 @@ function PackageManager(props) {
       },
     },
     {
+      title: 'Giá trị',
+      key: 'value',
+      dataIndex: 'value',
+      render: (value, item) => <div className="text-red fw-500">{moneyMask(value || 0)}</div>,
+    },
+    {
       title: 'Email',
       key: 'email',
       dataIndex: 'email',
+      render: (_, item) => <div>{item?.user_id?.email}</div>,
     },
     {
       title: 'Trạng thái',
@@ -95,9 +112,16 @@ function PackageManager(props) {
               />
             )}
 
-            {!item.isAccess && (
-              <Button onClick={() => actions.deletePackage({ id: item._id })} className="btn-red ml-8" size="small" icon={<DeleteOutlined />} />
-            )}
+            {!item.isAccess ||
+              (item.isRequest?.isTrash && (
+                <Button onClick={() => actions.deletePackage({ id: item._id })} className="btn-red ml-8" size="small" icon={<DeleteOutlined />} />
+              ))}
+            <Button
+              onClick={() => actions.sendShipper({ package_id: item._id })}
+              className="btn-green ml-8"
+              size="small"
+              icon={<UserSwitchOutlined />}
+            />
           </div>
           <div className="mt-8">
             <Button

@@ -6,6 +6,7 @@ import {
   GET_TURNOVER,
   DELETE_PACKAGE,
   SEND_REQUEST_CANCEL,
+  SEND_SHIPPER,
 } from 'constants/package';
 
 function loadListPackage(payload) {
@@ -57,6 +58,13 @@ function sendRequest(payload) {
   };
 }
 
-const packageActions = { loadListPackage, createPackage, checkPackage, acceptPackage, getTurnover, deletePackage, sendRequest };
+function sendShipper(payload) {
+  return {
+    type: SEND_SHIPPER,
+    payload,
+  };
+}
+
+const packageActions = { loadListPackage, createPackage, checkPackage, acceptPackage, getTurnover, deletePackage, sendRequest, sendShipper };
 
 export default packageActions;

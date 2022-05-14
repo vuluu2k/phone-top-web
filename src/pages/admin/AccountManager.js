@@ -3,6 +3,7 @@ import { Table, Button, Input, message as messageAntd } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 import { Admin } from 'components/layouts';
 import { TableCustom } from 'components/Common';
@@ -32,6 +33,7 @@ const options = [
 ];
 
 function AccountManager(props) {
+  const navigate = useNavigate();
   const {
     actions,
     selectAuthStatus: { user },
@@ -97,8 +99,9 @@ function AccountManager(props) {
     },
   ];
 
-  if (user?.role !== 1) {
-    return messageAntd.error('Bạn không có quyền hạn truy cập vào đây!');
+  if (user?.role === 0 || user?.role === 2) {
+    messageAntd.error('Bạn không có quyền hạn truy cập vào đây!');
+    navigate('/product-manager');
   }
 
   return (
