@@ -149,7 +149,8 @@ function* loadUser() {
 function* loadListUser({ payload }) {
   const { name, email, phone_number, role } = payload;
 
-  const url = `${API_URL}/auth/view_auth?name=${name}&email=${email || ''}&phone_number=${phone_number || ''}&role=${role || ''}`;
+  const url = `${API_URL}/auth/view_auth?name=${name || ''}&email=${email || ''}&phone_number=${phone_number || ''}&role=${String(role) || ''}`;
+
   try {
     const response = yield call(axios.get, url);
     if (!response.data.success) {

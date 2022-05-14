@@ -20,6 +20,9 @@ import {
   SEND_REQUEST_CANCEL,
   SEND_REQUEST_CANCEL_SUCCESS,
   SEND_REQUEST_CANCEL_ERROR,
+  SEND_SHIPPER,
+  SEND_SHIPPER_ERROR,
+  SEND_SHIPPER_SUCCESS,
 } from 'constants/package';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -108,10 +111,28 @@ const handleChange = (state, payload) => {
   const listCurrent = state.list_package.viewPackage;
 
   const listAfterEdit = listCurrent.map(item => {
-    console.log(item._id === request._id);
-
     if (item._id === request._id) {
       return request;
+    }
+    return item;
+  });
+
+  return update(state, {
+    list_package: {
+      requesting: { $set: false },
+      success: { $set: true },
+      viewPackage: { $set: listAfterEdit },
+      $merge: converObjToCamelKeys(payload),
+    },
+  });
+};
+
+const handleSendShipper = (state, payload) => {
+  const { packageChangeSend } = payload;
+  const listCurrent = state.list_package.viewPackage;
+  const listAfterEdit = listCurrent.map(item => {
+    if (item._id === packageChangeSend._id) {
+      return packageChangeSend;
     }
     return item;
   });
@@ -175,6 +196,13 @@ const packageReducer = (state = initialState, payload) => {
     case SEND_REQUEST_CANCEL_SUCCESS:
       return handleChange(state, payload);
     case SEND_REQUEST_CANCEL_ERROR:
+      return handleError(state, 'list_package', payload.message);
+
+    case SEND_SHIPPER:
+      return handleRequest(state, 'list_package');
+    case SEND_SHIPPER_SUCCESS:
+      return handleSendShipper(state, payload);
+    case SEND_SHIPPER_ERROR:
       return handleError(state, 'list_package', payload.message);
 
     default:
