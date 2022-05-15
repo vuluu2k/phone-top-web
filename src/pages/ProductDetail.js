@@ -69,6 +69,9 @@ function ProductDetail(props) {
   };
 
   const handleAddCart = () => {
+    if (productItem.quantity <= 0) {
+      return message.warning('Sản phẩm đã hết vui lòng đợi shop cập nhật số lượng hoặc liên hệ shop để biết thêm thông tin về sản phẩm');
+    }
     addCart({ product_id: _id, name_option: nameState, value_option: valueState, image_link: image_link, user_id: user_id, name });
     user_id && showCart();
   };
@@ -145,7 +148,7 @@ function ProductDetail(props) {
                 </div>
                 <div>
                   <AccountBookOutlined style={{ marginRight: 8 }} />
-                  Số lượng còn trong kho: <span className="text-red">{quantity}</span>
+                  Số lượng còn trong kho: <span className="text-red">{(quantity <= 0 && 'Hết hàng') || quantity}</span>
                 </div>
               </div>
             </div>

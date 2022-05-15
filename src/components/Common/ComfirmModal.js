@@ -18,7 +18,7 @@ export default function ComfirmModal(props) {
           </Button>
         </>
       }>
-      {content || <div className="d-flex fw-500 w-100 justify-content-center">Bạn có chắc chắn muốn xóa {item || ''}?</div>}
+      {<div className="d-flex fw-500 w-100 justify-content-center">{content || `Bạn có chắc chắn muốn xóa ${item || ''}?`}</div>}
     </Modal>
   );
 }

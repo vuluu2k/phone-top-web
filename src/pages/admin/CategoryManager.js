@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Input, Row, Col, message } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, RedoOutlined, LoadingOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -22,7 +22,7 @@ function CategoryManager(props) {
 
   const { visibleCreate, visibleEdit, visibleDelete, name, sub_name, sub_name_array, id } = state;
   const { selectCategoryInformation, actions } = props;
-  const { categorys } = selectCategoryInformation;
+  const { categorys, requesting } = selectCategoryInformation;
 
   const onChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -110,11 +110,19 @@ function CategoryManager(props) {
 
   return (
     <Admin title="Quản lý danh mục">
-      <TableCustom title="Thông tin danh mục">
+      <TableCustom
+        title="Thông tin danh mục"
+        refesh={
+          <Button
+            onClick={() => actions.loadListCategory()}
+            style={{ borderRadius: 8 }}
+            icon={(requesting && <LoadingOutlined />) || <RedoOutlined />}
+          />
+        }>
         <Button icon={<PlusOutlined />} className="mb-8" type="primary" onClick={() => onShowCreate()}>
           Thêm danh mục
         </Button>
-        <Table className="data-custom" columns={columns} dataSource={categorys} rowKey={record => record._id} size="small" />
+        <Table className="data-custom" loading={requesting} columns={columns} dataSource={categorys} rowKey={record => record._id} size="small" />
       </TableCustom>
       <Modal
         wrapClassName="modal-add-category"

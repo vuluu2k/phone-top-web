@@ -129,11 +129,11 @@ function* createPackage({ payload }) {
     const response = yield call(axios.post, url, body);
 
     if (!response.data.success) {
-      yield put({ typ: CREATE_PACKAGE_ERROR, ...response.data });
       messageAntd.error(response.data.message);
+      yield put({ typ: CREATE_PACKAGE_ERROR, ...response.data });
     } else {
-      yield put({ type: CREATE_PACKAGE_SUCCESS, ...response.data });
       messageAntd.success(response.data.message);
+      yield put({ type: CREATE_PACKAGE_SUCCESS, ...response.data });
     }
     return response.data;
   } catch (error) {

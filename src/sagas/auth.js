@@ -173,8 +173,10 @@ function* editUser({ payload }) {
   try {
     const response = yield call(axios.patch, url, body);
     if (!response.data.success) {
+      messageAntd.error(response.data.message);
       yield put({ type: EDIT_USER_ERROR, ...response.data });
     } else {
+      messageAntd.success(response.data.message);
       yield put({ type: EDIT_USER_SUCCESS, ...response.data });
     }
     return response.data;
@@ -191,8 +193,10 @@ function* deleteUser({ payload }) {
   try {
     const response = yield call(axios.delete, url);
     if (!response.data.success) {
+      messageAntd.error(response.data.message);
       yield put({ type: DELETE_USER_ERROR, ...response.data });
     } else {
+      messageAntd.success(response.data.message);
       yield put({ type: DELETE_USER_SUCCESS, ...response.data });
     }
     return response.data;

@@ -8,7 +8,12 @@ function Charts(props) {
       type: 'areaspline',
     },
     title: {
-      text: 'Thông kê kết quả doanh thu & phí vận chuyển',
+      text: props.text,
+      align: 'left',
+      style: {
+        color: '#003a9b',
+        fontFamily: 'Roboto',
+      },
     },
     legend: {
       layout: 'vertical',
@@ -22,17 +27,14 @@ function Charts(props) {
     },
     xAxis: {
       categories: props?.categoriesX || ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy', 'chủ nhật'],
-      plotBands: [
-        {
-          from: 4.5,
-          to: 6.5,
-          color: 'rgba(68, 170, 213, .2)',
-        },
-      ],
     },
     yAxis: {
       title: {
         text: 'Dòng tiền (vnđ)',
+        style: {
+          color: '#003a9b',
+          fontFamily: 'Roboto',
+        },
       },
       labels: {
         formatter: function () {

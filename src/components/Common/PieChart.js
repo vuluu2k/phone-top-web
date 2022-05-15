@@ -8,6 +8,11 @@ function PieChart(props) {
     },
     title: {
       text: 'Thông kê mặt số lượng',
+      align: 'left',
+      style: {
+        color: '#003a9b',
+        fontFamily: 'Roboto',
+      },
     },
     accessibility: {
       announceNewData: {
@@ -22,7 +27,11 @@ function PieChart(props) {
       series: {
         dataLabels: {
           enabled: true,
-          format: '{point.name}: {point.y:.1f}%',
+          format: `{point.name}: {point.y:.f} đơn vị`,
+          style: {
+            color: '#003a9b',
+            fontFamily: 'Roboto',
+          },
         },
       },
     },
@@ -30,6 +39,10 @@ function PieChart(props) {
     tooltip: {
       headerFormat: '<span style="font-size:11px">{series.data.name}</span><br>',
       pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> của tất cả<br/>',
+      style: {
+        color: '#003a9b',
+        fontFamily: 'Roboto',
+      },
     },
     series: props.series,
   };

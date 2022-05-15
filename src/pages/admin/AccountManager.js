@@ -6,7 +6,7 @@ import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutli
 import { useNavigate } from 'react-router-dom';
 
 import { Admin } from 'components/layouts';
-import { TableCustom } from 'components/Common';
+import { TableCustom, ComfirmModal } from 'components/Common';
 import { SnyTabs } from 'components/Lib';
 import { selectAuth } from 'selectors';
 import { authActions } from 'actions';
@@ -42,6 +42,11 @@ function AccountManager(props) {
 
   const [selectUser, setSelectUser] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showCancel, setShowCancel] = useState(false);
+  const [saveId, setSaveId] = useState('');
+
+  const onShowCancel = () => setShowCancel(true);
+  const onHiddenCancel = () => setShowCancel(false);
 
   const onShowModal = () => setShowModal(true);
   const onHiddenModal = () => setShowModal(false);
@@ -93,7 +98,15 @@ function AccountManager(props) {
         <div>
           <Button onClick={() => window.open(`tel:${item.phone_number}`, '_self')} className="btn-blue ml-8" size="small" icon={<PhoneOutlined />} />
           <Button onClick={() => window.open(`mailto:${item.email}`, '_self')} className="btn-orange ml-8" size="small" icon={<MailOutlined />} />
-          <Button onClick={() => actions.deleteUser({ id: item._id })} className="btn-red ml-8" size="small" icon={<DeleteOutlined />} />
+          <Button
+            onClick={() => {
+              setSaveId(item._id);
+              onShowCancel();
+            }}
+            className="btn-red ml-8"
+            size="small"
+            icon={<DeleteOutlined />}
+          />
         </div>
       ),
     },
@@ -151,6 +164,15 @@ function AccountManager(props) {
         />
       </TableCustom>
       <AccountModal visible={showModal} onCancel={onHiddenModal} />
+      <ComfirmModal
+        visible={showCancel}
+        content={`Bạn chắc chắn muốn xóa tài khoản này`}
+        onClose={onHiddenCancel}
+        onSubmit={() => {
+          actions.deleteUser({ id: saveId });
+          onHiddenCancel();
+        }}
+      />
     </Admin>
   );
 }
