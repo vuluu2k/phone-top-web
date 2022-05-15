@@ -27,7 +27,7 @@ function Pay(props) {
     actions: { createPackage, clearCart },
     selectAuthStatus: { user },
     selectCartInformation: { products },
-    selectListPackage: { packageNew },
+    selectListPackage: { packageNew, message },
   } = props;
   const [stateStep, setStateStep] = useState(1);
   const [stateRadio, setStateRadio] = useState(1);
@@ -51,13 +51,12 @@ function Pay(props) {
 
   const sumPayNumber = sumMoneyNumber(products?.map(item => item.quantity * item.value_option));
 
-  console.log(sumPayNumber);
-
   const onChangeInput = e => setStateInfor({ ...stateInfor, [e.target.name]: e.target.value });
 
   const styleIconStep = { width: 36, height: 36, borderRadius: 18, border: '1px solid #000' };
 
   const handleGoBack = () => {
+    if (stateStep === 3 && message !== 'Bạn có một đơn hàng mới') return;
     if (stateStep === 1) navigate('/cart');
     else setStateStep(stateStep - 1);
   };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Input } from 'antd';
+import { Table, Button, Input, Badge, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -15,7 +15,7 @@ import {
 import { Admin } from 'components/layouts';
 import { packageActions } from 'actions';
 import { selectPackage } from 'selectors';
-import { TableCustom } from 'components/Common';
+import { TableCustom, ComfirmModal } from 'components/Common';
 import { SnyTabs } from 'components/Lib';
 import { moneyMask } from 'utils/number';
 
@@ -34,6 +34,11 @@ function PackageManager(props) {
   } = props;
 
   const [selectTab, setSelectTab] = useState('');
+  const [showCancel, setShowCancel] = useState(false);
+  const [saveId, setSaveId] = useState('');
+
+  const onShowCancel = () => setShowCancel(true);
+  const onHiddenCancel = () => setShowCancel(false);
 
   useEffect(() => {
     actions.loadListPackage({});
@@ -56,13 +61,13 @@ function PackageManager(props) {
       title: 'Tên khách hàng',
       key: 'full_name',
       dataIndex: 'full_name',
-      render: (_, item) => <div>{item?.user_id?.full_name}</div>,
+      render: (_, item) => <div>{item?.full_name}</div>,
     },
     {
       title: 'Số điện thoại',
       key: 'phone_number',
       dataIndex: 'phone_number',
-      render: (_, item) => <div>{item?.user_id?.phone_number}</div>,
+      render: (_, item) => <div>{item?.phone_number}</div>,
     },
     {
       title: 'Sản phẩm',
@@ -88,7 +93,7 @@ function PackageManager(props) {
       title: 'Email',
       key: 'email',
       dataIndex: 'email',
-      render: (_, item) => <div>{item?.user_id?.email}</div>,
+      render: (_, item) => <div>{item?.email}</div>,
     },
     {
       title: 'Trạng thái',
@@ -104,33 +109,52 @@ function PackageManager(props) {
         <div>
           <div>
             {!item.isAccess && (
-              <Button
-                onClick={() => actions.acceptPackage({ package_id: item._id })}
-                className="btn-green ml-8"
-                size="small"
-                icon={<CheckCircleOutlined />}
-              />
+              <Tooltip title="Xác nhận đơn hàng">
+                <Button
+                  onClick={() => actions.acceptPackage({ package_id: item._id })}
+                  className="btn-green ml-8"
+                  size="small"
+                  icon={<CheckCircleOutlined />}
+                />
+              </Tooltip>
             )}
 
-            {!item.isAccess ||
-              (item.isRequest?.isTrash && (
-                <Button onClick={() => actions.deletePackage({ id: item._id })} className="btn-red ml-8" size="small" icon={<DeleteOutlined />} />
-              ))}
-            <Button
-              onClick={() => actions.sendShipper({ package_id: item._id })}
-              className="btn-green ml-8"
-              size="small"
-              icon={<UserSwitchOutlined />}
-            />
+            {(!item.isAccess || item.isRequest?.isTrash) && (
+              <Badge dot={item.isRequest?.isTrash}>
+                <Tooltip title={(item.isRequest?.isTrash && 'Hủy đơn hàng theo yêu cầu') || 'Hủy đơn hàng'}>
+                  <Button
+                    onClick={() => {
+                      setSaveId(item._id);
+                      onShowCancel();
+                    }}
+                    className="btn-red ml-8"
+                    size="small"
+                    icon={<DeleteOutlined />}
+                  />
+                </Tooltip>
+              </Badge>
+            )}
+            <Tooltip title="Chuyển đơn hàng cho shipper">
+              <Button
+                onClick={() => actions.sendShipper({ package_id: item._id })}
+                className="btn-green ml-8"
+                size="small"
+                icon={<UserSwitchOutlined />}
+              />
+            </Tooltip>
           </div>
           <div className="mt-8">
-            <Button
-              onClick={() => window.open(`tel:${item.phone_number}`, '_self')}
-              className="btn-blue ml-8"
-              size="small"
-              icon={<PhoneOutlined />}
-            />
-            <Button onClick={() => window.open(`mailto:${item.email}`, '_self')} className="btn-orange ml-8" size="small" icon={<MailOutlined />} />
+            <Tooltip title="Gọi điện cho khách đặt hàng">
+              <Button
+                onClick={() => window.open(`tel:${item.phone_number}`, '_self')}
+                className="btn-blue ml-8"
+                size="small"
+                icon={<PhoneOutlined />}
+              />
+            </Tooltip>
+            <Tooltip title="Gửi mail cho khách đặt hàng">
+              <Button onClick={() => window.open(`mailto:${item.email}`, '_self')} className="btn-orange ml-8" size="small" icon={<MailOutlined />} />
+            </Tooltip>
           </div>
         </div>
       ),
@@ -179,6 +203,15 @@ function PackageManager(props) {
           }}
         />
       </TableCustom>
+      <ComfirmModal
+        visible={showCancel}
+        content={`Bạn chắc chắn muốn hủy đơn hàng ${saveId}`}
+        onClose={onHiddenCancel}
+        onSubmit={() => {
+          actions.deletePackage({ id: saveId });
+          onHiddenCancel();
+        }}
+      />
     </Admin>
   );
 }

@@ -57,7 +57,9 @@ function CartDetail(props) {
     <>
       {(products?.length > 0 &&
         products.map((item, idx) => (
-          <div key={idx} style={{ marginBottom: 8, backgroundColor: '#f0f0f0', padding: 4 }}>
+          <div
+            key={idx}
+            style={{ marginBottom: 8, background: 'linear-gradient(to right, #dd5e89, #f7bb97)', padding: 8, borderRadius: 8, color: 'white' }}>
             <div className="d-flex w-100">
               <div>
                 <img src={item.image_link} alt={item.name_option} width="80" height="80" />
@@ -75,7 +77,7 @@ function CartDetail(props) {
                   </div>
                 </div>
                 <div>{item.name_option}</div>
-                <div className="fw-500" style={{ color: '#D70018 ' }}>
+                <div className="fw-700" style={{ color: '#D70018 ' }}>
                   {moneyMask(item.value_option)}
                 </div>
               </div>

@@ -30,7 +30,7 @@ const before60Day = subtractDate(60);
 function Dashboard(props) {
   const {
     actions: { getTurnover },
-    selectListTurnover: { packages, productCount, productCountOld, packageAcceptCount, packageNotAcceptCount, userCount, requesting },
+    selectListTurnover: { packages, productCount, productCountOld, packageAcceptCount, packageNotAcceptCount, userCount, requesting, codShipper },
   } = props;
 
   useEffect(() => {
@@ -51,10 +51,19 @@ function Dashboard(props) {
   });
 
   const keyArray = Object.keys(turnoverArray);
-
   const valueArray = keyArray.map(key => sumMoneyNumber(turnoverArray[key].map(item => item.value)));
-
   const sumTurnover = valueArray.reduce((prev, next) => prev + next, 0);
+
+  const codArray = groupBy(codShipper, item => {
+    const updatedAt = dayjs(item.updatedAt);
+    return updatedAt?.format('YYYY-MM-DD');
+  });
+
+  const keyCodArray = Object.keys(codArray);
+  const valueCodArray = keyCodArray.map(key => sumMoneyNumber(codArray[key].map(item => item.cod)));
+  const sumCod = valueCodArray.reduce((prev, next) => prev + next, 0);
+
+  console.log(codArray);
 
   return (
     <Admin title="Thông kê dữ liệu PhoneTop">
@@ -84,13 +93,18 @@ function Dashboard(props) {
         />
         <Spin spinning={requesting}>
           <Row>
-            <Col span={24}>
+            <Col span={12}>
               <Charts
-                series={[
-                  { name: 'Doanh thu', data: valueArray.reverse() },
-                  { name: 'Tiền COD', data: [] },
-                ]}
+                text="Doanh thu của cửa hàng chưa tính chi phí shipper, sản phẩm"
+                series={[{ name: 'Doanh thu', data: valueArray.reverse(), color: '#351d78' }]}
                 categoriesX={keyArray.reverse()}
+              />
+            </Col>
+            <Col span={12}>
+              <Charts
+                text="Tiền ship vận chuyển sản phẩm"
+                series={[{ name: 'Tiền COD', data: valueCodArray.reverse(), color: '#ffd600' }]}
+                categoriesX={keyCodArray.reverse()}
               />
             </Col>
             <Col span={24}>
@@ -104,22 +118,27 @@ function Dashboard(props) {
                           {
                             name: 'Sản phẩm',
                             y: productCount,
+                            color: '#351d78',
                           },
                           {
                             name: 'Sản phẩm tồn kho',
                             y: productCountOld,
+                            color: '#ffd600',
                           },
                           {
-                            name: 'Đơn hàng xác thực thanh toán',
+                            name: 'Đơn hàng đã xác thực thanh toán',
                             y: packageAcceptCount,
+                            color: '#23af46',
                           },
                           {
                             name: 'Đơn hàng chưa xác thực thanh toán',
                             y: packageNotAcceptCount,
+                            color: '#ae1624',
                           },
                           {
                             name: 'Khách hàng',
                             y: userCount,
+                            color: '#9a8ebb',
                           },
                         ],
                       },
@@ -130,15 +149,15 @@ function Dashboard(props) {
                   <TableCustom disable style={{ width: '100%' }}>
                     <Row gutter={8}>
                       <Col xs={24} md={12}>
-                        <div className="p-8" style={{ background: '#bddaf5' }}>
+                        <div className="p-8" style={{ background: '#9a8ebb', color: '#351d78' }}>
                           <div className="fw-700 fz-18">Tổng doanh thu</div>
                           <div className="fw-500 fz-16">{moneyMask(sumTurnover || 0)}</div>
                         </div>
                       </Col>
                       <Col xs={24} md={12}>
-                        <div className="p-8" style={{ background: '#a9ff96' }}>
+                        <div className="p-8" style={{ background: '#ffd600', color: '#351d78' }}>
                           <div className="fw-700 fz-18">Tổng phí ship</div>
-                          <div className="fw-500 fz-16">{moneyMask(0)}</div>
+                          <div className="fw-500 fz-16">{moneyMask(sumCod || 0)}</div>
                         </div>
                       </Col>
                     </Row>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu, message as messageAntd, Spin } from 'antd';
-import { UserOutlined, UpOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined, LeftOutlined } from '@ant-design/icons';
+import { Layout, Row, Col, BackTop, Input, Drawer, Button, Dropdown, Menu, message as messageAntd, Spin, Space } from 'antd';
+import { UserOutlined, UpOutlined, PhoneOutlined, ShoppingCartOutlined, LogoutOutlined, LeftOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { ImTruck } from 'react-icons/im';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -214,13 +214,26 @@ function Client({ children, ...props }) {
         )}
       </Layout>
       <Drawer
-        title="Giỏ hàng của bạn"
+        title={
+          <div style={{ color: '#d70018' }}>
+            <ShoppingCartOutlined /> Giỏ hàng của bạn
+          </div>
+        }
+        closable={false}
+        extra={
+          <Space>
+            <CloseCircleOutlined onClick={() => hiddenCart()} />
+          </Space>
+        }
         placement="right"
         onClose={() => hiddenCart()}
         visible={selectVisibleCart}
+        bodyStyle={{ padding: 8 }}
+        headerStyle={{ backgroundColor: '#fee2e2', color: '#d70018', padding: 16 }}
+        // footerStyle={{ backgroundColor: '#fee2e2', padding: 16 }}
         footer={
-          <>
-            <div className="text-upper fw-500 mb-8 text-center">
+          <div>
+            <div className="text-upper fw-700 fz-16 mb-8 text-center">
               Tổng tiền: <span style={{ color: 'rgb(215, 0, 24)' }}>{sumMoney(products?.map(item => item.quantity * item.value_option))}</span>
             </div>
             <div className="d-flex">
@@ -231,7 +244,7 @@ function Client({ children, ...props }) {
                 Thanh toán
               </Button>
             </div>
-          </>
+          </div>
         }>
         <CartDetail user_id={selectAuthStatus?.user?._id} />
       </Drawer>
