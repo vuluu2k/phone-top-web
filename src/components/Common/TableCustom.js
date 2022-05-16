@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tooltip } from 'antd';
 
 export default function TableCustom({ children, ...props }) {
   return (
@@ -8,7 +9,7 @@ export default function TableCustom({ children, ...props }) {
           <div className="title">
             <div className="d-flex align-items-center justify-content-between">
               <div>
-                {props.icon} {props.title} {props.refesh}
+                {props.icon} {props.title} <Tooltip title="Tải lại">{props.refesh}</Tooltip>
               </div>
               <div>{props.search}</div>
             </div>
