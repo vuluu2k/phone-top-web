@@ -36,6 +36,7 @@ function BlogManager(props) {
         name: 'Ảnh sản phẩm',
         status: 'done',
         url: '',
+        thumbUrl: '',
       },
     ],
     description: '',
@@ -102,6 +103,7 @@ function BlogManager(props) {
           name: 'Ảnh sản phẩm',
           status: 'done',
           url: '',
+          thumbUrl: '',
         },
       ],
       description: '',
@@ -147,6 +149,7 @@ function BlogManager(props) {
           name: 'Ảnh sản phẩm',
           status: 'done',
           url: item?.image_link || '',
+          thumbUrl: item?.image_link || '',
         },
       ],
     });
