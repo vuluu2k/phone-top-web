@@ -9,12 +9,14 @@ import { BsFillCartPlusFill } from 'react-icons/bs';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import validator from 'validator';
+import axios from 'axios';
 
 import { Client } from 'components/layouts';
 import { packageActions, cartActions } from 'actions';
 import { selectAuth, selectCart, selectPackage } from 'selectors';
 import { sumMoney, moneyMask, sumMoneyNumber } from 'utils/number';
-import validator from 'validator';
+import { API_URL } from 'env_config';
 
 const { Step } = Steps;
 const { Option } = Select;
@@ -27,7 +29,7 @@ function Pay(props) {
     actions: { createPackage, clearCart },
     selectAuthStatus: { user },
     selectCartInformation: { products },
-    selectListPackage: { packageNew, message },
+    selectListPackage: { packageNew },
   } = props;
   const [stateStep, setStateStep] = useState(1);
   const [stateRadio, setStateRadio] = useState(1);
@@ -56,12 +58,34 @@ function Pay(props) {
   const styleIconStep = { width: 36, height: 36, borderRadius: 18, border: '1px solid #000' };
 
   const handleGoBack = () => {
-    if (stateStep === 3 && message !== 'Bạn có một đơn hàng mới') return;
     if (stateStep === 1) navigate('/cart');
     else setStateStep(stateStep - 1);
   };
 
   const handleNext = () => {
+    const checkQuantity = products.map(async item => {
+      try {
+        const response = await axios.get(`${API_URL}/product/${item?.product_id}`);
+        if (!response.data?.success) {
+          messageAntd.error(response.data.message);
+          return true;
+        }
+
+        const result = response.data?.product;
+        if (result.quantity < item.quantity) {
+          messageAntd.error(
+            `Sản phẩm ${item.name} số lượng chỉ còn ${result.quantity} quý khách thông cảm điều chỉnh lại số lượng hoặc liên hệ với PhoneTop`
+          );
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    if (checkQuantity) return;
+
     if (!full_name || !phone_number || !email) {
       return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
     }
