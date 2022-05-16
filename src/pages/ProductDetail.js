@@ -100,12 +100,12 @@ function ProductDetail(props) {
           Trở về
         </Row>
         <Row gutter={30} style={{ paddingBottom: '16px' }}>
-          <Col span={8}>
+          <Col xs={24} lg={8}>
             <div className="product-item-detail d-flex align-items-center justify-content-center">
               <Image src={image_link} width="80%" />
             </div>
           </Col>
-          <Col span={16}>
+          <Col xs={24} lg={16}>
             <h2>{name?.toUpperCase()}</h2>
             <div>Giá chính thức:</div>
             <div className="product-item-money">{moneyMask(valueState || value)}</div>
@@ -180,7 +180,7 @@ function ProductDetail(props) {
         </Row>
         <Divider />
         <Row gutter={30} style={{ paddingBottom: 16 }}>
-          <Col span={16}>
+          <Col xs={24} lg={16}>
             <div
               className="description"
               style={{
@@ -212,7 +212,7 @@ function ProductDetail(props) {
               )) || <div>Sản phẩm chưa được shop nhập mô tả</div>}
             </div>
           </Col>
-          <Col span={8}>
+          <Col xs={24} lg={8}>
             <div
               style={{
                 boxShadow: 'rgb(60 64 67 / 0.1) 0px 1px 2px 0px, rgb(60 64 67 / 0.15) 0px 2px 6px 2px',
