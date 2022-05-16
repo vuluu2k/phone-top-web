@@ -96,9 +96,16 @@ function PackageManager(props) {
       render: (_, item) => <div>{item?.email}</div>,
     },
     {
+      title: 'Hình thức thanh toán',
+      key: 'isPay',
+      dataIndex: 'isPay',
+      render: (_, item) => <div>{item?.is_pay}</div>,
+    },
+    {
       title: 'Trạng thái',
       key: 'current_status_vi',
       dataIndex: 'current_status_vi',
+      align: 'center',
     },
     {
       title: 'Thao tác',

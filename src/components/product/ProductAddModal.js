@@ -324,6 +324,8 @@ function ProductAddModal(props) {
   };
   const styleTable = { padding: '4px 16px' };
 
+  console.log(fileList[0]);
+
   return (
     <>
       <Modal
