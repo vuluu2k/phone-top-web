@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Input, message as messageAntd } from 'antd';
+import { Table, Button, Input, message as messageAntd, Tooltip } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { RedoOutlined, LoadingOutlined, DeleteOutlined, PhoneOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons';
@@ -96,17 +96,28 @@ function AccountManager(props) {
       dataIndex: 'actions',
       render: (_, item) => (
         <div>
-          <Button onClick={() => window.open(`tel:${item.phone_number}`, '_self')} className="btn-blue ml-8" size="small" icon={<PhoneOutlined />} />
-          <Button onClick={() => window.open(`mailto:${item.email}`, '_self')} className="btn-orange ml-8" size="small" icon={<MailOutlined />} />
-          <Button
-            onClick={() => {
-              setSaveId(item._id);
-              onShowCancel();
-            }}
-            className="btn-red ml-8"
-            size="small"
-            icon={<DeleteOutlined />}
-          />
+          <Tooltip title="Gọi cho chủ số tài khoản">
+            <Button
+              onClick={() => window.open(`tel:${item.phone_number}`, '_self')}
+              className="btn-blue ml-8"
+              size="small"
+              icon={<PhoneOutlined />}
+            />
+          </Tooltip>
+          <Tooltip title="Gửi mail cho chủ số tài khoản">
+            <Button onClick={() => window.open(`mailto:${item.email}`, '_self')} className="btn-orange ml-8" size="small" icon={<MailOutlined />} />
+          </Tooltip>
+          <Tooltip title="Xóa tài khoản">
+            <Button
+              onClick={() => {
+                setSaveId(item._id);
+                onShowCancel();
+              }}
+              className="btn-red ml-8"
+              size="small"
+              icon={<DeleteOutlined />}
+            />
+          </Tooltip>
         </div>
       ),
     },

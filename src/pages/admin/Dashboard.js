@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import { DatePicker, Spin, Row, Col } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { DatePicker, Spin, Row, Col, Button } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import { groupBy } from 'lodash';
 import locale from 'antd/lib/date-picker/locale/vi_VN';
+import { RedoOutlined, LoadingOutlined } from '@ant-design/icons';
 
 import { Admin } from 'components/layouts';
 import { Charts, PieChart, TableCustom } from 'components/Common';
@@ -17,8 +18,6 @@ import { moneyMask } from 'utils/number';
 moment.locale('vi');
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD HH:mm';
-const startDate = dayjs().subtract(7, 'day').startOf().format(dateFormat);
-const endDate = dayjs().startOf().format(dateFormat);
 
 const subtractDate = (subtract, date = moment()) => date.subtract(subtract, 'days');
 
@@ -33,6 +32,13 @@ function Dashboard(props) {
     selectListTurnover: { packages, productCount, productCountOld, packageAcceptCount, packageNotAcceptCount, userCount, requesting, codShipper },
   } = props;
 
+  const [dateTime, setDateTime] = useState({
+    startDate: dayjs().subtract(7, 'day').startOf().format(dateFormat),
+    endDate: dayjs().startOf().format(dateFormat),
+  });
+
+  const { startDate, endDate } = dateTime;
+
   useEffect(() => {
     getTurnover({
       startDate: startDate,
@@ -43,6 +49,7 @@ function Dashboard(props) {
 
   function onChange(value, dateString) {
     getTurnover({ startDate: dateString[0], endDate: dateString[1] });
+    setDateTime({ startDate: dateString[0], endDate: dateString[1] });
   }
 
   const turnoverArray = groupBy(packages, item => {
@@ -63,11 +70,22 @@ function Dashboard(props) {
   const valueCodArray = keyCodArray.map(key => sumMoneyNumber(codArray[key].map(item => item.cod)));
   const sumCod = valueCodArray.reduce((prev, next) => prev + next, 0);
 
-  console.log(codArray);
-
   return (
     <Admin title="Thông kê dữ liệu PhoneTop">
-      <TableCustom title="Thông kê dữ liệu">
+      <TableCustom
+        title="Thông kê dữ liệu"
+        refesh={
+          <Button
+            onClick={() =>
+              getTurnover({
+                startDate: startDate,
+                endDate: endDate,
+              })
+            }
+            style={{ borderRadius: 8 }}
+            icon={(requesting && <LoadingOutlined />) || <RedoOutlined />}
+          />
+        }>
         <RangePicker
           showTime={{ format: 'HH:mm' }}
           onChange={onChange}

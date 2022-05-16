@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Modal, Input, Row, Col, message } from 'antd';
+import { Table, Button, Modal, Input, Row, Col, message, Tooltip } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, CloseCircleOutlined, RedoOutlined, LoadingOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -100,8 +100,12 @@ function CategoryManager(props) {
       dataIndex: 'actions',
       render: (_, item) => (
         <div>
-          <Button className="btn-green" size="small" icon={<EditOutlined />} onClick={() => onShowEdit(item)} />
-          <Button className="btn-red ml-8" size="small" icon={<DeleteOutlined />} onClick={() => onShowDelete()} />
+          <Tooltip title="Sửa danh mục">
+            <Button className="btn-green" size="small" icon={<EditOutlined />} onClick={() => onShowEdit(item)} />
+          </Tooltip>
+          <Tooltip title="Xóa danh mục">
+            <Button className="btn-red ml-8" size="small" icon={<DeleteOutlined />} onClick={() => onShowDelete()} />
+          </Tooltip>
           <ComfirmModal visible={visibleDelete} onClose={() => onHideDelete()} onSubmit={() => onSubmitDelete(item._id)} />
         </div>
       ),
