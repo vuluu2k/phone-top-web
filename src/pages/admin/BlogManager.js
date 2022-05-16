@@ -33,9 +33,9 @@ function BlogManager(props) {
     fileList: [
       {
         uid: '-1',
-        name: 'image.png',
+        name: 'Ảnh sản phẩm',
         status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        url: '',
       },
     ],
     description: '',
@@ -99,9 +99,9 @@ function BlogManager(props) {
       fileList: [
         {
           uid: '-1',
-          name: 'image.png',
+          name: 'Ảnh sản phẩm',
           status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          url: '',
         },
       ],
       description: '',
@@ -144,9 +144,9 @@ function BlogManager(props) {
       fileList: [
         {
           uid: '-1',
-          name: 'image.png',
+          name: 'Ảnh sản phẩm',
           status: 'done',
-          url: item?.image_link || 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          url: item?.image_link || '',
         },
       ],
     });
@@ -157,6 +157,14 @@ function BlogManager(props) {
   };
 
   const onSubmit = () => {
+    if (!fileList[0].thumbUrl) {
+      return messageAntd.error('Vui lòng thêm ảnh sản phẩm');
+    }
+
+    if (!description || !title) {
+      return messageAntd.error('Vui lòng nhập đủ thông tin tiêu đề và mô tả');
+    }
+
     if (stateAction.type === 'post') {
       onSubmitCreate();
     } else {

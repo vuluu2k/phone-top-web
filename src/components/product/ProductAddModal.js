@@ -54,9 +54,9 @@ function ProductAddModal(props) {
     fileList: [
       {
         uid: '-1',
-        name: 'image.png',
+        name: 'Ảnh sản phẩm',
         status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        url: '',
       },
     ],
     sub_categorys: [],
@@ -94,9 +94,9 @@ function ProductAddModal(props) {
       fileList: [
         {
           uid: '-1',
-          name: 'image.png',
+          name: 'Ảnh sản phẩm',
           status: 'done',
-          url: productItem?.image_link || 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          url: productItem?.image_link || '',
         },
       ],
       sub_categorys: [],
@@ -196,6 +196,7 @@ function ProductAddModal(props) {
       !quantity ||
       !ram_capacity ||
       !rom_capacity
+
       // validator.isEmpty(String(profile.screen_pixel)) ||
       // validator.isEmpty(String(profile.screen_technology)) ||
       // validator.isEmpty(String(profile.screen_size)) ||
@@ -210,6 +211,10 @@ function ProductAddModal(props) {
       // validator.isEmpty(String(profile.frequency))
     ) {
       messageAntd.error('Bạn chưa nhập đủ trường dữ liệu');
+      return false;
+    }
+    if (!fileList[0]?.thumbUrl) {
+      messageAntd.error('Vui lòng thêm ảnh sản phẩm');
       return false;
     }
     if (!validator.isNumeric(String(value))) {
@@ -302,9 +307,9 @@ function ProductAddModal(props) {
       fileList: [
         {
           uid: '-1',
-          name: 'image.png',
+          name: 'Ảnh sản phẩm',
           status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          url: '',
         },
       ],
       sub_categorys: [],
