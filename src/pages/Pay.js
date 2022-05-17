@@ -84,7 +84,7 @@ function Pay(props) {
       }
     });
 
-    if (checkQuantity) return;
+    // if (checkQuantity) return;
 
     if (!full_name || !phone_number || !email) {
       return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
