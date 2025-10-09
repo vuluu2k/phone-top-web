@@ -36,7 +36,7 @@ function CartDetail(props) {
                 />
               </div>
             </div>
-            <div className="text-red fw-700 fz-16">{moneyMask(item.value_option)}</div>
+            <div className="text-blue fw-700 fz-16">{moneyMask(item.value_option)}</div>
             <div className="d-flex align-items-center">
               <div className="fw-500">Chọn số lượng:</div>
               <div className="ml-4">
@@ -77,7 +77,7 @@ function CartDetail(props) {
                   </div>
                 </div>
                 <div>{item.name_option}</div>
-                <div className="fw-700" style={{ color: '#D70018 ' }}>
+                <div className="fw-700" style={{ color: '#5684D1 ' }}>
                   {moneyMask(item.value_option)}
                 </div>
               </div>

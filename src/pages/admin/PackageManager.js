@@ -87,7 +87,7 @@ function PackageManager(props) {
       title: 'Giá trị',
       key: 'value',
       dataIndex: 'value',
-      render: (value, item) => <div className="text-red fw-500">{moneyMask(value || 0)}</div>,
+      render: (value, item) => <div className="text-blue fw-500">{moneyMask(value || 0)}</div>,
     },
     {
       title: 'Email',

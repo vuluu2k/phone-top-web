@@ -61,7 +61,7 @@ function Client({ children, ...props }) {
           <div className="d-flex align-items-center justify-content-between" style={{ height: 64 }}>
             <Link to="/home">
               <img
-                src="https://res.cloudinary.com/vuluu/image/upload/v1648835124/PhoneTop/Logo/logo_white_yhtbc6.png"
+                src="https://res.cloudinary.com/ddbyw5qzi/image/upload/v1757671378/Link_fif9mg.png"
                 className="responsive-client-logo"
                 height={64}
                 alt="logo"
@@ -129,7 +129,7 @@ function Client({ children, ...props }) {
           <Spin spinning={requestingCart || requestingProductHome || requestingProduct}>
             {(keySearch && (
               <div style={{ minHeight: ' calc(100vh - 348px)', marginTop: 16 }}>
-                <Row className="text-red fw-700 fz-16 d-flex align-items-center mb-8" onClick={() => goBackHome()}>
+                <Row className="text-blue fw-700 fz-16 d-flex align-items-center mb-8" onClick={() => goBackHome()}>
                   <LeftOutlined style={{ fontSize: 14 }} />
                   Trở về
                 </Row>
@@ -207,7 +207,7 @@ function Client({ children, ...props }) {
             </Footer>{' '}
             <div
               className="w-100 d-flex justify-content-center "
-              style={{ backgroundColor: 'rgba(255, 0, 0,0.8)', color: 'white', padding: '8px 0', fontWeight: 500 }}>
+              style={{ backgroundColor: '#E9E9E9', color: '#6E6E73', padding: '8px 0', fontWeight: 500 }}>
               ©Copyright Created by Lưu Công Quang Vũ
             </div>
           </>
@@ -215,7 +215,7 @@ function Client({ children, ...props }) {
       </Layout>
       <Drawer
         title={
-          <div style={{ color: '#d70018' }}>
+          <div style={{ color: '#5684D1' }}>
             <ShoppingCartOutlined /> Giỏ hàng của bạn
           </div>
         }
@@ -229,12 +229,12 @@ function Client({ children, ...props }) {
         onClose={() => hiddenCart()}
         visible={selectVisibleCart}
         bodyStyle={{ padding: 8 }}
-        headerStyle={{ backgroundColor: '#fee2e2', color: '#d70018', padding: 16 }}
-        // footerStyle={{ backgroundColor: '#fee2e2', padding: 16 }}
+        headerStyle={{ backgroundColor: '#f1f9fe', color: '#5684D1', padding: 16 }}
+        // footerStyle={{ backgroundColor: '#f1f9fe', padding: 16 }}
         footer={
           <div>
             <div className="text-upper fw-700 fz-16 mb-8 text-center">
-              Tổng tiền: <span style={{ color: 'rgb(215, 0, 24)' }}>{sumMoney(products?.map(item => item.quantity * item.value_option))}</span>
+              Tổng tiền: <span style={{ color: '#5684D1' }}>{sumMoney(products?.map(item => item.quantity * item.value_option))}</span>
             </div>
             <div className="d-flex">
               <Button className="btn-red" block onClick={() => hiddenCart()}>
@@ -251,7 +251,7 @@ function Client({ children, ...props }) {
       <MessengerCustomerChat
         pageId="117602084263347"
         appId="690880528891606"
-        themeColor="#d70018"
+        themeColor="#5684D1"
         language="vn"
         loggedInGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?"
         loggedOutGreeting="Xin chào! PhoneTop có thể giúp gì cho bạn ?"

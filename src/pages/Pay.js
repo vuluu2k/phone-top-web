@@ -146,7 +146,7 @@ function Pay(props) {
             <div className="d-flex justify-content-between w-100 fw-700 fz-16">
               {item.name} ({item.name_option})
             </div>
-            <div className="text-red fw-700 fz-16">{moneyMask(item.value_option)}</div>
+            <div className="text-blue fw-700 fz-16">{moneyMask(item.value_option)}</div>
             <div className="d-flex align-items-center">
               <div className="fw-500">Số lượng: {item.quantity}</div>
             </div>
@@ -164,7 +164,7 @@ function Pay(props) {
       <div className="d-flex justify-content-center">
         <div style={{ padding: '16px', maxWidth: 644 }}>
           <div>
-            <div className="  d-flex text-red fz-18 fw-700 align-items-center justify-content-center mb-16" style={{ position: 'relative' }}>
+            <div className="  d-flex text-blue fz-18 fw-700 align-items-center justify-content-center mb-16" style={{ position: 'relative' }}>
               <div
                 className="d-flex align-items-center justify-content-center cursor-pointer"
                 onClick={() => handleGoBack()}
@@ -192,8 +192,8 @@ function Pay(props) {
                 icon={
                   <div
                     className="d-flex align-items-center justify-content-center"
-                    style={{ ...styleIconStep, borderColor: (stateStep >= 0 && '#d70018') || color_disable }}>
-                    <ShoppingCartOutlined style={{ color: (stateStep >= 0 && '#d70018') || color_disable, fontSize: 16 }} />
+                    style={{ ...styleIconStep, borderColor: (stateStep >= 0 && '#5684D1') || color_disable }}>
+                    <ShoppingCartOutlined style={{ color: (stateStep >= 0 && '#5684D1') || color_disable, fontSize: 16 }} />
                   </div>
                 }
               />
@@ -203,8 +203,8 @@ function Pay(props) {
                 icon={
                   <div
                     className="d-flex align-items-center justify-content-center"
-                    style={{ ...styleIconStep, borderColor: (stateStep >= 1 && '#d70018') || color_disable }}>
-                    <IdcardOutlined style={{ color: (stateStep >= 1 && '#d70018') || color_disable, fontSize: 16 }} />
+                    style={{ ...styleIconStep, borderColor: (stateStep >= 1 && '#5684D1') || color_disable }}>
+                    <IdcardOutlined style={{ color: (stateStep >= 1 && '#5684D1') || color_disable, fontSize: 16 }} />
                   </div>
                 }
               />
@@ -214,8 +214,8 @@ function Pay(props) {
                 icon={
                   <div
                     className="d-flex align-items-center justify-content-center"
-                    style={{ ...styleIconStep, borderColor: (stateStep >= 2 && '#d70018') || color_disable }}>
-                    <PercentageOutlined style={{ color: (stateStep >= 2 && '#d70018') || color_disable, fontSize: 16 }} />
+                    style={{ ...styleIconStep, borderColor: (stateStep >= 2 && '#5684D1') || color_disable }}>
+                    <PercentageOutlined style={{ color: (stateStep >= 2 && '#5684D1') || color_disable, fontSize: 16 }} />
                   </div>
                 }
               />
@@ -225,8 +225,8 @@ function Pay(props) {
                 icon={
                   <div
                     className="d-flex align-items-center justify-content-center"
-                    style={{ ...styleIconStep, borderColor: (stateStep >= 3 && '#d70018') || color_disable }}>
-                    <CreditCardOutlined style={{ color: (stateStep >= 3 && '#d70018') || color_disable, fontSize: 16 }} />
+                    style={{ ...styleIconStep, borderColor: (stateStep >= 3 && '#5684D1') || color_disable }}>
+                    <CreditCardOutlined style={{ color: (stateStep >= 3 && '#5684D1') || color_disable, fontSize: 16 }} />
                   </div>
                 }
               />
@@ -236,8 +236,8 @@ function Pay(props) {
                 icon={
                   <div
                     className="d-flex align-items-center justify-content-center"
-                    style={{ ...styleIconStep, borderColor: (stateStep >= 4 && '#d70018') || color_disable }}>
-                    <FiPackage style={{ color: (stateStep >= 4 && '#d70018') || color_disable, fontSize: 16 }} />
+                    style={{ ...styleIconStep, borderColor: (stateStep >= 4 && '#5684D1') || color_disable }}>
+                    <FiPackage style={{ color: (stateStep >= 4 && '#5684D1') || color_disable, fontSize: 16 }} />
                   </div>
                 }
               />
@@ -429,7 +429,7 @@ function Pay(props) {
               <div className="box-shadow p-16 border-radius-16 mt-16 bg-white">
                 <div className="d-flex justify-content-between mb-16 fw-700 fz-16">
                   <div>Tổng tiền tạm tính</div>
-                  <div className="text-red">{sumPay}</div>
+                  <div className="text-blue">{sumPay}</div>
                 </div>
                 <Button className="btn-buy fw-500 fz-16 mb-8" style={{ height: 60, textTransform: 'uppercase' }} block onClick={() => handleNext()}>
                   Tiếp tục

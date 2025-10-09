@@ -74,7 +74,7 @@ function Account(props) {
 
   return (
     <Client>
-      <Row className="text-red fw-700 fz-16 d-flex align-items-center mt-16 mb-8 cursor-pointer" onClick={() => navigate('/home')}>
+      <Row className="text-blue fw-700 fz-16 d-flex align-items-center mt-16 mb-8 cursor-pointer" onClick={() => navigate('/home')}>
         <LeftOutlined style={{ fontSize: 14 }} />
         Trang chủ
       </Row>
@@ -198,7 +198,7 @@ function Account(props) {
                       <div>
                         <strong>Trạng thái đơn hàng :</strong> {item.current_status_vi}
                         {item.isAccess || (
-                          <span className="text-red fw-500">
+                          <span className="text-blue fw-500">
                             {' '}
                             | Đơn hàng chưa được xác nhận thanh toán vui lòng liên hệ với PhoneTop để được xác nhận ngay
                           </span>
@@ -207,7 +207,7 @@ function Account(props) {
 
                       {item?.isRequest?.isTrash && (
                         <div className="fw-500">
-                          Bạn đã gửi yêu cầu hủy đơn này với lí do <span className="text-red">{item?.isRequest?.note}</span>
+                          Bạn đã gửi yêu cầu hủy đơn này với lí do <span className="text-blue">{item?.isRequest?.note}</span>
                           <Button type="link" onClick={() => sendRequest({ codePackage: item?._id, note: '', isTrash: false })}>
                             Hủy yêu cầu
                           </Button>
