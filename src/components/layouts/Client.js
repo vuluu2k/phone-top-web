@@ -208,7 +208,7 @@ function Client({ children, ...props }) {
             <div
               className="w-100 d-flex justify-content-center "
               style={{ backgroundColor: '#E9E9E9', color: '#6E6E73', padding: '8px 0', fontWeight: 500 }}>
-              ©Copyright Created by Lưu Công Quang Vũ
+              
             </div>
           </>
         )}
