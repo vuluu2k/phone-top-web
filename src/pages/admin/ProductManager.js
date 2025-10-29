@@ -9,6 +9,8 @@ import { TableCustom } from 'components/Common';
 import { ProductAddModal } from 'components/product';
 import { productActions } from 'actions';
 import { selectProduct, selectCategory } from 'selectors';
+import axios from 'axios';
+import { API_URL } from 'env_config';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -134,7 +136,39 @@ function ProductManager(props) {
       align: 'center',
       dataIndex: 'quantity',
     },
+    {
+      title: 'Hành động',
+      key: 'action',
+      align: 'center',
+      render: (_, item) => (
+        <div onClick={e => e.stopPropagation()}>
+          <Button size="small" style={{ marginRight: 8 }} onClick={e => duplicateProduct(item._id, e)}>
+            Nhân bản
+          </Button>
+        </div>
+      ),
+    },
   ];
+
+  const duplicateProduct = async (id, e) => {
+    // prevent row click from opening modal
+    if (e && e.stopPropagation) e.stopPropagation();
+    try {
+      const url = `${API_URL}/product/duplicate/${id}`;
+      const response = await axios.post(url);
+      if (!response.data || !response.data.success) {
+        messageAntd.error(response?.data?.message || 'Nhân bản thất bại');
+      } else {
+        messageAntd.success(response.data.message || 'Nhân bản thành công');
+        loadListProduct({ ...dataSearch });
+      }
+      return response.data;
+    } catch (error) {
+      console.error('duplicateProduct error', error);
+      messageAntd.error('Lỗi khi nhân bản sản phẩm');
+      return { success: false, error };
+    }
+  };
 
   const handleFilterProduct = e => {
     if (e?.length > 0 && e[0] === 'category') loadListProduct({ ...dataSearch, category: e[e.length - 2], sub_category: e[e.length - 1] });
