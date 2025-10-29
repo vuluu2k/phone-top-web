@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Image, Button, Cascader, Tag, message as messageAntd, Input, Select } from 'antd';
-import { RedoOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, Image, Button, Cascader, Tag, message as messageAntd, Input, Select, Tooltip } from 'antd';
+import { RedoOutlined, LoadingOutlined, PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -26,6 +26,7 @@ const filterName = [
 function ProductManager(props) {
   const [state, setState] = useState({ visibleAdd: false, visibleProduct: false, productItem: {} });
   const [stateOptionSearch, setStateOptionSearch] = useState('name');
+  const [duplicating, setDuplicating] = useState({});
 
   const {
     actions: { loadListProduct, createProduct, editProduct, deleteProduct },
@@ -140,35 +141,36 @@ function ProductManager(props) {
       title: 'Hành động',
       key: 'action',
       align: 'center',
-      render: (_, item) => (
-        <div onClick={e => e.stopPropagation()}>
-          <Button size="small" style={{ marginRight: 8 }} onClick={e => duplicateProduct(item._id, e)}>
-            Nhân bản
-          </Button>
-        </div>
-      ),
+        render: (_, item) => (
+          <div onClick={e => e.stopPropagation()}>
+            <Tooltip title="Nhân bản">
+              <Button size="small" type="default" icon={<CopyOutlined />} loading={!!duplicating[item._id]} onClick={() => duplicateProduct(item._id)} />
+            </Tooltip>
+          </div>
+        ),
     },
   ];
 
-  const duplicateProduct = async (id, e) => {
-    // prevent row click from opening modal
-    if (e && e.stopPropagation) e.stopPropagation();
-    try {
-      const url = `${API_URL}/product/duplicate/${id}`;
-      const response = await axios.post(url);
-      if (!response.data || !response.data.success) {
-        messageAntd.error(response?.data?.message || 'Nhân bản thất bại');
-      } else {
-        messageAntd.success(response.data.message || 'Nhân bản thành công');
-        loadListProduct({ ...dataSearch });
+    const duplicateProduct = async id => {
+      setDuplicating(prev => ({ ...prev, [id]: true }));
+      try {
+        const url = `${API_URL}/product/duplicate/${id}`;
+        const response = await axios.post(url);
+        if (!response.data || !response.data.success) {
+          messageAntd.error(response?.data?.message || 'Nhân bản thất bại');
+        } else {
+          messageAntd.success(response.data.message || 'Nhân bản thành công');
+          loadListProduct({ ...dataSearch });
+        }
+        return response.data;
+      } catch (error) {
+        console.error('duplicateProduct error', error);
+        messageAntd.error('Lỗi khi nhân bản sản phẩm');
+        return { success: false, error };
+      } finally {
+        setDuplicating(prev => ({ ...prev, [id]: false }));
       }
-      return response.data;
-    } catch (error) {
-      console.error('duplicateProduct error', error);
-      messageAntd.error('Lỗi khi nhân bản sản phẩm');
-      return { success: false, error };
-    }
-  };
+    };
 
   const handleFilterProduct = e => {
     if (e?.length > 0 && e[0] === 'category') loadListProduct({ ...dataSearch, category: e[e.length - 2], sub_category: e[e.length - 1] });
