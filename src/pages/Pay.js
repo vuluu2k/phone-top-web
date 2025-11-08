@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Steps, Row, Col, Input, Radio, Select, Button, message as messageAntd } from 'antd';
 import { ShoppingCartOutlined, IdcardOutlined, PercentageOutlined, CreditCardOutlined, LeftOutlined } from '@ant-design/icons';
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
@@ -56,6 +56,25 @@ function Pay(props) {
   const sumPayNumber = sumMoneyNumber(products?.map(item => item.quantity * item.value_option));
 
   const onChangeInput = e => setStateInfor({ ...stateInfor, [e.target.name]: e.target.value });
+  
+  // Xử lý thanh toán ZaloPay khi đơn hàng được tạo
+  useEffect(() => {
+    if (packageNew?._id && is_pay === 'ZaloPay' && stateStep === 4) {
+      // Tạo thanh toán ZaloPay
+      createZaloPayPayment({
+        package_id: packageNew._id,
+        amount: packageNew.value
+      });
+    }
+  }, [packageNew, stateStep, is_pay, createZaloPayPayment]);
+  
+  // Xử lý khi có dữ liệu thanh toán ZaloPay
+  useEffect(() => {
+    if (zaloPayData && zaloPayData.order_url) {
+      // Mở URL thanh toán ZaloPay trong cửa sổ mới
+      window.open(zaloPayData.order_url, '_blank');
+    }
+  }, [zaloPayData]);
 
   const styleIconStep = { width: 36, height: 36, borderRadius: 18, border: '1px solid #000' };
 
@@ -64,7 +83,7 @@ function Pay(props) {
     else setStateStep(stateStep - 1);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // Validate product quantities
     const validateQuantities = async () => {
       for (const item of products) {
@@ -90,6 +109,14 @@ function Pay(props) {
       return false;
     };
 
+    // Kiểm tra số lượng sản phẩm nếu đang ở bước thanh toán
+    if (stateStep === 3) {
+      const hasQuantityError = await validateQuantities();
+      if (hasQuantityError) {
+        return;
+      }
+    }
+    
     // Basic validations
     if (!full_name || !phone_number || !email) {
       return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
@@ -413,6 +440,31 @@ function Pay(props) {
                           </li>
                           <li>
                             <strong>Cú pháp chuyển khoản:</strong> [Tên cá nhân/tổ chức] + [SĐT mua hàng] + [mã thanh toán 6 kí tự] (nếu có)
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                    {is_pay === 'ZaloPay' && (
+                      <div className="p-8 border-radius-16 mt-8" style={{ backgroundColor: 'white', color: '#155724' }}>
+                        <div className="fw-700">Thông tin thanh toán ZaloPay:</div>
+                        <ul style={{ marginBottom: 0 }}>
+                          <li>Mã đơn hàng: <strong>{packageNew?._id}</strong></li>
+                          <li>Số tiền: <strong>{moneyMask(packageNew.value)}</strong></li>
+                          <li>
+                            <strong>Trạng thái:</strong> {zaloPayData ? 'Đang chờ thanh toán' : 'Chưa thanh toán'}
+                          </li>
+                          <li>
+                            <strong>Lưu ý:</strong> Nếu bạn chưa thanh toán, vui lòng nhấn vào nút bên dưới để thanh toán
+                          </li>
+                          <li className="mt-8">
+                            {zaloPayData && zaloPayData.order_url && (
+                              <Button 
+                                type="primary" 
+                                onClick={() => window.open(zaloPayData.order_url, '_blank')}
+                              >
+                                Thanh toán qua ZaloPay
+                              </Button>
+                            )}
                           </li>
                         </ul>
                       </div>
