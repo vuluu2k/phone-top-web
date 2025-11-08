@@ -26,6 +26,12 @@ import {
   SEND_SHIPPER,
   SEND_SHIPPER_SUCCESS,
   SEND_SHIPPER_ERROR,
+  CREATE_ZALOPAY_PAYMENT,
+  CREATE_ZALOPAY_PAYMENT_SUCCESS,
+  CREATE_ZALOPAY_PAYMENT_ERROR,
+  QUERY_ZALOPAY_STATUS,
+  QUERY_ZALOPAY_STATUS_SUCCESS,
+  QUERY_ZALOPAY_STATUS_ERROR,
 } from 'constants/package';
 
 import { API_URL } from 'env_config';
@@ -59,6 +65,12 @@ function* startRequest(payload) {
       break;
     case SEND_SHIPPER:
       yield call(sendShipper, payload);
+      break;
+    case CREATE_ZALOPAY_PAYMENT:
+      yield call(createZaloPayPayment, payload);
+      break;
+    case QUERY_ZALOPAY_STATUS:
+      yield call(queryZaloPayStatus, payload);
       break;
     default:
       break;
@@ -250,9 +262,73 @@ function* sendShipper({ payload }) {
   }
 }
 
+function* createZaloPayPayment({ payload }) {
+  const { package_id, amount } = payload;
+  const url = `${API_URL}/payment/zalopay/create`;
+  const body = { package_id, amount };
+
+  try {
+    const response = yield call(axios.post, url, body);
+
+    if (!response.data.success) {
+      messageAntd.error(response.data.message);
+      yield put({ type: CREATE_ZALOPAY_PAYMENT_ERROR, ...response.data });
+    } else {
+      messageAntd.success(response.data.message);
+      yield put({ type: CREATE_ZALOPAY_PAYMENT_SUCCESS, ...response.data });
+      
+      // Open ZaloPay payment URL in new window
+      if (response.data.data && response.data.data.order_url) {
+        window.open(response.data.data.order_url, '_blank');
+      }
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: CREATE_ZALOPAY_PAYMENT_ERROR, error: error });
+    return error;
+  }
+}
+
+function* queryZaloPayStatus({ payload }) {
+  const { app_trans_id } = payload;
+  const url = `${API_URL}/payment/zalopay/query?app_trans_id=${app_trans_id}`;
+
+  try {
+    const response = yield call(axios.get, url);
+
+    if (!response.data.success) {
+      yield put({ type: QUERY_ZALOPAY_STATUS_ERROR, ...response.data });
+    } else {
+      yield put({ type: QUERY_ZALOPAY_STATUS_SUCCESS, ...response.data });
+      
+      // If payment is successful, show success message
+      if (response.data.data && response.data.data.return_code === 1) {
+        messageAntd.success('Thanh toán thành công');
+      }
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    yield put({ type: QUERY_ZALOPAY_STATUS_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* packageSagas() {
   yield takeLatest(
-    [LOAD_LIST_PACKAGE, CREATE_PACKAGE, CHECK_PACKAGE, ACCEPT_PACKAGE, DELETE_PACKAGE, GET_TURNOVER, SEND_REQUEST_CANCEL, SEND_SHIPPER],
+    [
+      LOAD_LIST_PACKAGE, 
+      CREATE_PACKAGE, 
+      CHECK_PACKAGE, 
+      ACCEPT_PACKAGE, 
+      DELETE_PACKAGE, 
+      GET_TURNOVER, 
+      SEND_REQUEST_CANCEL, 
+      SEND_SHIPPER,
+      CREATE_ZALOPAY_PAYMENT,
+      QUERY_ZALOPAY_STATUS
+    ],
     startRequest
   );
 }

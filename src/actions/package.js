@@ -7,6 +7,8 @@ import {
   DELETE_PACKAGE,
   SEND_REQUEST_CANCEL,
   SEND_SHIPPER,
+  CREATE_ZALOPAY_PAYMENT,
+  QUERY_ZALOPAY_STATUS,
 } from 'constants/package';
 
 function loadListPackage(payload) {
@@ -65,6 +67,31 @@ function sendShipper(payload) {
   };
 }
 
-const packageActions = { loadListPackage, createPackage, checkPackage, acceptPackage, getTurnover, deletePackage, sendRequest, sendShipper };
+function createZaloPayPayment(payload) {
+  return {
+    type: CREATE_ZALOPAY_PAYMENT,
+    payload,
+  };
+}
+
+function queryZaloPayStatus(payload) {
+  return {
+    type: QUERY_ZALOPAY_STATUS,
+    payload,
+  };
+}
+
+const packageActions = { 
+  loadListPackage, 
+  createPackage, 
+  checkPackage, 
+  acceptPackage, 
+  getTurnover, 
+  deletePackage, 
+  sendRequest, 
+  sendShipper,
+  createZaloPayPayment,
+  queryZaloPayStatus
+};
 
 export default packageActions;

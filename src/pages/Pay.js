@@ -4,6 +4,7 @@ import { ShoppingCartOutlined, IdcardOutlined, PercentageOutlined, CreditCardOut
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
 import { FiPackage } from 'react-icons/fi';
 import { MdPayment } from 'react-icons/md';
+import { SiZalo } from 'react-icons/si';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
 import { BsFillCartPlusFill } from 'react-icons/bs';
 import { Link, useNavigate } from 'react-router-dom';
@@ -26,10 +27,11 @@ const color_disable = '#0e2431';
 function Pay(props) {
   const navigate = useNavigate();
   const {
-    actions: { createPackage, clearCart },
+    actions: { createPackage, clearCart, createZaloPayPayment },
     selectAuthStatus: { user },
     selectCartInformation: { products },
     selectListPackage: { packageNew },
+    selectZaloPayPayment: { data: zaloPayData },
   } = props;
   const [stateStep, setStateStep] = useState(1);
   const [stateRadio, setStateRadio] = useState(1);
@@ -63,29 +65,32 @@ function Pay(props) {
   };
 
   const handleNext = () => {
-    const checkQuantity = products.map(async item => {
-      try {
-        const response = await axios.get(`${API_URL}/product/${item?.product_id}`);
-        if (!response.data?.success) {
-          messageAntd.error(response.data.message);
-          return true;
-        }
+    // Validate product quantities
+    const validateQuantities = async () => {
+      for (const item of products) {
+        try {
+          const response = await axios.get(`${API_URL}/product/${item?.product_id}`);
+          if (!response.data?.success) {
+            messageAntd.error(response.data.message);
+            return true;
+          }
 
-        const result = response.data?.product;
-        if (result.quantity < item.quantity) {
-          messageAntd.error(
-            `Sản phẩm ${item.name} số lượng chỉ còn ${result.quantity} quý khách thông cảm điều chỉnh lại số lượng hoặc liên hệ với PhoneTop`
-          );
+          const result = response.data?.product;
+          if (result.quantity < item.quantity) {
+            messageAntd.error(
+              `Sản phẩm ${item.name} số lượng chỉ còn ${result.quantity} quý khách thông cảm điều chỉnh lại số lượng hoặc liên hệ với PhoneTop`
+            );
+            return true;
+          }
+        } catch (error) {
+          console.error(error);
           return true;
         }
-        return false;
-      } catch (error) {
-        console.error(error);
       }
-    });
+      return false;
+    };
 
-    // if (checkQuantity) return;
-
+    // Basic validations
     if (!full_name || !phone_number || !email) {
       return messageAntd.error('Bạn chưa nhập đủ trường thông tin cá nhân');
     }
@@ -99,11 +104,16 @@ function Pay(props) {
       return messageAntd.error('Bạn chưa nhập đầy đủ/lựa chọn địa chỉ nhận hàng');
     }
 
+    // Update address
     setStateInfor({ ...stateInfor, full_address: stateRadio === 1 ? stateStore : `${address}-${district}-${provice}` });
+    
+    // Handle payment step
     if (stateStep === 3) {
       if (!is_pay) {
         return messageAntd.error('Vui lòng chọn phương thức thanh toán');
       }
+      
+      // Create package
       createPackage({
         user_id: user._id,
         products,
@@ -112,11 +122,13 @@ function Pay(props) {
         email,
         voucher,
         value: sumPayNumber,
-        address: full_address,
+        address: full_address || (stateRadio === 1 ? stateStore : `${address}-${district}-${provice}`),
         is_access: false,
         note,
         is_pay,
       });
+      
+      // Clear cart
       clearCart({ user_id: user._id });
     }
 
@@ -351,8 +363,9 @@ function Pay(props) {
                   <div className="p-16">
                     <div className="mt-8 mb-8 fz-16 fw-500">Chọn hình thức thanh toán</div>
                     <Row gutter={4}>
-                      <Col span={12}>{renderItemPay('Thanh toán tại cửa hàng', <SiHomeassistantcommunitystore />)}</Col>
-                      <Col span={12}>{renderItemPay('Thanh toán chuyển khoản', <MdPayment />)}</Col>
+                      <Col span={8}>{renderItemPay('Thanh toán tại cửa hàng', <SiHomeassistantcommunitystore />)}</Col>
+                      <Col span={8}>{renderItemPay('Thanh toán chuyển khoản', <MdPayment />)}</Col>
+                      <Col span={8}>{renderItemPay('ZaloPay', <SiZalo />)}</Col>
                     </Row>
                   </div>
                 </>
@@ -447,6 +460,12 @@ function Pay(props) {
 }
 
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ ...packageActions, ...cartActions }, dispatch) });
-const mapStateToProps = state => ({ ...selectCart(state), ...selectAuth(state), ...selectPackage(state) });
+const mapStateToProps = state => ({ 
+  ...selectCart(state), 
+  ...selectAuth(state), 
+  ...selectPackage(state),
+  selectZaloPayPayment: state.package.zalopay_payment,
+  selectZaloPayStatus: state.package.zalopay_status,
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pay);

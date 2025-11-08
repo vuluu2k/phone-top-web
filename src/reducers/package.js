@@ -23,6 +23,12 @@ import {
   SEND_SHIPPER,
   SEND_SHIPPER_ERROR,
   SEND_SHIPPER_SUCCESS,
+  CREATE_ZALOPAY_PAYMENT,
+  CREATE_ZALOPAY_PAYMENT_SUCCESS,
+  CREATE_ZALOPAY_PAYMENT_ERROR,
+  QUERY_ZALOPAY_STATUS,
+  QUERY_ZALOPAY_STATUS_SUCCESS,
+  QUERY_ZALOPAY_STATUS_ERROR,
 } from 'constants/package';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -56,6 +62,22 @@ const initialState = {
     packageAcceptCount: 0,
     packageNotAcceptCount: 0,
     userCount: 0,
+  },
+
+  zalopay_payment: {
+    success: false,
+    message: '',
+    requesting: false,
+    data: null,
+    app_trans_id: '',
+    order_url: '',
+  },
+
+  zalopay_status: {
+    success: false,
+    message: '',
+    requesting: false,
+    data: null,
   },
 };
 
@@ -204,6 +226,20 @@ const packageReducer = (state = initialState, payload) => {
       return handleSendShipper(state, payload);
     case SEND_SHIPPER_ERROR:
       return handleError(state, 'list_package', payload.message);
+
+    case CREATE_ZALOPAY_PAYMENT:
+      return handleRequest(state, 'zalopay_payment', payload);
+    case CREATE_ZALOPAY_PAYMENT_SUCCESS:
+      return handleSuccess(state, 'zalopay_payment', payload);
+    case CREATE_ZALOPAY_PAYMENT_ERROR:
+      return handleError(state, 'zalopay_payment', payload.message);
+
+    case QUERY_ZALOPAY_STATUS:
+      return handleRequest(state, 'zalopay_status', payload);
+    case QUERY_ZALOPAY_STATUS_SUCCESS:
+      return handleSuccess(state, 'zalopay_status', payload);
+    case QUERY_ZALOPAY_STATUS_ERROR:
+      return handleError(state, 'zalopay_status', payload.message);
 
     default:
       return state;
