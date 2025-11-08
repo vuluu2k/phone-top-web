@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Image, Button, Cascader, Tag, message as messageAntd, Input, Select } from 'antd';
-import { RedoOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, Image, Button, Cascader, Tag, message as messageAntd, Input, Select, Tooltip } from 'antd';
+import { RedoOutlined, LoadingOutlined, PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -9,6 +9,8 @@ import { TableCustom } from 'components/Common';
 import { ProductAddModal } from 'components/product';
 import { productActions } from 'actions';
 import { selectProduct, selectCategory } from 'selectors';
+import axios from 'axios';
+import { API_URL } from 'env_config';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -24,6 +26,7 @@ const filterName = [
 function ProductManager(props) {
   const [state, setState] = useState({ visibleAdd: false, visibleProduct: false, productItem: {} });
   const [stateOptionSearch, setStateOptionSearch] = useState('name');
+  const [duplicating, setDuplicating] = useState({});
 
   const {
     actions: { loadListProduct, createProduct, editProduct, deleteProduct },
@@ -134,7 +137,40 @@ function ProductManager(props) {
       align: 'center',
       dataIndex: 'quantity',
     },
+    {
+      title: 'Hành động',
+      key: 'action',
+      align: 'center',
+        render: (_, item) => (
+          <div onClick={e => e.stopPropagation()}>
+            <Tooltip title="Nhân bản">
+              <Button size="small" type="default" icon={<CopyOutlined />} loading={!!duplicating[item._id]} onClick={() => duplicateProduct(item._id)} />
+            </Tooltip>
+          </div>
+        ),
+    },
   ];
+
+    const duplicateProduct = async id => {
+      setDuplicating(prev => ({ ...prev, [id]: true }));
+      try {
+        const url = `${API_URL}/product/duplicate/${id}`;
+        const response = await axios.post(url);
+        if (!response.data || !response.data.success) {
+          messageAntd.error(response?.data?.message || 'Nhân bản thất bại');
+        } else {
+          messageAntd.success(response.data.message || 'Nhân bản thành công');
+          loadListProduct({ ...dataSearch });
+        }
+        return response.data;
+      } catch (error) {
+        console.error('duplicateProduct error', error);
+        messageAntd.error('Lỗi khi nhân bản sản phẩm');
+        return { success: false, error };
+      } finally {
+        setDuplicating(prev => ({ ...prev, [id]: false }));
+      }
+    };
 
   const handleFilterProduct = e => {
     if (e?.length > 0 && e[0] === 'category') loadListProduct({ ...dataSearch, category: e[e.length - 2], sub_category: e[e.length - 1] });

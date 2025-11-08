@@ -25,9 +25,9 @@ body {
   $neutral-5: #d9d9d9;
   $neutral-4: #f0f0f0;
   $neutral-3: #f5f5f5;
-  $dust-red-7: #cf1322;
-  $dust-red-6: #f5222d;
-  $dust-red-3: #ffa39e;
+  $dust-red-7: #0C6398;
+  $dust-red-6: #1BA1E3;
+  $dust-red-3: #bee4f9;
   $dust-red-1: #fff1f0;
   $volcano-7: #d4380d;
   $volcano-3: #ffbb96;
@@ -41,10 +41,10 @@ body {
   }
 
   .ant-radio-checked .ant-radio-inner {
-    border-color: #d70018;
+    border-color: #0C6398;
   }
   .ant-radio-inner::after {
-    background-color: #d70018;
+    background-color: #0C6398;
   }
 
   .bg-white {
@@ -56,11 +56,11 @@ body {
     display: block;
 
     .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
-      background-color: #d70018;
+      background-color: #0C6398;
     }
     .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title,
     .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
-      color: #d70018;
+      color: #0C6398;
     }
     .ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-tail::after,
     .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-tail::after {
@@ -196,8 +196,8 @@ body {
     font-weight: 450;
   }
 
-  .text-red {
-    color: #d70018;
+  .text-blue {
+    color: #5684D1;
   }
 
   .text-white {
@@ -211,8 +211,7 @@ body {
     padding: 16px 16px 0 16px;
     border-radius: 10px;
     margin: 8px 0 16px;
-    background: linear-gradient(to bottom, #2d0798, #c114e0);
-  }
+    background: #1BA1E3; }
 
   //
 

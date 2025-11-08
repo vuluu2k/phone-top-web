@@ -83,7 +83,7 @@ function ProductDetail(props) {
 
   const renderItemProfile = (title, content, color, border) => {
     return (
-      <Row style={{ backgroundColor: color || 'white', padding: 8, borderBottomRightRadius: border, borderBottomLeftRadius: border }}>
+      <Row style={{ backgroundColor: color || 'white', padding: 16, borderBottomRightRadius: border, borderBottomLeftRadius: border }}>
         <Col span={6}>{title}</Col>
         <Col span={18}>
           <div style={{ marginLeft: 4 }}>{content}</div>
@@ -95,7 +95,7 @@ function ProductDetail(props) {
   return (
     <Client>
       <Spin spinning={requesting}>
-        <Row className="text-red fw-700 fz-16 d-flex align-items-center mt-16 mb-8" onClick={() => navigate('/home')}>
+        <Row className="text-blue fw-700 fz-16 d-flex align-items-center mt-16 mb-8" onClick={() => navigate('/home')}>
           <LeftOutlined style={{ fontSize: 14 }} />
           Trở về
         </Row>
@@ -148,7 +148,7 @@ function ProductDetail(props) {
                 </div>
                 <div>
                   <AccountBookOutlined style={{ marginRight: 8 }} />
-                  Số lượng còn trong kho: <span className="text-red">{(quantity <= 0 && 'Hết hàng') || quantity}</span>
+                  Số lượng còn trong kho: <span className="text-blue">{(quantity <= 0 && 'Hết hàng') || quantity}</span>
                 </div>
               </div>
             </div>
@@ -186,10 +186,10 @@ function ProductDetail(props) {
               style={{
                 boxShadow: 'rgb(60 64 67 / 0.1) 0px 1px 2px 0px, rgb(60 64 67 / 0.15) 0px 2px 6px 2px',
                 borderRadius: 16,
-                padding: 8,
+                padding: 16,
                 backgroundColor: 'white',
               }}>
-              <div className="text-center text-red fw-700 fz-16">ĐẶC ĐIỂM NỔI BẬT</div>
+              <div className="text-center text-blue fw-700 fz-16">ĐẶC ĐIỂM NỔI BẬT</div>
               {(description && (
                 <>
                   <div
@@ -219,7 +219,7 @@ function ProductDetail(props) {
                 borderRadius: 16,
                 backgroundColor: 'rgba(255, 255, 255)',
               }}>
-              <div className="fw-700 p-8">THÔNG SỐ KĨ THUẬT</div>
+              <div className="fw-700 p-16">THÔNG SỐ KĨ THUẬT</div>
               {renderItemProfile('Kích thước màn hình', (profile?.screen_size && `${profile.screen_size} inches`) || text_empty, '#F2F2F2')}
               {renderItemProfile('Công nghệ màn hình', (profile?.screen_technology && `${profile.screen_technology} inches`) || text_empty)}
               {renderItemProfile('Camera sau', (profile?.camera_font && `${profile.camera_font} inches`) || text_empty, '#F2F2F2')}

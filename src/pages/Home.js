@@ -65,7 +65,7 @@ function Home(props) {
     <Client>
       {(products.length > 0 && (
         <div>
-          <Row className="text-red fw-700 fz-16 d-flex align-items-center mt-16 mb-8" onClick={() => goBackHome()}>
+          <Row className="text-blue fw-700 fz-16 d-flex align-items-center mt-16 mb-8" onClick={() => goBackHome()}>
             <LeftOutlined style={{ fontSize: 14 }} />
             Trở về
           </Row>

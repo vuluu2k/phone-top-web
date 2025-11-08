@@ -21,13 +21,13 @@ $neutral-6: #bfbfbf;
 $neutral-5: #d9d9d9;
 $neutral-4: #f0f0f0;
 $neutral-3: #f5f5f5;
-$dust-red-7: #cf1322;
-$dust-red-6: #f5222d;
-$dust-red-3: #ffa39e;
-$dust-red-1: #fff1f0;
-$volcano-7: #d4380d;
-$volcano-3: #ffbb96;
-$volcano-1: #fff2e8;
+$dust-red-7: #5684D1;
+$dust-red-6: #1ba1e3;
+$dust-red-3: #bee4f9;
+$dust-red-1: #f1f9fe;
+$volcano-7: #1ba1e3;
+$volcano-3: #84cef5;
+$volcano-1: #f1f9fe;
 $calendula-gold-7: #d48806;
 $calendula-gold-4: #ffd666;
 $sunset-orange-1: #fff7e6;
@@ -59,7 +59,7 @@ body {
     .ant-layout-header {
       padding: 0 200px;
       line-height: 20px;
-      background: #d70018;
+      background: linear-gradient(90deg, #9168c0 23%, #5684d1 56%, #1ba1e3 83%);
 
       &.header {
         position: fixed;
@@ -77,17 +77,18 @@ body {
     }
 
     .ant-layout-footer {
-      background: #d70018;
-      color: white;
+      background: #E9E9E9;
+      color: #6E6E73 !important
+    ;
     }
 
-    .layout-carousel {
-      box-shadow: rgb(60 64 67 / 0.1) 0px 1px 2px 0px, rgb(60 64 67 / 0.15) 0px 2px 6px 2px;
-      border: 1px solid #f0f0f0;
-      margin-top: 16px;
-      padding: 8px;
-      border-radius: 8px;
-    }
+   .layout-carousel {
+  box-shadow: 2px 4px 12px 0 rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+  margin-top: 16px;
+  padding: 8px;
+  border-radius: 8px;
+}
 
     .ant-input-affix-wrapper {
       border-radius: 8px;
