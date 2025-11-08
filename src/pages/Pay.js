@@ -141,7 +141,7 @@ function Pay(props) {
       }
       
       // Create package
-      createPackage({
+      const resultCreatePackage = await createPackage({
         user_id: user._id,
         products,
         full_name,
@@ -154,6 +154,12 @@ function Pay(props) {
         note,
         is_pay,
       });
+
+      console.log('resultCreatePackage::::::::', resultCreatePackage)
+
+      if (!resultCreatePackage.success) {
+        return messageAntd.error(resultCreatePackage.message);
+      }
       
       // Clear cart
       clearCart({ user_id: user._id });
