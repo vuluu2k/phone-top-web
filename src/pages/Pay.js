@@ -90,10 +90,11 @@ function Pay(props) {
   useEffect(() => {
     console.log('ZaloPay Data Full:', zaloPayData); // DEBUG
     
-    // Backend returns: { success: true, data: { order_url, app_trans_id, ... }, packageNew: {...} }
-    const orderUrl = zaloPayData?.data?.order_url;
-    const appTransId = zaloPayData?.data?.app_trans_id;
-    const packageId = zaloPayData?.data?.package_id || zaloPayData?.packageNew?._id;
+    // zaloPayData is already the 'data' object from the API response
+    // Structure: { order_url, app_trans_id, package_id, ... }
+    const orderUrl = zaloPayData?.order_url;
+    const appTransId = zaloPayData?.app_trans_id;
+    const packageId = zaloPayData?.package_id;
     
     console.log('Extracted:', { orderUrl, appTransId, packageId }); // DEBUG
     
@@ -541,11 +542,11 @@ function Pay(props) {
                             <strong>Trạng thái:</strong> {packageNew?.zalopay_transaction?.status === 'completed' ? '✅ Đã thanh toán' : '⏳ Chờ thanh toán'}
                           </li>
                           <li className="mt-8">
-                            {zaloPayData && zaloPayData.data && zaloPayData.data.order_url && (
+                            {zaloPayData && zaloPayData.order_url && (
                               <div className="d-flex" style={{ gap: '8px' }}>
                                 <Button 
                                   type="primary" 
-                                  onClick={() => window.open(zaloPayData.data.order_url, '_blank')}
+                                  onClick={() => window.open(zaloPayData.order_url, '_blank')}
                                 >
                                   Thanh toán qua ZaloPay
                                 </Button>
