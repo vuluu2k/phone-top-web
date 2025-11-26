@@ -491,8 +491,13 @@ function Pay(props) {
                     Cảm ơn Quý khách hàng đã chọn mua hàng tại PhoneTop. Trong 15 phút, PhoneTop sẽ SMS hoặc gọi để xác nhận đơn hàng. * Các đơn hàng
                     từ 21h30 tối tới 8h sáng hôm sau. PhoneTop sẽ liên hệ với Quý khách trước 10h trưa cùng ngày
                   </div>
-                  <div className="box-shadow p-16 border-radius-16" style={{ backgroundColor: '#d4edda', color: '#155724' }}>
-                    <div className="fz-16 fw-700 text-upper text-center mb-b ">ĐẶT HÀNG THÀNH CÔNG</div>
+                  <div className="box-shadow p-16 border-radius-16" style={{ 
+                    backgroundColor: (is_pay === 'ZaloPay' && packageNew?.zalopay_transaction?.status !== 'completed') ? '#fff3cd' : '#d4edda', 
+                    color: (is_pay === 'ZaloPay' && packageNew?.zalopay_transaction?.status !== 'completed') ? '#856404' : '#155724' 
+                  }}>
+                    <div className="fz-16 fw-700 text-upper text-center mb-b ">
+                      {(is_pay === 'ZaloPay' && packageNew?.zalopay_transaction?.status !== 'completed') ? 'ĐƠN HÀNG ĐANG CHỜ THANH TOÁN' : 'ĐẶT HÀNG THÀNH CÔNG'}
+                    </div>
                     <div>
                       Mã đơn hàng: <strong>{packageNew?._id || '#000'}</strong>
                     </div>
@@ -535,6 +540,9 @@ function Pay(props) {
                     {is_pay === 'ZaloPay' && (
                       <div className="p-8 border-radius-16 mt-8" style={{ backgroundColor: 'white', color: '#155724' }}>
                         <div className="fw-700">Thông tin thanh toán ZaloPay:</div>
+                        <div className="mb-8 text-danger fw-500">
+                          {packageNew?.zalopay_transaction?.status !== 'completed' && 'Vui lòng hoàn tất thanh toán trong cửa sổ ZaloPay vừa mở ra.'}
+                        </div>
                         <ul style={{ marginBottom: 0 }}>
                           <li>Mã đơn hàng: <strong>{packageNew?._id}</strong></li>
                           <li>Số tiền: <strong>{moneyMask(packageNew.value)}</strong></li>
