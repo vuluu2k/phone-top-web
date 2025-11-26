@@ -29,6 +29,9 @@ import {
   QUERY_ZALOPAY_STATUS,
   QUERY_ZALOPAY_STATUS_SUCCESS,
   QUERY_ZALOPAY_STATUS_ERROR,
+  HANDLE_ZALOPAY_RETURN,
+  HANDLE_ZALOPAY_RETURN_SUCCESS,
+  HANDLE_ZALOPAY_RETURN_ERROR,
 } from 'constants/package';
 
 import { handleRequest, handleSuccess, handleError } from 'utils/handleReducer';
@@ -239,6 +242,13 @@ const packageReducer = (state = initialState, payload) => {
     case QUERY_ZALOPAY_STATUS_SUCCESS:
       return handleSuccess(state, 'zalopay_status', payload);
     case QUERY_ZALOPAY_STATUS_ERROR:
+      return handleError(state, 'zalopay_status', payload.message);
+
+    case HANDLE_ZALOPAY_RETURN:
+      return handleRequest(state, 'zalopay_status', payload);
+    case HANDLE_ZALOPAY_RETURN_SUCCESS:
+      return handleSuccess(state, 'zalopay_status', payload);
+    case HANDLE_ZALOPAY_RETURN_ERROR:
       return handleError(state, 'zalopay_status', payload.message);
 
     default:

@@ -32,6 +32,9 @@ import {
   QUERY_ZALOPAY_STATUS,
   QUERY_ZALOPAY_STATUS_SUCCESS,
   QUERY_ZALOPAY_STATUS_ERROR,
+  HANDLE_ZALOPAY_RETURN,
+  HANDLE_ZALOPAY_RETURN_SUCCESS,
+  HANDLE_ZALOPAY_RETURN_ERROR,
 } from 'constants/package';
 
 import { API_URL } from 'env_config';
@@ -71,6 +74,9 @@ function* startRequest(payload) {
       break;
     case QUERY_ZALOPAY_STATUS:
       yield call(queryZaloPayStatus, payload);
+      break;
+    case HANDLE_ZALOPAY_RETURN:
+      yield call(handleZaloPayReturn, payload);
       break;
     default:
       break;
@@ -267,8 +273,12 @@ function* createZaloPayPayment({ payload }) {
   const url = `${API_URL}/payment/zalopay/create`;
   const body = { package_id, amount };
 
+  console.log('Saga createZaloPayPayment called:', { package_id, amount, url }); // DEBUG
+
   try {
     const response = yield call(axios.post, url, body);
+
+    console.log('ZaloPay API Response:', response.data); // DEBUG
 
     if (!response.data.success) {
       messageAntd.error(response.data.message);
@@ -276,11 +286,7 @@ function* createZaloPayPayment({ payload }) {
     } else {
       messageAntd.success(response.data.message);
       yield put({ type: CREATE_ZALOPAY_PAYMENT_SUCCESS, ...response.data });
-      
-      // Open ZaloPay payment URL in new window
-      if (response.data.data && response.data.data.order_url) {
-        window.open(response.data.data.order_url, '_blank');
-      }
+      // Popup will be opened by Pay.js component useEffect
     }
     return response.data;
   } catch (error) {
@@ -315,6 +321,43 @@ function* queryZaloPayStatus({ payload }) {
   }
 }
 
+function* handleZaloPayReturn({ payload }) {
+  const { app_trans_id, package_id } = payload;
+  const url = `${API_URL}/payment/zalopay/return`;
+  const body = { app_trans_id, package_id };
+
+  try {
+    const response = yield call(axios.post, url, body);
+
+    if (!response.data.success) {
+      // Payment failed - package has been deleted
+      messageAntd.error(response.data.message || 'Thanh toán thất bại. Đơn hàng đã bị hủy.');
+      yield put({ type: HANDLE_ZALOPAY_RETURN_ERROR, ...response.data });
+      
+      // Clear localStorage
+      localStorage.removeItem('zalopay_transaction');
+      
+      // Redirect to home or cart after 2 seconds
+      setTimeout(() => {
+        window.location.href = '/cart';
+      }, 2000);
+    } else {
+      // Payment successful
+      messageAntd.success(response.data.message);
+      yield put({ type: HANDLE_ZALOPAY_RETURN_SUCCESS, ...response.data });
+      
+      // Clear localStorage
+      localStorage.removeItem('zalopay_transaction');
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    messageAntd.error('Lỗi khi kiểm tra trạng thái thanh toán');
+    yield put({ type: HANDLE_ZALOPAY_RETURN_ERROR, error: error });
+    return error;
+  }
+}
+
 export function* packageSagas() {
   yield takeLatest(
     [
@@ -327,7 +370,8 @@ export function* packageSagas() {
       SEND_REQUEST_CANCEL, 
       SEND_SHIPPER,
       CREATE_ZALOPAY_PAYMENT,
-      QUERY_ZALOPAY_STATUS
+      QUERY_ZALOPAY_STATUS,
+      HANDLE_ZALOPAY_RETURN
     ],
     startRequest
   );

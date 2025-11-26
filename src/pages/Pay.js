@@ -57,24 +57,90 @@ function Pay(props) {
 
   const onChangeInput = e => setStateInfor({ ...stateInfor, [e.target.name]: e.target.value });
   
-  // Xử lý thanh toán ZaloPay khi đơn hàng được tạo
+  // Auto-check payment status when user returns from ZaloPay
   useEffect(() => {
-    if (packageNew?._id && is_pay === 'ZaloPay' && stateStep === 4) {
-      // Tạo thanh toán ZaloPay
-      createZaloPayPayment({
-        package_id: packageNew._id,
-        amount: packageNew.value
-      });
-    }
-  }, [packageNew, stateStep, is_pay, createZaloPayPayment]);
+    const checkPaymentStatus = () => {
+      const savedTransaction = localStorage.getItem('zalopay_transaction');
+      if (savedTransaction && stateStep === 4 && is_pay === 'ZaloPay') {
+        try {
+          const transaction = JSON.parse(savedTransaction);
+          const { app_trans_id, package_id, timestamp } = transaction;
+          
+          // Only check if transaction is within 30 minutes
+          if (Date.now() - timestamp < 30 * 60 * 1000) {
+            console.log('Auto-checking payment status...', { app_trans_id, package_id });
+            // Call API to check status
+            props.actions.handleZaloPayReturn({ app_trans_id, package_id });
+          } else {
+            // Transaction too old, clear it
+            localStorage.removeItem('zalopay_transaction');
+          }
+        } catch (error) {
+          console.error('Error checking payment status:', error);
+        }
+      }
+    };
+
+    // Check after a short delay to ensure component is mounted
+    const timer = setTimeout(checkPaymentStatus, 500);
+    return () => clearTimeout(timer);
+  }, [stateStep, is_pay, props.actions]);
   
   // Xử lý khi có dữ liệu thanh toán ZaloPay
   useEffect(() => {
-    if (zaloPayData && zaloPayData.order_url) {
+    console.log('ZaloPay Data Full:', zaloPayData); // DEBUG
+    
+    // Backend returns: { success: true, data: { order_url, app_trans_id, ... }, packageNew: {...} }
+    const orderUrl = zaloPayData?.data?.order_url;
+    const appTransId = zaloPayData?.data?.app_trans_id;
+    const packageId = zaloPayData?.data?.package_id || zaloPayData?.packageNew?._id;
+    
+    console.log('Extracted:', { orderUrl, appTransId, packageId }); // DEBUG
+    
+    if (orderUrl && appTransId && packageId) {
+      console.log('Opening ZaloPay URL:', orderUrl); // DEBUG
+      
+      // Lưu thông tin giao dịch vào localStorage để kiểm tra sau
+      localStorage.setItem('zalopay_transaction', JSON.stringify({
+        app_trans_id: appTransId,
+        package_id: packageId,
+        timestamp: Date.now()
+      }));
+      
       // Mở URL thanh toán ZaloPay trong cửa sổ mới
-      window.open(zaloPayData.order_url, '_blank');
+      const newWindow = window.open(orderUrl, '_blank');
+      
+      if (!newWindow) {
+        messageAntd.warning('Trình duyệt đã chặn popup. Vui lòng cho phép popup hoặc click vào nút "Thanh toán qua ZaloPay" bên dưới.');
+      }
     }
   }, [zaloPayData]);
+
+  // Kiểm tra trạng thái thanh toán khi component mount (user quay lại từ ZaloPay)
+  useEffect(() => {
+    const checkPaymentStatus = () => {
+      const savedTransaction = localStorage.getItem('zalopay_transaction');
+      if (savedTransaction && stateStep === 4) {
+        try {
+          const transaction = JSON.parse(savedTransaction);
+          const { app_trans_id, package_id, timestamp } = transaction;
+          
+          // Chỉ kiểm tra nếu giao dịch trong vòng 30 phút
+          if (Date.now() - timestamp < 30 * 60 * 1000) {
+            // Gọi API để kiểm tra trạng thái
+            props.actions.handleZaloPayReturn({ app_trans_id, package_id });
+            
+            // Xóa thông tin đã lưu
+            localStorage.removeItem('zalopay_transaction');
+          }
+        } catch (error) {
+          console.error('Error checking payment status:', error);
+        }
+      }
+    };
+
+    checkPaymentStatus();
+  }, [stateStep, props.actions]);
 
   const styleIconStep = { width: 36, height: 36, borderRadius: 18, border: '1px solid #000' };
 
@@ -140,25 +206,40 @@ function Pay(props) {
         return messageAntd.error('Vui lòng chọn phương thức thanh toán');
       }
       
-      // Create package
-      const resultCreatePackage = await createPackage({
-        user_id: user._id,
-        products,
-        full_name,
-        phone_number,
-        email,
-        voucher,
-        value: sumPayNumber,
-        address: full_address || (stateRadio === 1 ? stateStore : `${address}-${district}-${provice}`),
-        is_access: false,
-        note,
-        is_pay,
-      });
+      // If ZaloPay payment, create package + payment in one call
+      if (is_pay === 'ZaloPay') {
+        console.log('Creating package with ZaloPay payment...');
+        createZaloPayPayment({
+          user_id: user._id,
+          products,
+          full_name,
+          phone_number,
+          email,
+          voucher,
+          value: sumPayNumber,
+          address: full_address || (stateRadio === 1 ? stateStore : `${address}-${district}-${provice}`),
+          note,
+        });
+      } else {
+        // For other payment methods, create package normally
+        const resultCreatePackage = await createPackage({
+          user_id: user._id,
+          products,
+          full_name,
+          phone_number,
+          email,
+          voucher,
+          value: sumPayNumber,
+          address: full_address || (stateRadio === 1 ? stateStore : `${address}-${district}-${provice}`),
+          is_access: false,
+          note,
+          is_pay,
+        });
 
-      console.log('resultCreatePackage::::::::', resultCreatePackage)
+        console.log('resultCreatePackage::::::::', resultCreatePackage)
 
-      if (!resultCreatePackage.success) {
-        return messageAntd.error(resultCreatePackage.message);
+        // Note: resultCreatePackage is a Redux action, not the actual result
+        // The actual package will be available in packageNew after Redux updates
       }
       
       // Clear cart
@@ -457,19 +538,31 @@ function Pay(props) {
                           <li>Mã đơn hàng: <strong>{packageNew?._id}</strong></li>
                           <li>Số tiền: <strong>{moneyMask(packageNew.value)}</strong></li>
                           <li>
-                            <strong>Trạng thái:</strong> {zaloPayData ? 'Đang chờ thanh toán' : 'Chưa thanh toán'}
-                          </li>
-                          <li>
-                            <strong>Lưu ý:</strong> Nếu bạn chưa thanh toán, vui lòng nhấn vào nút bên dưới để thanh toán
+                            <strong>Trạng thái:</strong> {packageNew?.zalopay_transaction?.status === 'completed' ? '✅ Đã thanh toán' : '⏳ Chờ thanh toán'}
                           </li>
                           <li className="mt-8">
-                            {zaloPayData && zaloPayData.order_url && (
-                              <Button 
-                                type="primary" 
-                                onClick={() => window.open(zaloPayData.order_url, '_blank')}
-                              >
-                                Thanh toán qua ZaloPay
-                              </Button>
+                            {zaloPayData && zaloPayData.data && zaloPayData.data.order_url && (
+                              <div className="d-flex" style={{ gap: '8px' }}>
+                                <Button 
+                                  type="primary" 
+                                  onClick={() => window.open(zaloPayData.data.order_url, '_blank')}
+                                >
+                                  Thanh toán qua ZaloPay
+                                </Button>
+                                <Button 
+                                  onClick={() => {
+                                    const transaction = localStorage.getItem('zalopay_transaction');
+                                    if (transaction) {
+                                      const { app_trans_id, package_id } = JSON.parse(transaction);
+                                      props.actions.handleZaloPayReturn({ app_trans_id, package_id });
+                                    } else {
+                                      messageAntd.warning('Không tìm thấy thông tin giao dịch');
+                                    }
+                                  }}
+                                >
+                                  Kiểm tra trạng thái
+                                </Button>
+                              </div>
                             )}
                           </li>
                         </ul>

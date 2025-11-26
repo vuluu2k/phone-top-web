@@ -9,6 +9,7 @@ import {
   SEND_SHIPPER,
   CREATE_ZALOPAY_PAYMENT,
   QUERY_ZALOPAY_STATUS,
+  HANDLE_ZALOPAY_RETURN,
 } from 'constants/package';
 
 function loadListPackage(payload) {
@@ -81,6 +82,13 @@ function queryZaloPayStatus(payload) {
   };
 }
 
+function handleZaloPayReturn(payload) {
+  return {
+    type: HANDLE_ZALOPAY_RETURN,
+    payload,
+  };
+}
+
 const packageActions = { 
   loadListPackage, 
   createPackage, 
@@ -91,7 +99,8 @@ const packageActions = {
   sendRequest, 
   sendShipper,
   createZaloPayPayment,
-  queryZaloPayStatus
+  queryZaloPayStatus,
+  handleZaloPayReturn
 };
 
 export default packageActions;

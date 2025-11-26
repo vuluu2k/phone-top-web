@@ -61,9 +61,9 @@ function* initCart({ payload }) {
   };
   try {
     const response = yield call(axios.post, url, body);
-    const cart = response.data.cart[0].products;
+    const cart = response.data.cart && response.data.cart[0] ? response.data.cart[0].products : [];
     if (!response.data.success) {
-      yield put({ typ: INIT_CART_ERROR, ...response.data });
+      yield put({ type: INIT_CART_ERROR, ...response.data });
     } else {
       yield put({ type: INIT_CART_SUCCESS, ...response.data, cart });
       localStorage.setItem(LOCAL_CART, JSON.stringify(cart));
