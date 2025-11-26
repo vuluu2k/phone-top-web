@@ -269,11 +269,11 @@ function* sendShipper({ payload }) {
 }
 
 function* createZaloPayPayment({ payload }) {
-  const { package_id, amount } = payload;
   const url = `${API_URL}/payment/zalopay/create`;
-  const body = { package_id, amount };
+  // Send entire payload (contains user_id, products, full_name, etc.)
+  const body = payload;
 
-  console.log('Saga createZaloPayPayment called:', { package_id, amount, url }); // DEBUG
+  console.log('Saga createZaloPayPayment called:', { payload, url }); // DEBUG
 
   try {
     const response = yield call(axios.post, url, body);
